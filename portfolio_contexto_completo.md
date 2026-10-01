@@ -1705,3 +1705,19 @@ Cambios sobre lo definido arriba, con su porqué. Las secciones afectadas ya est
 - **TypeScript 6, no 7.** TypeScript 7 (la reescritura en Go) eliminó la API de JavaScript que usa `astro check` para revisar los `.astro`; `@astrojs/check` solo soporta `^5 || ^6`. Astro planea soportarlo desde TypeScript 7.1, que todavía no salió. **Pendiente:** migrar cuando 7.1 sea estable y Astro lo soporte.
 - **`prettier-plugin-tailwindcss` en build `insiders`, fijado exacto.** La 0.8.1 no ordena clases en `.astro` con `prettier-plugin-astro` 1.x (el parser nuevo genera un árbol tipo JSX que el plugin no recorría). El fix ([#473](https://github.com/tailwindlabs/prettier-plugin-tailwindcss/pull/473)) está mergeado pero sin release estable. **Pendiente:** pasar a la primera versión estable que lo incluya.
 - **Prettier con su estilo por defecto** (comillas dobles, 2 espacios, trailing commas, punto y coma).
+
+---
+
+## 41. Pendientes
+
+Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). Al resolverse, se saca de esta lista; si implicó una decisión, queda en el registro (§40).
+
+- [ ] **`prettier-plugin-tailwindcss` → versión estable.** Hoy usa el build `insiders` con el fix [#473](https://github.com/tailwindlabs/prettier-plugin-tailwindcss/pull/473). _Disparador:_ release estable posterior a 0.8.1 que lo incluya (`pnpm outdated` lo muestra). Al migrar, verificar que siga ordenando clases en `.astro`.
+- [ ] **TypeScript 7.1.** _Disparador:_ 7.1 estable y soportado por Astro (`@astrojs/check` o el chequeo de `.astro` desde `tsc`).
+- [ ] **ESLint.** _Disparador:_ la primera lógica real en TypeScript (`lib/i18n.ts`).
+- [ ] **README del proyecto.** Sin roadmap: un portfolio terminado no tiene próximas versiones. _Disparador:_ terminar el portfolio. Si el repo se publica antes, un README mínimo de placeholder.
+- [ ] **Espacios entre spans del texto del Hero.** Astro 7 (`compressHTML: 'jsx'`) elimina los espacios entre elementos inline: hay que separarlos con `{" "}`. _Disparador:_ implementar el texto del Hero (§9).
+- [ ] **Import de `global.css` → `BaseLayout`.** Hoy está en `src/pages/index.astro`. _Disparador:_ crear `layouts/BaseLayout.astro`.
+- [ ] **Favicon → firma.** Hoy es el logo de Astro. _Disparador:_ tener la firma definida.
+- [ ] **Viabilidad de cada demo interactiva.** _Disparador:_ llegar a la sección de proyectos (§26).
+- [ ] **CI en GitHub Actions.** Correr `check`, `format:check` y `build` en cada push: el hook de pre-commit es local y se puede saltear, CI es la garantía. _Disparador:_ publicar el repo en GitHub.

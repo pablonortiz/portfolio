@@ -13,6 +13,7 @@ El objetivo no es solo tener el portfolio: es que Pablo **domine el código**, e
 - **Pasos chicos y revisables.** Cada cambio tiene que poder leerse y entenderse entero. Al crear un archivo nuevo, explicar qué rol cumple en la arquitectura.
 - **Dependencias: siempre preguntar.** Antes de instalar un paquete, explicar qué resuelve, cuánto suma al bundle y si ya lo cubre algo que tenemos (CSS, la plataforma, Astro).
 - **Decisiones que cambian → al doc.** Si se toma o se cambia una decisión, actualizar `portfolio_contexto_completo.md` en la misma sesión para que siga siendo la fuente de verdad.
+- **Pendientes → al doc.** Lo que se posterga a propósito (esperar una versión, una decisión o llegar a cierta etapa) va a la sección _Pendientes_ del doc con su disparador. Al resolverse, se saca de la lista.
 
 ## Principios del proyecto
 
