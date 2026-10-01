@@ -1,8 +1,18 @@
 ---
+import type { GetStaticPaths, InferGetStaticParamsType } from "astro";
+
 import "@/styles/global.css";
+import { locales } from "@/lib/i18n";
+
+export const getStaticPaths = (() =>
+  locales.map((lang) => ({ params: { lang } }))) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+
+const { lang } = Astro.params as Params;
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

@@ -178,9 +178,7 @@ src/
 │  └─ ProjectLayout.astro
 │
 ├─ pages/
-│  ├─ index.astro
-│  ├─ es/
-│  └─ en/
+│  └─ [lang]/
 │
 ├─ styles/
 │  ├─ global.css
@@ -534,49 +532,26 @@ Ventajas:
 - navegación coherente;
 - no depender de traducción JS en runtime.
 
-### Estructura posible
+### Estructura (decidido)
 
 ```text
 src/pages/
-├─ index.astro
-│
-├─ es/
-│  ├─ index.astro
-│  └─ proyectos/
-│     └─ [slug].astro
-│
-└─ en/
-   ├─ index.astro
-   └─ projects/
-      └─ [slug].astro
+└─ [lang]/
+   ├─ index.astro        → /es/ y /en/
+   └─ [section]/
+      └─ [slug].astro    → /es/proyectos/… y /en/projects/… (pendiente)
 ```
 
-`/` redirige a `/es`. Los prefijos y ese redirect los resuelve el i18n routing nativo de Astro (config `i18n` en `astro.config`); no se arman a mano.
+Una **ruta dinámica** por página: `getStaticPaths()` le dice a Astro, al compilar, qué versiones generar (una por idioma). La lista de idiomas vive solo en `lib/i18n.ts` (`locales`, tipo `Locale`, `defaultLocale`); `astro.config.mjs` también la importa de ahí. Para los proyectos, `getStaticPaths` va a decidir qué segmento (`proyectos` / `projects`) corresponde a cada idioma.
 
-### No duplicar las páginas
+Así no hay páginas duplicadas por construcción: un solo archivo por página, el idioma llega como parámetro (`lang`, tipado como `"es" | "en"`) y las secciones toman sus textos del diccionario.
 
-Evitar:
+### Redirect de `/`
 
-```text
-es/index.astro -> 300 líneas
-en/index.astro -> otras 300 líneas
-```
+`/` redirige a `/es/` con el redirect **manual** de Astro (`redirects` en `astro.config`, status 302), no con el automático del i18n (`redirectToDefaultLocale`): el automático genera una página que espera 2 segundos antes de redirigir; el manual, 0.
 
-En su lugar:
-
-```astro
-<HomePage lang="es" />
-```
-
-y:
-
-```astro
-<HomePage lang="en" />
-```
-
-Los componentes son los mismos.
-
-Solo cambia el contenido.
+- Es un redirect estático (una página HTML con `meta refresh`). Con un adapter de hosting puede pasar a ser un redirect HTTP del servidor sin tocar páginas.
+- Sin servidor no se puede detectar el idioma del navegador: los links del CV y LinkedIn apuntan directo a `/es/` o `/en/`.
 
 ### Traducciones cortas
 
