@@ -381,7 +381,9 @@ La información sigue siendo legible aunque la animación no corra.
 - El orden de cada grupo se pasa con una variable CSS (`style="--line-index: 2"`) y el delay se calcula a partir de ella.
 
 ```css
-.hero-line { opacity: 1; }
+.hero-line {
+  opacity: 1;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-line {
@@ -391,7 +393,9 @@ La información sigue siendo legible aunque la animación no corra.
 }
 
 @keyframes illuminate {
-  from { opacity: 0.35; }
+  from {
+    opacity: 0.35;
+  }
 }
 ```
 
@@ -678,9 +682,12 @@ Tailwind v4 se configura desde CSS con `@theme`, que genera a la vez las variabl
 CSS normal sigue siendo válido para cosas especiales:
 
 ```css
-.hero-orbit {}
-.project-mask {}
-.scroll-gradient {}
+.hero-orbit {
+}
+.project-mask {
+}
+.scroll-gradient {
+}
 ```
 
 No forzar todo a utilities gigantescas.
@@ -775,7 +782,7 @@ La arquitectura es una **dirección de crecimiento**, no un requisito de scaffol
 
 ## 17. `components/ui`, `components/shared` y sections
 
-Se usa `sections/` y no `features/` para no mezclar con el significado de *feature* en FSD (una acción del usuario): acá cada carpeta es una sección del sitio.
+Se usa `sections/` y no `features/` para no mezclar con el significado de _feature_ en FSD (una acción del usuario): acá cada carpeta es una sección del sitio.
 
 ### `components/ui`
 
@@ -1378,18 +1385,18 @@ Regla:
 
 ### Casos concretos
 
-| Necesidad | Solución preferida |
-|---|---|
-| Hover de órbita | CSS |
-| Menú mobile | `useState` |
-| Demo fullscreen | `useState` |
-| Animación del Hero | CSS |
-| Idioma | URL |
-| Proyecto seleccionado | URL |
-| Filtros | URL/search params o estado local |
-| Theme | CSS + localStorage |
-| Formulario | estado local |
-| Proyectos | Content Collections |
+| Necesidad             | Solución preferida               |
+| --------------------- | -------------------------------- |
+| Hover de órbita       | CSS                              |
+| Menú mobile           | `useState`                       |
+| Demo fullscreen       | `useState`                       |
+| Animación del Hero    | CSS                              |
+| Idioma                | URL                              |
+| Proyecto seleccionado | URL                              |
+| Filtros               | URL/search params o estado local |
+| Theme                 | CSS + localStorage               |
+| Formulario            | estado local                     |
+| Proyectos             | Content Collections              |
 
 ---
 
@@ -1677,7 +1684,7 @@ Cambios sobre lo definido arriba, con su porqué. Las secciones afectadas ya est
 ### 2026-09-29
 
 - **React y Motion no se instalan de entrada** (§14, §15, §29, §35). El Hero, tal como está definido, se resuelve con CSS; hacerlo isla React con `client:load` mandaría React + react-dom + Motion en la primera pantalla para cosas que CSS ya hace. Se suman cuando una pieza lo justifique.
-- **`features/` → `sections/`** (§16, §17). En FSD *feature* significa una acción del usuario; acá las carpetas son secciones. Evita dos significados para la misma palabra.
+- **`features/` → `sections/`** (§16, §17). En FSD _feature_ significa una acción del usuario; acá las carpetas son secciones. Evita dos significados para la misma palabra.
 - **Imágenes de proyectos en `src/`, no en `public/`** (§25). Lo que está en `public/` no pasa por la optimización de Astro (formatos modernos, `srcset`, dimensiones). `public/` queda para videos, CV y favicon.
 - **Zod vía Astro** (§15). Astro ya lo incluye; no se instala aparte.
 - **Tailwind v4 con `@theme` como única fuente de tokens** (§15, §23).
@@ -1692,3 +1699,9 @@ Cambios sobre lo definido arriba, con su porqué. Las secciones afectadas ya est
 - **Coreografía del Hero: una animación por vez** (§10). Texto → órbita; en reposo solo se mueve la órbita. Se respeta `prefers-reduced-motion`.
 - **Animación del texto en CSS puro, con el estado final como default** (§9). Con `animation-fill-mode: backwards`, si la animación no corre el texto se ve completo.
 - **Motion tokens como variables CSS** (§24, §16). Sin Motion, los presets dejan de ser un objeto TS; sale `lib/motion.ts` del árbol.
+
+### 2026-10-01
+
+- **TypeScript 6, no 7.** TypeScript 7 (la reescritura en Go) eliminó la API de JavaScript que usa `astro check` para revisar los `.astro`; `@astrojs/check` solo soporta `^5 || ^6`. Astro planea soportarlo desde TypeScript 7.1, que todavía no salió. **Pendiente:** migrar cuando 7.1 sea estable y Astro lo soporte.
+- **`prettier-plugin-tailwindcss` en build `insiders`, fijado exacto.** La 0.8.1 no ordena clases en `.astro` con `prettier-plugin-astro` 1.x (el parser nuevo genera un árbol tipo JSX que el plugin no recorría). El fix ([#473](https://github.com/tailwindlabs/prettier-plugin-tailwindcss/pull/473)) está mergeado pero sin release estable. **Pendiente:** pasar a la primera versión estable que lo incluya.
+- **Prettier con su estilo por defecto** (comillas dobles, 2 espacios, trailing commas, punto y coma).
