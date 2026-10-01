@@ -2,7 +2,7 @@
 
 ## 40. Registro de decisiones
 
-Cambios sobre lo definido arriba, con su porqué. Las secciones afectadas ya están actualizadas.
+Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones afectadas ya están actualizadas.
 
 ### 2026-09-29
 
@@ -29,3 +29,4 @@ Cambios sobre lo definido arriba, con su porqué. Las secciones afectadas ya est
 - **`prettier-plugin-tailwindcss` en build `insiders`, fijado exacto.** La 0.8.1 no ordena clases en `.astro` con `prettier-plugin-astro` 1.x (el parser nuevo genera un árbol tipo JSX que el plugin no recorría). El fix ([#473](https://github.com/tailwindlabs/prettier-plugin-tailwindcss/pull/473)) está mergeado pero sin release estable. **Pendiente:** pasar a la primera versión estable que lo incluya.
 - **Prettier con su estilo por defecto** (comillas dobles, 2 espacios, trailing commas, punto y coma).
 - **Hooks de pre-commit con prek, no con pre-commit.** Corren Prettier sobre los archivos del commit y `astro check` si el commit toca código; solo chequean, no corrigen. prek es ~10x más rápido en su propio trabajo (0,01 s vs 0,10 s), pero esa no es la razón: el tiempo lo dominan Prettier y `astro check` (~1,4 s). La razón es que es un binario único manejado por mise, sin depender de Python. Usa el mismo `.pre-commit-config.yaml`, así que volver a pre-commit es cambiar una línea en `.mise.toml`. Riesgo aceptado: versión 0.x.
+- **Documentación dividida en `docs/`.** El doc único (1.722 líneas) mezclaba tres tipos de contenido que cambian a ritmos distintos: referencia, registro de decisiones y pendientes. Se mantuvo la numeración § global para no romper las referencias cruzadas; se eliminaron la §37 (estado actual) y la §39 (resumen para otra IA), que habían quedado obsoletas.
