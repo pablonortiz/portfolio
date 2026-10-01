@@ -1,7 +1,7 @@
 ---
 import type { GetStaticPaths, InferGetStaticParamsType } from "astro";
 
-import "@/styles/global.css";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 
 export const getStaticPaths = (() =>
@@ -12,16 +12,6 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 const { lang } = Astro.params as Params;
 ---
 
-<html lang={lang}>
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>Astro</title>
-  </head>
-  <body>
-    <h1>Astro</h1>
-  </body>
-</html>
+<BaseLayout lang={lang} title="Pablo Ortiz">
+  <h1>Pablo Ortiz</h1>
+</BaseLayout>
