@@ -16,13 +16,13 @@ Las animaciones son una capa de personalidad, no la fuente primaria de informaci
 
 Después de varias iteraciones, la frase preferida quedó:
 
-> **Diseño y desarrollo software y sistemas para web, mobile y desktop.**
+> **Diseño y desarrollo software y sistemas.**
 
 Razones:
 
 - “Software” amplía el alcance.
 - “Sistemas” comunica herramientas empresariales y software interno.
-- “Web, mobile y desktop” deja explícitas las plataformas.
+- Las plataformas (web, mobile y desktop) las comunica la órbita de íconos con etiqueta (§10), así no se dice dos veces lo mismo. La meta description sí mantiene la frase completa.
 - No encierra el perfil en páginas web o apps móviles.
 
 Esto también cubre trabajos como un sistema realizado para una empresa de insumos médicos con:
@@ -42,8 +42,8 @@ Esto también cubre trabajos como un sistema realizado para una empresa de insum
 
 - Firma como logo.
 - Selector de idioma `ES | EN`.
-- Navegación simple.
-- Posiblemente menú o enlaces:
+- Fondo con blur al scrollear (referencia de §3.3).
+- Navegación: en desktop, **links visibles** (sin menú hamburguesa, para que se vea qué hay sin un click extra); en mobile, menú hamburguesa:
   - Proyectos.
   - Sobre mí.
   - Contacto.
@@ -71,6 +71,7 @@ Si la firma real es demasiado compleja, se puede crear una versión estilizada i
   - tener dos capas,
   - usar el color de acento del sistema visual.
 - El círculo **no reacciona al mouse**: queda quieto.
+- La foto actual (512×512, mirando hacia la izquierda del encuadre) es un **placeholder**. La final se define en pendientes.
 
 Esta dirección está bastante aceptada.
 
@@ -79,7 +80,7 @@ Esta dirección está bastante aceptada.
 Propuesta conceptual:
 
 > **Hola, soy Pablo Ortiz.**  
-> Diseño y desarrollo software y sistemas para web, mobile y desktop.
+> Diseño y desarrollo software y sistemas.
 
 Se recomendó jerarquía visual fuerte:
 
@@ -87,6 +88,23 @@ Se recomendó jerarquía visual fuerte:
 > **Pablo Ortiz.**
 
 El nombre debe tener más peso.
+
+### Layout desktop (decidido, a partir del boceto)
+
+```text
+[firma]                     Proyectos  Sobre mí  Contacto  CV   (ES|EN)
+────────────────────────────── blur ─────────────────────────────────────
+  Hola, soy                      │
+  PABLO ORTIZ                    │     ( foto saliendo
+  Diseño y desarrollo            │       del círculo )
+  software y sistemas            │
+    ⊛ Web        ▯ Mobile        │
+         ▭ Desktop               │
+  [ Conocé mis proyectos ]       │
+                              ╭─ ↓ ─╮
+```
+
+Texto a la izquierda y foto a la derecha (el boceto los tenía al revés): la mirada guía la vista de quien visita, así que la foto tiene que mirar hacia el texto, no hacia afuera de la página. Además, el nombre se lee primero.
 
 ---
 
@@ -110,7 +128,6 @@ Secuencia conceptual:
 2. `soy Pablo Ortiz.`
 3. `Diseño y desarrollo`
 4. `software y sistemas`
-5. `para web, mobile y desktop.`
 
 La información sigue siendo legible aunque la animación no corra.
 
@@ -206,6 +223,8 @@ Al hacer hover:
 
 Los íconos deben ser simples, preferentemente lineales, no enormes ni demasiado ilustrativos.
 
+**Son información, no decoración** (decidido): desde que la frase del §7 no nombra las plataformas, la órbita es la que las comunica. Por eso se ven sin hover ni animación, llevan su etiqueta en texto y se marcan como lista (Web, Mobile, Desktop) para lectores de pantalla.
+
 ### Coreografía del Hero (decidido)
 
 Principio: **una animación por vez**. Cada cosa se mueve en su momento y, en reposo, solo queda una en movimiento.
@@ -252,16 +271,14 @@ Se probaron:
 - Conocé mis proyectos.
 - Ver mis proyectos.
 
-La opción más clara es:
+Elegida (decidido):
 
-> **Ver mis proyectos**
+> **Conocé mis proyectos**
 
-“Conocé mis proyectos” también es válida si se busca un tono un poco más cálido.
+Más cálida que “Ver mis proyectos”, en el mismo voseo que el resto del sitio (el español va todo en voseo). En inglés: **Explore my projects**, que mantiene el tono de invitación.
 
-Recomendación:
-
-- CTA real como botón.
-- Flecha circular **quieta** debajo como indicador secundario de scroll (sin animación en loop).
+- CTA real como **botón**, dentro de la columna de texto, debajo de la órbita.
+- Flecha **quieta** dentro de un semicírculo en el borde inferior, centrada, como indicador secundario de scroll (sin animación en loop).
 
 No depender únicamente de la flecha.
 
@@ -282,22 +299,20 @@ Pablo Ortiz.
 
 Diseño y desarrollo
 software y sistemas
-para web, mobile
-y desktop.
 
    Web   Mobile
       Desktop
 
-[ Ver mis proyectos ]
+[ Conocé mis proyectos ]
 
-        ↓
+      ╭─ ↓ ─╮
 ```
 
 Principios:
 
 - márgenes laterales generosos;
 - no comprimir simplemente el desktop;
-- foto más chica que en desktop;
+- foto más chica que en desktop, y más chica todavía en pantallas bajas para que el botón quede en la primera pantalla (verificar en 375×667 y 390×844);
 - texto legible en pocas líneas;
 - mantener la órbita pero compacta;
 - evitar demasiadas animaciones simultáneas.
