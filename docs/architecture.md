@@ -553,26 +553,24 @@ Así no hay páginas duplicadas por construcción: un solo archivo por página, 
 - Es un redirect estático (una página HTML con `meta refresh`). Con un adapter de hosting puede pasar a ser un redirect HTTP del servidor sin tocar páginas.
 - Sin servidor no se puede detectar el idioma del navegador: los links del CV y LinkedIn apuntan directo a `/es/` o `/en/`.
 
-### Traducciones cortas
+### Traducciones cortas (decidido)
 
-Pueden estar centralizadas:
+Cada sección tiene sus propios textos, **con los dos idiomas juntos**, en un archivo `*.texts.ts` dentro de su carpeta:
 
 ```ts
-const translations = {
-  es: {
-    hero: {
-      greeting: "Hola, soy",
-      projects: "Ver mis proyectos",
-    },
-  },
-  en: {
-    hero: {
-      greeting: "Hi, I'm",
-      projects: "View my projects",
-    },
-  },
-};
+// sections/hero/hero.texts.ts
+interface HeroTexts {
+  greeting: string;
+  cta: string;
+}
+
+export const heroTexts = {
+  es: { greeting: "Hola, soy", cta: "Ver mis proyectos" },
+  en: { greeting: "Hi, I'm", cta: "View my projects" },
+} satisfies Record<Locale, HeroTexts>;
 ```
+
+La sección los usa con `heroTexts[lang]`. `satisfies Record<Locale, …>` hace que no compile si a un idioma le falta un texto o le sobra uno, o si se agrega un idioma a `locales` sin traducir. Los textos del sitio en general (título y descripción) viven en `config/site.ts`.
 
 ### Contenido largo
 

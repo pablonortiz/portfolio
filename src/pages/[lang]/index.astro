@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths, InferGetStaticParamsType } from "astro";
 
+import { siteTexts } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 
@@ -10,8 +11,9 @@ export const getStaticPaths = (() =>
 type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 
 const { lang } = Astro.params as Params;
+const { title, description } = siteTexts[lang];
 ---
 
-<BaseLayout lang={lang} title="Pablo Ortiz">
+<BaseLayout lang={lang} title={title} description={description}>
   <h1>Pablo Ortiz</h1>
 </BaseLayout>
