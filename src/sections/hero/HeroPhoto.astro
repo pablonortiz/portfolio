@@ -1,0 +1,60 @@
+---
+import { Picture } from "astro:assets";
+
+import heroPhoto from "@/assets/images/hero-photo.png";
+
+interface Props {
+  alt: string;
+  class?: string;
+}
+
+const { alt, class: className } = Astro.props;
+---
+
+<div class:list={["hero-photo relative aspect-square", className]}>
+  <div class="hero-photo-circle absolute rounded-full bg-accent/15"></div>
+  <Picture
+    src={heroPhoto}
+    alt={alt}
+    formats={["avif", "webp"]}
+    widths={[256, 384, 512]}
+    sizes="(min-width: 768px) 28rem, 70vw"
+    loading="eager"
+    fetchpriority="high"
+    class="hero-photo-image absolute inset-0 size-full object-contain"
+  />
+</div>
+
+<style>
+  /*
+   * The head sticks out of the circle: the image is visible in full above the
+   * circle's horizontal center line, and only inside the circle below it.
+   */
+  .hero-photo {
+    --circle-size: 85%;
+    --circle-center-y: calc(100% - var(--circle-size) / 2);
+  }
+
+  .hero-photo-circle {
+    width: var(--circle-size);
+    height: var(--circle-size);
+    left: calc((100% - var(--circle-size)) / 2);
+    bottom: 0;
+  }
+
+  .hero-photo-image {
+    mask-image:
+      linear-gradient(#000, #000),
+      radial-gradient(
+        ellipse calc(var(--circle-size) / 2) calc(var(--circle-size) / 2) at 50%
+          var(--circle-center-y),
+        #000 99.5%,
+        transparent 100%
+      );
+    mask-size:
+      100% var(--circle-center-y),
+      100% 100%;
+    mask-position: top, center;
+    mask-repeat: no-repeat;
+  }
+</style>

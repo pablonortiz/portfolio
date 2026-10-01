@@ -1,0 +1,54 @@
+---
+import ArrowDownIcon from "@/assets/icons/arrow-down.svg";
+import { sectionIds } from "@/config/navigation";
+import type { Locale } from "@/lib/i18n";
+
+import HeroPhoto from "./HeroPhoto.astro";
+import PlatformList from "./PlatformList.astro";
+import { heroTexts } from "./hero.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = heroTexts[lang];
+const projectsHref = `#${sectionIds[lang].projects}`;
+---
+
+<section class="relative mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl content-center justify-items-center gap-5 px-6 pt-6 pb-14 text-center md:grid-cols-2 md:grid-rows-[1fr_auto_auto_auto_1fr] md:justify-items-start md:gap-x-12 md:text-left">
+  <h1 class="md:col-start-1 md:row-start-2">
+    <span class="block text-xl text-muted">{texts.greeting}</span>
+    <span class="block text-5xl font-bold">{texts.name}</span>
+  </h1>
+
+  <HeroPhoto
+    alt={texts.photoAlt}
+    class="w-[min(70vw,30dvh)] md:col-start-2 md:row-span-full md:w-full md:max-w-md md:self-center md:justify-self-end"
+  />
+
+  <p class="text-2xl md:col-start-1 md:row-start-3">
+    {texts.taglineLines[0]}
+    <br />
+    {texts.taglineLines[1]}
+  </p>
+
+  <div class="flex flex-col items-center gap-6 md:col-start-1 md:row-start-4 md:items-start">
+    <PlatformList lang={lang} />
+    <a
+      href={projectsHref}
+      class="rounded-full bg-foreground px-6 py-3 text-background"
+    >
+      {texts.cta}
+    </a>
+  </div>
+
+  <a
+    href={projectsHref}
+    aria-hidden="true"
+    tabindex="-1"
+    class="absolute bottom-0 left-1/2 flex h-8 w-16 -translate-x-1/2 items-end justify-center rounded-t-full border border-b-0 border-border pb-1"
+  >
+    <ArrowDownIcon class="size-4" />
+  </a>
+</section>
