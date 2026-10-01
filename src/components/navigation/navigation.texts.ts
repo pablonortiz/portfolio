@@ -1,9 +1,5 @@
+import type { Section } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
-
-interface NavigationLink {
-  sectionId: string;
-  label: string;
-}
 
 interface NavigationTexts {
   homeLabel: string;
@@ -12,7 +8,7 @@ interface NavigationTexts {
   openMenu: string;
   closeMenu: string;
   menuLabel: string;
-  links: NavigationLink[];
+  links: Record<Section, string>;
 }
 
 export const navigationTexts = {
@@ -23,11 +19,7 @@ export const navigationTexts = {
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     menuLabel: "Menú",
-    links: [
-      { sectionId: "proyectos", label: "Proyectos" },
-      { sectionId: "sobre-mi", label: "Sobre mí" },
-      { sectionId: "contacto", label: "Contacto" },
-    ],
+    links: { projects: "Proyectos", about: "Sobre mí", contact: "Contacto" },
   },
   en: {
     homeLabel: "Pablo Ortiz, home",
@@ -36,10 +28,6 @@ export const navigationTexts = {
     openMenu: "Open menu",
     closeMenu: "Close menu",
     menuLabel: "Menu",
-    links: [
-      { sectionId: "projects", label: "Projects" },
-      { sectionId: "about", label: "About" },
-      { sectionId: "contact", label: "Contact" },
-    ],
+    links: { projects: "Projects", about: "About", contact: "Contact" },
   },
 } satisfies Record<Locale, NavigationTexts>;

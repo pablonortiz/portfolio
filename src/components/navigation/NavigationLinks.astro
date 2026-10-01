@@ -1,6 +1,7 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
 
+import { sectionIds, sections } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 
 import { navigationTexts } from "./navigation.texts";
@@ -16,9 +17,9 @@ const homePath = getRelativeLocaleUrl(lang);
 ---
 
 <ul class={className}>
-  {links.map((link) => (
+  {sections.map((section) => (
     <li>
-      <a href={`${homePath}#${link.sectionId}`}>{link.label}</a>
+      <a href={`${homePath}#${sectionIds[lang][section]}`}>{links[section]}</a>
     </li>
   ))}
 </ul>
