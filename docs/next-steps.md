@@ -44,4 +44,3 @@ Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). 
 - [ ] **Favicon → firma.** Hoy es el logo de Astro. _Disparador:_ tener la firma definida.
 - [ ] **Viabilidad de cada demo interactiva.** _Disparador:_ llegar a la sección de proyectos (§26).
 - [ ] **CI en GitHub Actions.** Correr `check`, `format:check` y `build` en cada push: el hook de pre-commit es local y se puede saltear, CI es la garantía. _Disparador:_ publicar el repo en GitHub.
-- [ ] **Alias `@/` para imports.** Evita rutas como `../../styles/global.css`. _Disparador:_ el primer import con `../../`.
