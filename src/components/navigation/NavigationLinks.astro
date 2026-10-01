@@ -1,0 +1,24 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import type { Locale } from "@/lib/i18n";
+
+import { navigationTexts } from "./navigation.texts";
+
+interface Props {
+  lang: Locale;
+  class?: string;
+}
+
+const { lang, class: className } = Astro.props;
+const { links } = navigationTexts[lang];
+const homePath = getRelativeLocaleUrl(lang);
+---
+
+<ul class={className}>
+  {links.map((link) => (
+    <li>
+      <a href={`${homePath}#${link.sectionId}`}>{link.label}</a>
+    </li>
+  ))}
+</ul>

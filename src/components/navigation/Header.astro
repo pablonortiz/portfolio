@@ -1,0 +1,33 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import Signature from "@/assets/images/signature.svg";
+import type { Locale } from "@/lib/i18n";
+
+import LanguageSwitcher from "./LanguageSwitcher.astro";
+import MobileMenu from "./MobileMenu.astro";
+import NavigationLinks from "./NavigationLinks.astro";
+import { navigationTexts } from "./navigation.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = navigationTexts[lang];
+---
+
+<header class="sticky top-0 z-10 border-b border-border bg-background/70 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
+    <a href={getRelativeLocaleUrl(lang)} aria-label={texts.homeLabel}>
+      <Signature class="h-10 w-auto" aria-hidden="true" />
+    </a>
+    <div class="flex items-center gap-6">
+      <nav aria-label={texts.navigationLabel} class="hidden md:block">
+        <NavigationLinks lang={lang} class="flex gap-6 text-sm" />
+      </nav>
+      <LanguageSwitcher lang={lang} />
+      <MobileMenu lang={lang} />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,81 @@
+---
+import type { Locale } from "@/lib/i18n";
+
+import NavigationLinks from "./NavigationLinks.astro";
+import { navigationTexts } from "./navigation.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = navigationTexts[lang];
+---
+
+<div class="md:hidden">
+  <button
+    type="button"
+    data-mobile-menu-open
+    aria-haspopup="dialog"
+    aria-controls="mobile-menu"
+    aria-label={texts.openMenu}
+    class="p-2"
+  >
+    <svg
+      viewBox="0 0 24 24"
+      class="size-6"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      aria-hidden="true"
+    >
+      <path d="M4 7h16M4 12h16M4 17h16"></path>
+    </svg>
+  </button>
+
+  <dialog
+    id="mobile-menu"
+    aria-label={texts.menuLabel}
+    class="m-0 h-dvh max-h-none w-full max-w-none bg-background text-foreground backdrop:bg-foreground/40"
+  >
+    <div class="flex h-16 items-center justify-end px-4">
+      <button
+        type="button"
+        data-mobile-menu-close
+        aria-label={texts.closeMenu}
+        class="p-2"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="size-6"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+    <nav aria-label={texts.navigationLabel}>
+      <NavigationLinks
+        lang={lang}
+        class="flex flex-col gap-6 px-6 pt-8 text-2xl"
+      />
+    </nav>
+  </dialog>
+</div>
+
+<script>
+  const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
+
+  document
+    .querySelector("[data-mobile-menu-open]")
+    ?.addEventListener("click", () => menu?.showModal());
+
+  menu
+    ?.querySelectorAll("[data-mobile-menu-close], a")
+    .forEach((element) =>
+      element.addEventListener("click", () => menu.close()),
+    );
+</script>

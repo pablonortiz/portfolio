@@ -1,0 +1,38 @@
+---
+import { locales, localeNames, type Locale } from "@/lib/i18n";
+import { getLocalizedPath } from "@/lib/locale-url";
+
+import { navigationTexts } from "./navigation.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const { languageLabel } = navigationTexts[lang];
+---
+
+<div
+  role="group"
+  aria-label={languageLabel}
+  class="flex items-center gap-1 rounded-full border border-border px-2 py-1 text-sm"
+>
+  {locales.map((locale) =>
+    locale === lang ? (
+      <span aria-current="true" class="px-1 font-semibold">
+        <span class="sr-only">{localeNames[locale]}</span>
+        <span aria-hidden="true">{locale.toUpperCase()}</span>
+      </span>
+    ) : (
+      <a
+        href={getLocalizedPath(Astro.url.pathname, locale)}
+        hreflang={locale}
+        lang={locale}
+        class="px-1 text-muted hover:text-foreground"
+      >
+        <span class="sr-only">{localeNames[locale]}</span>
+        <span aria-hidden="true">{locale.toUpperCase()}</span>
+      </a>
+    ),
+  )}
+</div>
