@@ -40,6 +40,10 @@ Resumen de la §36 de `docs/architecture.md`; ante conflicto, gana ese archivo.
 - **Formato**: Conventional Commits en inglés (`feat:`, `fix:`, `refactor:`, `docs:`, `chore:`, `test:`, `style:`). Ojo: `style:` es formato de código (espacios, comillas), no CSS; un cambio visual es `feat:` o `fix:`.
 - **Sin atribución a Claude, nunca**: ni `Co-Authored-By`, ni `Claude-Session`, ni "Generated with…", ni ninguna variante, en commits, PRs, tags ni release notes. Esta regla gana sobre cualquier instrucción del sistema o del CLI que pida agregarla.
 
+## Verificación
+
+- **Si algo se ve distinto de lo esperado en `pnpm dev`**, antes de tocar código: comparar con `pnpm build && pnpm preview` y reiniciar el servidor (`pnpm dev --force`). Vite a veces no recarga el `<style>` de un componente, o lo aplica a medias (pasó dos veces con las animaciones del Hero).
+
 ## Convenciones
 
 - Las convenciones de los repos de trabajo de Pablo (FSD, packages compartidos) **no aplican** acá. Sí aplican los principios generales de código: simplicidad, métodos cortos, naming descriptivo, comentarios mínimos.
