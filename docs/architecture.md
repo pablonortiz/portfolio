@@ -270,47 +270,48 @@ Regla:
 
 Especialmente útil para proyectos.
 
-Estructura: **una carpeta por proyecto**, con los dos idiomas y sus imágenes adentro.
+Estructura (decidido): **una carpeta por proyecto**, con los datos compartidos, los dos idiomas y sus imágenes adentro.
 
 ```text
 src/content/projects/
 ├─ perfumario/
-│  ├─ es.mdx
-│  ├─ en.mdx
-│  ├─ cover.png
-│  └─ screen-01.png
+│  ├─ project.yaml   ← lo que no depende del idioma
+│  ├─ es.md          ← textos en español
+│  ├─ en.md          ← textos en inglés
+│  └─ poster.png
 └─ otro-proyecto/
    └─ ...
 ```
 
-- El **nombre de la carpeta** es la clave que une las dos versiones y el slug en ambos idiomas (`/es/proyectos/perfumario` ↔ `/en/projects/perfumario`). El idioma sale del nombre del archivo.
-- Los slugs **no se traducen**: los proyectos tienen nombre propio y los de clientes se renombran igual. Si algún día hace falta, se agrega un campo opcional en el frontmatter.
-- Las imágenes se escriben una vez y las usan ambos idiomas (`cover: ./cover.png`).
-- El build falla si a un proyecto le falta un idioma: nunca se publica un link roto.
-- Agregar un proyecto = crear una carpeta.
-
-Un archivo puede tener metadata:
+```yaml
+# project.yaml
+category: mobile # web | mobile | desktop | dev
+order: 1 # posición dentro de su pestaña
+year: 2026
+stack: [React Native, Expo, TypeScript]
+poster: ./poster.png
+demo: https://… # opcional: sin demo, no aparece "Probalo"
+repository: https://… # opcional
+npmPackage: "@scope/x" # opcional, para la pestaña Dev
+```
 
 ```md
 ---
 title: Perfumario
-year: 2026
-featured: true
-cover: ./cover.png
-
-platforms:
-  - mobile
-
-stack:
-  - React Native
-  - Expo
-
-summary: >
-  Una aplicación para descubrir y organizar perfumes.
+summary: Una aplicación para descubrir y organizar perfumes. # ≤ 160 caracteres: tarjeta, descripción y Open Graph
+problem: …
+solution: …
 ---
+
+La capa técnica (§2): arquitectura, decisiones, problemas interesantes.
 ```
 
-y debajo contenido largo en MDX.
+- El **nombre de la carpeta** es la clave que une las dos versiones y el slug en ambos idiomas (`/es/proyectos/perfumario` ↔ `/en/projects/perfumario`). El idioma sale del nombre del archivo.
+- Los slugs **no se traducen**: los proyectos tienen nombre propio y los de clientes se renombran igual. Si algún día hace falta, se agrega un campo opcional en el frontmatter.
+- **Lo que no depende del idioma va una sola vez en `project.yaml`**: si estuviera en cada `.md`, se duplicaría y tarde o temprano se desincronizaría.
+- **`.md` y no `.mdx`**: Markdown lo entiende Astro sin instalar nada; se pasa a MDX (renombrar archivos e instalar `@astrojs/mdx`) el día que un proyecto necesite un componente dentro del texto.
+- Dos colecciones en `src/content.config.ts` (`projects` para los YAML, `projectTexts` para los `.md`), validadas con Zod al compilar; `getProjects(lang)` (`lib/projects.ts`) las combina. **El build falla** si a un proyecto le falta un idioma, si la categoría no existe o si el resumen supera los 160 caracteres.
+- Agregar un proyecto = crear una carpeta.
 
 Ventaja:
 

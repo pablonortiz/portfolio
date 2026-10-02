@@ -71,3 +71,5 @@ Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones 
 - **Transición del Hero a Proyectos ligada al scroll, sin bloquearlo** (§42.6): la carpeta sube y se abre siguiendo el scroll.
 - **Fase 0 validada** (§42.4): la página real por proyecto con `ClientRouter` funciona como se diseñó (zoom de la tarjeta al fondo, el mismo `<video>` pausado en el frame del click, vuelta animada a la misma página de proyectos y el video siguiendo desde ahí). Quedaron documentadas las tres trampas encontradas y su solución.
 - **La carpeta sin barra de scroll visible** (§42.2), a pedido de Pablo: el indicador de página cumple esa función.
+- **Contenido de proyectos: `project.yaml` compartido + un `.md` por idioma** (§18), en vez de toda la metadata repetida en cada idioma. Dos colecciones validadas con Zod y una función que las combina; el build falla ante un idioma faltante, una categoría inexistente o un resumen de más de 160 caracteres (verificado).
+- **`.md` en vez de `.mdx`** (§18): MDX solo hace falta para componentes dentro del texto; se adopta cuando un proyecto lo necesite.
