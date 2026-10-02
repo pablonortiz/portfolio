@@ -35,7 +35,9 @@ Un recuadro dentro de la página, con bordes, que funciona como una **carpeta co
 - **Accesibilidad:** semántica de pestañas (se recorren con las flechas del teclado y se anuncian como pestañas).
 - **La pestaña activa va en la URL** (`?plataforma=mobile` en español, `?platform=mobile` en inglés, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior. Cambiar de pestaña requiere JS; el HTML llega con Web activa, así que lo primero que se ve no depende del script.
 - **En mobile, las pestañas inactivas muestran solo el ícono** (el nombre queda para lectores de pantalla): las cuatro con nombre no entraban en 375 px y Dev quedaba afuera. Son los mismos íconos que la órbita del Hero acaba de mostrar con su nombre.
-- **Dev tiene estética de terminal** (monoespaciada), con un cursor que titila (`_` o `|`) como animación característica, y su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar).
+- **Dev tiene estética de terminal:** fondo oscuro en los dos temas, la pestaña en monoespaciada y un cursor `_` después de "Dev" en la pestaña activa (con el `>_` del ícono se lee como un prompt). Falta su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar), y se hace junto con los datos reales.
+  - **El cursor titila 4 veces (1 s cada una) cada vez que se abre Dev y queda fijo:** lo que titila solo más de 5 segundos tiene que poder pausarse (WCAG 2.2.2, §36). Es CSS puro: la animación depende de `aria-selected`, y pasar de `display: none` a visible la reinicia. Con "reducir movimiento" no titila.
+  - **La animación se declara dentro de `prefers-reduced-motion: no-preference`** en vez de apagarla dentro de `reduce`: la regla que la prende (`.project-tab[aria-selected="true"] .project-tab-cursor`) es más específica que una que la apague con un selector simple, y la primera versión seguía titilando con "reducir movimiento".
 - Idea a evaluar: tocar un ícono de la órbita del Hero abre esa pestaña.
 
 ### 42.2. Páginas de proyectos (scroll snap)

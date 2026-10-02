@@ -54,7 +54,14 @@ const [defaultCategory] = categories;
           class="project-tab"
         >
           <Icon class="size-4" aria-hidden="true" />
-          <span class="project-tab-label">{texts.categories[category]}</span>
+          <span class="project-tab-label">
+            {texts.categories[category]}
+            {category === "dev" && (
+              <span class="project-tab-cursor" aria-hidden="true">
+                _
+              </span>
+            )}
+          </span>
         </button>
       );
     })}
@@ -235,6 +242,35 @@ const [defaultCategory] = categories;
 
   .project-tab[aria-selected="true"] :global(svg) {
     color: var(--color-accent);
+  }
+
+  .project-tab[data-category="dev"] {
+    font-family: var(--font-mono);
+  }
+
+  /*
+   * Blinks 4 × 1 s each time Dev opens, then stays solid: anything blinking on
+   * its own for more than 5 s needs a pause control (WCAG 2.2.2). Going from
+   * display none to visible restarts the animation.
+   */
+  .project-tab-cursor {
+    display: none;
+  }
+
+  .project-tab[aria-selected="true"] .project-tab-cursor {
+    display: inline;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .project-tab[aria-selected="true"] .project-tab-cursor {
+      animation: cursor-blink 1s steps(1) 4;
+    }
+  }
+
+  @keyframes cursor-blink {
+    50% {
+      opacity: 0;
+    }
   }
 
   .project-panels {
