@@ -38,6 +38,7 @@ const [defaultCategory] = categories;
   data-active-category={defaultCategory}
 >
   <div role="tablist" aria-label={texts.tablistLabel} class="project-tabs">
+    <span class="project-tab-indicator" aria-hidden="true"></span>
     {categories.map((category) => {
       const Icon = categoryIcons[category];
       const selected = category === defaultCategory;
@@ -65,6 +66,7 @@ const [defaultCategory] = categories;
         id={`panel-${category}`}
         aria-labelledby={`tab-${category}`}
         hidden={category !== defaultCategory}
+        data-category={category}
         class="project-panel"
       >
         <ProjectPages
@@ -90,29 +92,37 @@ const [defaultCategory] = categories;
     flex-direction: column;
   }
 
-  /* Each category's colors (all from the violet family; Dev is a dark terminal in both themes). */
-  .project-folder[data-active-category="web"] {
+  /*
+   * Each category's colors (all from the violet family; Dev is a dark terminal
+   * in both themes). The folder takes the active category's (tabs and outline);
+   * each panel keeps its own, so the leaving one doesn't change color mid-reveal.
+   */
+  .project-folder[data-active-category="web"],
+  .project-panel[data-category="web"] {
     --folder-background: light-dark(oklch(94% 0.05 268), oklch(23% 0.075 268));
     --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
     --folder-muted: light-dark(oklch(46% 0.04 268), oklch(74% 0.04 268));
     --folder-accent: light-dark(oklch(50% 0.2 268), oklch(76% 0.13 268));
   }
 
-  .project-folder[data-active-category="mobile"] {
+  .project-folder[data-active-category="mobile"],
+  .project-panel[data-category="mobile"] {
     --folder-background: light-dark(oklch(94% 0.05 292), oklch(23% 0.085 292));
     --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
     --folder-muted: light-dark(oklch(46% 0.04 292), oklch(74% 0.04 292));
     --folder-accent: light-dark(oklch(52% 0.23 292), oklch(76% 0.15 292));
   }
 
-  .project-folder[data-active-category="desktop"] {
+  .project-folder[data-active-category="desktop"],
+  .project-panel[data-category="desktop"] {
     --folder-background: light-dark(oklch(94% 0.05 328), oklch(23% 0.08 328));
     --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
     --folder-muted: light-dark(oklch(46% 0.04 328), oklch(74% 0.04 328));
     --folder-accent: light-dark(oklch(52% 0.21 328), oklch(76% 0.15 328));
   }
 
-  .project-folder[data-active-category="dev"] {
+  .project-folder[data-active-category="dev"],
+  .project-panel[data-category="dev"] {
     --folder-background: light-dark(
       oklch(17% 0.025 285),
       oklch(11.5% 0.02 285)
@@ -123,11 +133,13 @@ const [defaultCategory] = categories;
   }
 
   /*
-   * The folder (panels and the active tab) is a theme scope: it redefines the
-   * semantic tokens, so everything inside takes the active category's colors.
+   * Theme scope: these redefine the semantic tokens with their category's
+   * colors, so everything inside takes them without knowing about categories.
    */
   .project-tab[aria-selected="true"],
-  .project-panels {
+  .project-tab-indicator,
+  .project-panels,
+  .project-panel {
     --color-background: var(--folder-background);
     --color-foreground: var(--folder-foreground);
     --color-muted: var(--folder-muted);
@@ -146,13 +158,48 @@ const [defaultCategory] = categories;
   }
 
   .project-tabs {
+    position: relative;
+    z-index: 1;
     display: flex;
     gap: 0.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
+  }
+
+  /*
+   * The active tab's shape: JS measures the active tab and slides it there.
+   * Hidden until JS positions it: going from display none to visible never
+   * transitions, so the first position doesn't animate.
+   */
+  .project-tab-indicator {
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: -1px;
+    left: 0;
+    width: var(--indicator-width, 0);
+    translate: var(--indicator-x, 0) 0;
+    border: 1px solid var(--color-border);
+    border-bottom: none;
+    border-radius: 0.75rem 0.75rem 0 0;
+    background: var(--color-background);
+    transition:
+      translate var(--duration-slow) var(--ease-out),
+      width var(--duration-slow) var(--ease-out),
+      background-color var(--duration-slow) var(--ease-out),
+      border-color var(--duration-slow) var(--ease-out);
+  }
+
+  .project-tabs[data-indicator-ready] .project-tab-indicator {
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-tab-indicator {
+      transition: none;
+    }
   }
 
   .project-tab {
+    position: relative;
     display: flex;
     flex-shrink: 0;
     align-items: center;
@@ -177,9 +224,13 @@ const [defaultCategory] = categories;
   }
 
   .project-tab[aria-selected="true"] {
+    color: var(--color-foreground);
+  }
+
+  /* Without JS (indicator never positioned), the active tab draws its own shape. */
+  .project-tabs:not([data-indicator-ready]) .project-tab[aria-selected="true"] {
     border-color: var(--color-border);
     background: var(--color-background);
-    color: var(--color-foreground);
   }
 
   .project-tab[aria-selected="true"] :global(svg) {
@@ -187,17 +238,35 @@ const [defaultCategory] = categories;
   }
 
   .project-panels {
+    position: relative;
+    isolation: isolate;
     flex: 1;
     min-height: 0;
     margin-top: -1px;
     border: 1px solid var(--color-border);
     border-radius: 0 1rem 1rem 1rem;
     overflow: hidden;
+    transition: border-color var(--duration-slow) var(--ease-out);
+  }
+
+  .project-panel {
+    position: relative;
+    z-index: 1;
+    height: 100%;
     background: var(--color-background);
     color: var(--color-foreground);
   }
 
-  .project-panel {
-    height: 100%;
+  /* While the new panel's circle grows (JS), the previous one stays visible underneath. */
+  .project-panel[data-leaving] {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-panels {
+      transition: none;
+    }
   }
 </style>

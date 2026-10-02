@@ -673,9 +673,13 @@ Como las animaciones son CSS (ver §14), los presets son **variables CSS en los 
 --duration-normal: 400ms;
 --duration-slow: 800ms;
 
---ease-out: ...;
---ease-in-out: ...;
+--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 ```
+
+- **`--ease-out`** para lo que responde a una acción y tiene que sentirse inmediato: arranca rápido y frena suave (el texto del Hero, el indicador de la pestaña).
+- **`--ease-in-out`** para lo que recorre una superficie y tiene que verse avanzar: arranca y termina suave (el círculo de color de la carpeta). Con `--ease-out`, un círculo que crece cubre el 75% del panel en los primeros 100 ms y no se llega a ver (§42.1).
+- Las animaciones de JS (Web Animations) leen los mismos tokens con `getComputedStyle`, en vez de repetir los valores.
 
 Si más adelante entra Motion, se define en ese momento cómo comparte estos valores.
 
