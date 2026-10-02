@@ -1,0 +1,99 @@
+# Proyectos
+
+## 42. Sección de proyectos
+
+Diseño acordado a partir de dos bocetos de Pablo (la grilla y el detalle de un proyecto). Es la parte más compleja del sitio: se construye en fases (§42.8), cada una funcionando por sí sola.
+
+### 42.1. La carpeta
+
+Un recuadro dentro de la página, con bordes, que funciona como una **carpeta con pestañas**:
+
+```text
+ ⊛ Web │ ▯ Mobile │ ▭ Desktop │ >_ Dev
+┌─────────────────────────────────────────┐
+│  ┌───────────────┐   ┌───────────────┐  │
+│  │   proyecto    │   │   proyecto    │  │
+│  └───────────────┘   └───────────────┘  │
+│  ┌───────────────┐   ┌───────────────┐  │
+│  │   proyecto    │   │   proyecto    │  │
+│  └───────────────┘   └───────────────┘  │
+│                  • ○                    │
+└─────────────────────────────────────────┘
+```
+
+- **Pestañas por plataforma** (Web, Mobile, Desktop), las mismas de la órbita del Hero, más **Dev**: herramientas internas, paquetes de npm y lo más técnico, para quien quiera profundizar ("superficialmente producto, en profundidad ingeniería", §4).
+- **Cada pestaña tiene su color**, todos de la familia del violeta de marca (índigo, violeta, fucsia; Dev, un oscuro tipo terminal), cada uno en claro y oscuro con contraste verificado. Cuatro colores fuertes ajenos al violeta diluirían la identidad.
+- **Al cambiar de pestaña:** el indicador de la pestaña activa se desliza hasta la nueva, y un **círculo del color nuevo crece desde el punto del click** hasta cubrir la carpeta. Con "reducir movimiento", el cambio es instantáneo.
+- **Accesibilidad:** semántica de pestañas (se recorren con las flechas del teclado y se anuncian como pestañas).
+- **La pestaña activa va en la URL** (`?plataforma=mobile`, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior.
+- **Dev tiene estética de terminal** (monoespaciada) y su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar).
+- Idea a evaluar: tocar un ícono de la órbita del Hero abre esa pestaña.
+
+### 42.2. Páginas de proyectos (scroll snap)
+
+Los proyectos se muestran **por páginas**, no en una grilla que se scrollea libremente: cada página es una composición completa, y el zoom (§42.4) siempre arranca desde una tarjeta entera, nunca desde una cortada a mitad de pantalla.
+
+- **Desktop:** 2 columnas × 2 filas = 4 proyectos por página. **Mobile:** 1 columna, 2 por página.
+- **Con CSS Scroll Snap, no interceptando el scroll con JS:** el área de proyectos tiene scroll propio, cada página ocupa toda el área, `scroll-snap-type: y mandatory` obliga a terminar siempre en una página y `scroll-snap-stop: always` impide saltarse páginas con un gesto fuerte. Al llegar a la última, el scroll pasa solo a la página de abajo (encadenamiento nativo). Teclado, trackpad, mouse y touch funcionan como en cualquier lado. Interceptar la rueda con JS trae los problemas clásicos: la inercia del trackpad salta páginas, se queda atrapado en la carpeta, y el teclado y los lectores de pantalla dejan de funcionar como se espera.
+- Al encajar una página, sus tarjetas entran con una animación.
+- **Indicador de página** (puntos o "1/2"), para que se sepa que hay más.
+- **Las tarjetas se dimensionan según el alto disponible** de la carpeta: 2 filas tienen que entrar enteras (en 1280×720 quedan ~600 px tras el header y las pestañas).
+- Soporta cualquier cantidad de proyectos por pestaña (hoy se estiman entre 4 y 8).
+
+### 42.3. Tarjetas con video
+
+- Cada tarjeta reproduce un **video corto en loop** del proyecto (5–10 s, sin sonido, muy comprimido, ~0,5 MB).
+- **Solo se reproducen las tarjetas visibles**; mientras carga, se ve una imagen fija (poster).
+- Con "reducir movimiento" o en modo ahorro de datos, quedan quietas con la imagen fija.
+- **Datos inventados** en todas las grabaciones (regla de privacidad del CLAUDE.md).
+
+### 42.4. Del grid al proyecto: el zoom
+
+- **Cada proyecto es una página real** (`/es/proyectos/<slug>`, §18 y §22): URL para compartir, SEO, su tarjeta Open Graph y el "atrás" del navegador funcionando solo.
+- **Al tocar una tarjeta**, la vista hace zoom hacia ella, "entrando por la ventana" del proyecto. Se resuelve con el `<ClientRouter />` de Astro (transiciones animadas entre páginas, con `transition:name` para que la tarjeta se transforme en la página). En navegadores sin soporte nativo, como Firefox, Astro simula la animación.
+- **El video queda pausado en el frame en el que se tocó** y ese frame es el fondo de la página del proyecto (`transition:persist` mantiene vivo el `<video>` entre páginas).
+- **Al volver** (botón del navegador o "← Proyectos"), la animación se invierte, el video sigue desde donde estaba y se vuelve **a la misma página de proyectos** (Astro restaura el scroll de la ventana pero no el de un área interna: hay que guardarlo y restaurarlo).
+- Costo asumido: `ClientRouter` hace que el sitio navegue como una SPA; los scripts existentes (menú, tema) se reinicializan en cada navegación y el tema guardado se vuelve a aplicar después de cada cambio de página.
+
+### 42.5. Página de un proyecto
+
+```text
+┌──────────────────────────────────────────────┐
+│ ← Proyectos          Nombre del proyecto     │
+│                                              │
+│  Problemática                ┌────────────┐  │
+│  ~~~~~~~~~~~~~~              │   video    │  │
+│  ~~~~~~~~~~~~~~              │     ▷      │  │
+│                              └────────────┘  │
+│  Se construyó…                 Probalo ↗     │
+│  ~~~~~~~~~~~~~~                              │
+│                                              │
+│  Tecnologías: React · Jest · Tailwind → → →  │
+└──────────────────────────────────────────────┘
+   fondo: el frame del video en el que se tocó
+```
+
+- A la izquierda, el problema y lo que se construyó (capa 1, §2). A la derecha, el video con todos los controles (pantalla completa, avanzar, retroceder).
+- **"Probalo"**: lleva a la demo (§5, §26), solo si el proyecto tiene una.
+- **"← Proyectos"** arriba a la izquierda; Esc también vuelve.
+- **Tira de tecnologías:** se mueve sola hacia la derecha en loop infinito y se puede arrastrar hacia adelante o hacia atrás. Se pausa con el hover o el foco; con "reducir movimiento" es una lista quieta; las copias que se repiten para el loop quedan ocultas para los lectores de pantalla.
+
+### 42.6. Transición del Hero a Proyectos
+
+- **La carpeta sube desde abajo y se "abre" a medida que se scrollea**, siguiendo el scroll (también al tocar la flecha del Hero).
+- **Sin bloquear el scroll** (scroll-jacking): la animación sigue al scroll, el control lo tiene quien visita.
+- Las animaciones de CSS ligadas al scroll no andan en Firefox, así que va con JS. Candidatas: `scroll()` de Motion (versión sin React) o GSAP ScrollTrigger (§15). Se decide con prototipos.
+
+### 42.7. Videos
+
+Los produce otra IA siguiendo una especificación (duración, resolución, formato, peso máximo, datos inventados), para que salgan consistentes y livianos. No se guardan en git: cada video quedaría para siempre en el historial; van a un almacenamiento aparte, a decidir junto con el hosting.
+
+### 42.8. Fases
+
+0. **Prueba técnica** (página descartable): grilla con páginas, zoom con `ClientRouter`, video que sigue vivo entre páginas y vuelta a la misma página de proyectos. Es lo más riesgoso y define la arquitectura.
+1. **Content Collection** de proyectos, con su schema de Zod (categoría, textos ES/EN, stack, video, imagen, demo).
+2. **La carpeta sin efectos:** pestañas que filtran, páginas con scroll snap, tarjetas con imagen y las páginas de proyecto.
+3. **Animaciones de la carpeta:** indicador que se desliza, círculo de color, entrada de las tarjetas.
+4. **Videos en las tarjetas**, el zoom y la continuidad del frame.
+5. **La tira de tecnologías.**
+6. **La transición del Hero a Proyectos.**

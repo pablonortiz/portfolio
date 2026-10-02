@@ -4,30 +4,13 @@
 
 Sin que sean obligatorias, los siguientes pasos naturales serían:
 
-1. Cerrar identidad visual:
-   - paleta,
-   - tipografía,
-   - iconografía,
-   - estilo de firma,
-   - círculo/foto,
-   - estilo de motion.
-2. Diseñar el Hero final:
-   - desktop,
-   - mobile,
-   - animaciones,
-   - copy,
-   - navegación.
-3. Definir las secciones de la home:
-   - proyectos destacados;
+1. Construir la sección de proyectos y la página de cada proyecto, en las fases de la §42.8.
+2. Definir y construir el resto de las secciones de la home:
    - sobre mí;
    - experiencia;
    - contacto;
    - CTA final.
-4. Diseñar página de proyecto.
-5. Crear Content Collection de proyectos.
-6. Implementar i18n `/es` y `/en`.
-7. Construir Hero.
-8. Iterar progresivamente sobre el resto.
+3. Iterar progresivamente sobre el resto.
 
 ---
 
@@ -43,3 +26,5 @@ Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). 
 - [ ] **SEO con URLs absolutas: canonical, `hreflang` y Open Graph.** El canonical indica cuál es la URL oficial de cada página; los `hreflang` le dicen a los buscadores que `/es/` y `/en/` son la misma página en otro idioma. Open Graph arma el preview (título, descripción, imagen) al compartir el link en LinkedIn, WhatsApp, Slack, etc. Van en `BaseLayout`, una versión por idioma. Cada proyecto tiene su propia tarjeta (nombre + captura), generada al compilar; la home usa una general. _Disparador:_ tener el copy final del Hero, una imagen para compartir (1200×630) y el dominio definido (las URLs tienen que ser absolutas).
 - [ ] **Foto final del Hero.** La actual es un placeholder de 512×512 (se ve blanda en pantallas retina y tiene un halo de una edición previa). La final: al menos 1500 px de alto, luz pareja, fondo liso, mirando hacia el texto (izquierda del encuadre) o a cámara; el blanco y negro se aplica después. _Disparador:_ antes de publicar.
 - [ ] **Link al CV en la navegación.** Quedó afuera para no tener un link roto. _Disparador:_ tener el PDF del CV (uno por idioma).
+- [ ] **Especificación de los videos de proyectos** (§42.7): duración, resolución, formato, peso máximo y datos inventados, para que otra IA los produzca consistentes. _Disparador:_ antes de producir el primer video (fase 4 de la §42.8).
+- [ ] **Dónde alojar los videos** (§42.7): fuera de git. _Disparador:_ definir el hosting.
