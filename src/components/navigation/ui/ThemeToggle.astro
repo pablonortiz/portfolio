@@ -3,7 +3,7 @@ import MoonIcon from "@/assets/icons/moon.svg";
 import SunIcon from "@/assets/icons/sun.svg";
 import type { Locale } from "@/lib/i18n";
 
-import { navigationTexts } from "./navigation.texts";
+import { navigationTexts } from "../navigation.texts";
 
 interface Props {
   lang: Locale;
@@ -25,29 +25,11 @@ const { darkTheme } = navigationTexts[lang];
 </button>
 
 <script>
-  const root = document.documentElement;
-  const toggle = document.querySelector("[data-theme-toggle]");
-  const systemDark = matchMedia("(prefers-color-scheme: dark)");
+  import { setupThemeToggle } from "../lib/theme-toggle";
 
-  const currentTheme = () =>
-    root.dataset.theme ?? (systemDark.matches ? "dark" : "light");
-
-  const syncPressed = () =>
-    toggle?.setAttribute("aria-pressed", String(currentTheme() === "dark"));
-
-  toggle?.addEventListener("click", () => {
-    const nextTheme = currentTheme() === "dark" ? "light" : "dark";
-    root.dataset.theme = nextTheme;
-    try {
-      localStorage.setItem("theme", nextTheme);
-    } catch {
-      // Storage can be blocked (private mode, site settings): the theme still applies to this visit.
-    }
-    syncPressed();
-  });
-
-  systemDark.addEventListener("change", syncPressed);
-  syncPressed();
+  document
+    .querySelectorAll<HTMLElement>("[data-theme-toggle]")
+    .forEach(setupThemeToggle);
 </script>
 
 <style>

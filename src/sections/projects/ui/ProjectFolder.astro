@@ -8,7 +8,7 @@ import type { Locale } from "@/lib/i18n";
 import type { Project } from "@/lib/projects";
 
 import ProjectPages from "./ProjectPages.astro";
-import { projectsTexts } from "./projects.texts";
+import { projectsTexts } from "../projects.texts";
 
 interface Props {
   lang: Locale;
@@ -72,64 +72,11 @@ const [defaultCategory] = categories;
 </div>
 
 <script>
+  import { setupProjectTabs } from "../lib/project-tabs";
+
   document
     .querySelectorAll<HTMLElement>("[data-project-folder]")
-    .forEach(setupFolder);
-
-  function setupFolder(folder: HTMLElement) {
-    const tabs = [
-      ...folder.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
-    ];
-    const urlParam = folder.dataset.urlParam ?? "platform";
-
-    const panelOf = (tab: HTMLButtonElement) =>
-      document.getElementById(tab.getAttribute("aria-controls") ?? "");
-
-    const activate = (tab: HTMLButtonElement, updateUrl: boolean) => {
-      if (tab.getAttribute("aria-selected") === "true") return;
-      tabs.forEach((candidate) => {
-        const selected = candidate === tab;
-        candidate.setAttribute("aria-selected", String(selected));
-        candidate.tabIndex = selected ? 0 : -1;
-        panelOf(candidate)?.toggleAttribute("hidden", !selected);
-      });
-      panelOf(tab)?.dispatchEvent(new Event("panel-shown"));
-      if (updateUrl) pushCategory(tab.dataset.category ?? "");
-    };
-
-    const pushCategory = (category: string) => {
-      const url = new URL(location.href);
-      url.searchParams.set(urlParam, category);
-      history.pushState(null, "", url);
-    };
-
-    const tabForUrl = () => {
-      const category = new URL(location.href).searchParams.get(urlParam);
-      return tabs.find((tab) => tab.dataset.category === category) ?? tabs[0];
-    };
-
-    const keyboardTarget = (key: string, index: number) =>
-      ({
-        ArrowRight: tabs[(index + 1) % tabs.length],
-        ArrowLeft: tabs[(index - 1 + tabs.length) % tabs.length],
-        Home: tabs[0],
-        End: tabs[tabs.length - 1],
-      })[key];
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => activate(tab, true));
-      tab.addEventListener("keydown", (event) => {
-        const target = keyboardTarget(event.key, index);
-        if (!target) return;
-        event.preventDefault();
-        target.focus();
-        activate(target, true);
-      });
-    });
-
-    window.addEventListener("popstate", () => activate(tabForUrl(), false));
-    activate(tabForUrl(), false);
-  }
+    .forEach(setupProjectTabs);
 </script>
 
 <style>

@@ -26,7 +26,7 @@ Resumen de la §36 de `docs/architecture.md`; ante conflicto, gana ese archivo.
 5. No instalar herramientas preventivamente (incluye state managers: estado local → URL → localStorage → store global solo ante una necesidad real).
 6. La URL es el estado cuando el concepto es navegación (idioma, proyecto, filtros).
 7. Contenido separado de UI (Content Collections / MDX).
-8. No predecir reutilización: a `shared` solo cuando realmente se reutiliza.
+8. No predecir reutilización: a `components/<dominio>/` solo cuando realmente lo usa una segunda sección.
 9. La web tiene que ser clara sin animaciones.
 10. La performance es parte del portfolio.
 

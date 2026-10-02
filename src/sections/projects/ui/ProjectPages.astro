@@ -36,35 +36,11 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
 </div>
 
 <script>
+  import { setupPageIndicator } from "../lib/page-indicator";
+
   document
     .querySelectorAll<HTMLElement>("[data-project-pages]")
-    .forEach(setupIndicator);
-
-  function setupIndicator(pages: HTMLElement) {
-    const indicator = pages.parentElement?.querySelector(
-      "[data-project-indicator]",
-    );
-    if (!indicator) return;
-    const items = [...pages.children] as HTMLElement[];
-
-    const update = () => {
-      const paddingTop = parseFloat(getComputedStyle(pages).paddingTop);
-      const pageStarts = items.filter(
-        (item) => getComputedStyle(item).scrollSnapAlign !== "none",
-      );
-      const currentPage =
-        pageStarts.findLastIndex(
-          (item) => item.offsetTop - paddingTop <= pages.scrollTop + 1,
-        ) + 1;
-      indicator.textContent =
-        pageStarts.length > 1 ? `${currentPage} / ${pageStarts.length}` : "";
-    };
-
-    pages.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    pages.closest('[role="tabpanel"]')?.addEventListener("panel-shown", update);
-    update();
-  }
+    .forEach(setupPageIndicator);
 </script>
 <style>
   .project-pages-frame {

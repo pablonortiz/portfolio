@@ -161,8 +161,8 @@ src/
 │
 ├─ components/
 │  ├─ ui/
-│  ├─ shared/
-│  └─ navigation/
+│  ├─ navigation/
+│  └─ <dominio>/   (solo cuando una pieza la usan 2+ secciones)
 │
 ├─ sections/
 │  ├─ hero/
@@ -204,7 +204,7 @@ La arquitectura es una **dirección de crecimiento**, no un requisito de scaffol
 
 ---
 
-## 17. `components/ui`, `components/shared` y sections
+## 17. `components/` y `sections/`
 
 Se usa `sections/` y no `features/` para no mezclar con el significado de _feature_ en FSD (una acción del usuario): acá cada carpeta es una sección del sitio.
 
@@ -223,21 +223,24 @@ Icon.astro
 
 No deberían saber nada del dominio específico del portfolio.
 
-### `components/shared`
+Equivale al `shared/ui` de FSD.
 
-Componentes reutilizados entre distintas secciones.
+### `components/navigation`
 
-Ejemplos posibles:
+La estructura fija del sitio: Header, Footer y menús. La usan los layouts, una vez por página; no es una pieza "compartida entre secciones" (en FSD sería un widget).
+
+### Piezas de dominio reutilizadas: `components/<dominio>/` (decidido)
+
+**No hay una carpeta `shared/`**: en FSD, `shared` es la capa sin conocimiento del dominio (lo que acá es `components/ui`), y usar la misma palabra para "lo que se reutiliza entre secciones" le daría dos significados. Cuando una pieza con dominio la usan dos o más secciones, va a una carpeta con el nombre de **su dominio**:
 
 ```text
-ProjectCard.astro
-TechBadge.astro
-SocialLinks.astro
+components/tech/TechBadge.astro      ← si la usan Proyectos y Sobre mí
+components/social/SocialLinks.astro  ← si la usan el Footer y Contacto
 ```
 
 Regla:
 
-> Si realmente se reutiliza entre varias secciones → shared.
+> Si realmente la usa una segunda sección → `components/<dominio>/`.
 
 No mover componentes prematuramente “por si algún día se reutilizan”.
 
@@ -245,22 +248,27 @@ No mover componentes prematuramente “por si algún día se reutilizan”.
 
 Sí: cada sección puede y debe contener su UI propia.
 
-Ejemplo:
-
-```text
-sections/
-└─ projects/
-   ├─ ProjectsSection.astro
-   ├─ ProjectFilters.tsx
-   ├─ ProjectDemo.tsx
-   ├─ DeviceFrame.tsx
-   ├─ projects.types.ts
-   └─ projects.utils.ts
-```
-
 Regla:
 
 > Si solo tiene sentido dentro de una sección → vive dentro de esa sección.
+
+### Estructura interna de una sección (decidido)
+
+Todas las secciones (y `components/navigation/`) tienen la misma forma, para saber siempre dónde está cada cosa:
+
+```text
+sections/projects/
+├─ ProjectsSection.astro     ← entrada: lo que importan las páginas
+├─ ProjectDetail.astro       ← (otra entrada, si la sección tiene más de una)
+├─ projects.texts.ts         ← textos ES/EN, compartidos por entrada y piezas
+├─ ui/                       ← piezas internas (componentes)
+└─ lib/                      ← lógica
+```
+
+- **El primer nivel es la API pública** de la sección; `ui/` y `lib/` son internos. Sin `index.ts` que reexporten: la regla de la carpeta ya cumple esa función.
+- **Un `<script>` con lógica va a `lib/`** y el componente solo lo cablea (`import { setupX } from "../lib/x"` + `querySelectorAll(...).forEach(setupX)`). En `lib/` se separan las **funciones puras** (cuentas testeables sin navegador, ej. qué pestaña sigue con cada tecla) del **`setup…()`** que toca el DOM. Un script que es solo cableado (ej. el menú mobile: abrir, cerrar) se queda en el componente.
+- **Excepción:** el script anti-destello del `<head>` es `is:inline` (tiene que correr antes del primer pintado) y un script inline no puede importar módulos.
+- **Nombres:** carpetas en minúscula (`ui/`, `lib/`), componentes en PascalCase (convención de Astro), módulos `.ts` en kebab-case (`project-tabs.ts`).
 
 ---
 
@@ -971,6 +979,6 @@ Estado
 5. **No instalar herramientas preventivamente.**
 6. **La URL es estado cuando el concepto es navegación.**
 7. **Contenido separado de UI.**
-8. **No predecir reutilización: mover a shared cuando realmente se reutiliza.**
+8. **No predecir reutilización: mover a `components/<dominio>/` cuando realmente se reutiliza.**
 9. **La web debe seguir siendo clara sin animaciones.**
 10. **Performance también forma parte del portfolio.**

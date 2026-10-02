@@ -3,8 +3,9 @@ import ArrowDownIcon from "@/assets/icons/arrow-down.svg";
 import { sectionIds } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 
-import HeroPhoto from "./HeroPhoto.astro";
-import PlatformList from "./PlatformList.astro";
+import { getRevealTiming } from "./lib/reveal-timing";
+import HeroPhoto from "./ui/HeroPhoto.astro";
+import PlatformList from "./ui/PlatformList.astro";
 import { heroTexts } from "./hero.texts";
 
 interface Props {
@@ -15,23 +16,12 @@ const { lang } = Astro.props;
 const texts = heroTexts[lang];
 const projectsHref = `#${sectionIds[lang].projects}`;
 
-const countWords = (text: string) => text.trim().split(/\s+/).length;
-
-const revealGroups = [
+const { groupStyles, totalWords } = getRevealTiming([
   [texts.greeting],
   [texts.intro, texts.name],
   [texts.taglineLines[0]],
   [texts.taglineLines[1]],
-];
-const wordCounts = revealGroups.map((group) => countWords(group.join(" ")));
-const totalWords = wordCounts.reduce((sum, count) => sum + count, 0);
-
-const revealStyle = (groupIndex: number) => {
-  const wordsBefore = wordCounts
-    .slice(0, groupIndex)
-    .reduce((sum, count) => sum + count, 0);
-  return `--words-before: ${wordsBefore}; --words: ${wordCounts[groupIndex]}`;
-};
+]);
 ---
 
 <section
@@ -40,16 +30,16 @@ const revealStyle = (groupIndex: number) => {
 >
   <h1 class="md:col-start-1 md:row-start-2">
     <span class="block text-xl text-muted">
-      <span class="hero-reveal" style={revealStyle(0)}>
+      <span class="hero-reveal" style={groupStyles[0]}>
         {texts.greeting}
       </span>{" "}
-      <span class="hero-reveal" style={revealStyle(1)}>
+      <span class="hero-reveal" style={groupStyles[1]}>
         {texts.intro}
       </span>
     </span>
     <span
       class="hero-reveal block font-display text-5xl font-extrabold tracking-tight"
-      style={revealStyle(1)}
+      style={groupStyles[1]}
     >
       {texts.name}
     </span>
@@ -61,10 +51,10 @@ const revealStyle = (groupIndex: number) => {
   />
 
   <p class="text-2xl md:col-start-1 md:row-start-3">
-    <span class="hero-reveal block" style={revealStyle(2)}>
+    <span class="hero-reveal block" style={groupStyles[2]}>
       {texts.taglineLines[0]}
     </span>
-    <span class="hero-reveal block" style={revealStyle(3)}>
+    <span class="hero-reveal block" style={groupStyles[3]}>
       {texts.taglineLines[1]}
     </span>
   </p>
