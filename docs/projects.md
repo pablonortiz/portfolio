@@ -26,7 +26,7 @@ Un recuadro dentro de la página, con bordes, que funciona como una **carpeta co
 - **Al cambiar de pestaña:** el indicador de la pestaña activa se desliza hasta la nueva, y un **círculo del color nuevo crece desde el punto del click** hasta cubrir la carpeta. Con "reducir movimiento", el cambio es instantáneo.
 - **Accesibilidad:** semántica de pestañas (se recorren con las flechas del teclado y se anuncian como pestañas).
 - **La pestaña activa va en la URL** (`?plataforma=mobile`, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior.
-- **Dev tiene estética de terminal** (monoespaciada) y su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar).
+- **Dev tiene estética de terminal** (monoespaciada), con un cursor que titila (`_` o `|`) como animación característica, y su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar).
 - Idea a evaluar: tocar un ícono de la órbita del Hero abre esa pestaña.
 
 ### 42.2. Páginas de proyectos (scroll snap)
@@ -48,6 +48,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **Solo se reproducen las tarjetas visibles**; mientras carga, se ve una imagen fija (poster).
 - Con "reducir movimiento" o en modo ahorro de datos, quedan quietas con la imagen fija.
 - **Datos inventados** en todas las grabaciones (regla de privacidad del CLAUDE.md).
+- **Todos los videos son horizontales (16:9)**, para que las tarjetas no desentonen: los de apps mobile se graban verticales y se componen en horizontal, con el teléfono al centro y los costados en negro o difuminados.
 
 ### 42.4. Del grid al proyecto: el zoom
 

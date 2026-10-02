@@ -1,8 +1,7 @@
 ---
-import { getRelativeLocaleUrl } from "astro:i18n";
-
-import { sectionIds, sections } from "@/config/navigation";
+import { sections } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
+import { getSectionPath } from "@/lib/locale-url";
 
 import { navigationTexts } from "./navigation.texts";
 
@@ -13,13 +12,12 @@ interface Props {
 
 const { lang, class: className } = Astro.props;
 const { links } = navigationTexts[lang];
-const homePath = getRelativeLocaleUrl(lang);
 ---
 
 <ul class={className}>
   {sections.map((section) => (
     <li>
-      <a href={`${homePath}#${sectionIds[lang][section]}`}>{links[section]}</a>
+      <a href={getSectionPath(lang, section)}>{links[section]}</a>
     </li>
   ))}
 </ul>

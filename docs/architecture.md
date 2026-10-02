@@ -540,10 +540,10 @@ src/pages/
 └─ [lang]/
    ├─ index.astro        → /es/ y /en/
    └─ [section]/
-      └─ [slug].astro    → /es/proyectos/… y /en/projects/… (pendiente)
+      └─ [slug].astro    → /es/proyectos/… y /en/projects/…
 ```
 
-Una **ruta dinámica** por página: `getStaticPaths()` le dice a Astro, al compilar, qué versiones generar (una por idioma). La lista de idiomas vive solo en `lib/i18n.ts` (`locales`, tipo `Locale`, `defaultLocale`); `astro.config.mjs` también la importa de ahí. Para los proyectos, `getStaticPaths` va a decidir qué segmento (`proyectos` / `projects`) corresponde a cada idioma.
+Una **ruta dinámica** por página: `getStaticPaths()` le dice a Astro, al compilar, qué versiones generar (una por idioma). La lista de idiomas vive solo en `lib/i18n.ts` (`locales`, tipo `Locale`, `defaultLocale`); `astro.config.mjs` también la importa de ahí. Para los proyectos, `getStaticPaths` genera cada proyecto con el segmento de su idioma (`proyectos` / `projects`, definidos en `routeSegments` de `config/navigation.ts`): `/es/projects/…` no existe.
 
 Así no hay páginas duplicadas por construcción: un solo archivo por página, el idioma llega como parámetro (`lang`, tipado como `"es" | "en"`) y las secciones toman sus textos del diccionario.
 
@@ -600,7 +600,7 @@ Ejemplo:
 
 No necesita React.
 
-Las URLs por idioma se arman con **una sola función en `lib/i18n.ts`**; ningún componente las arma a mano. Es la que traduce el único segmento que cambia (`proyectos` ↔ `projects`), porque el i18n de Astro no traduce segmentos. La misma función alimenta:
+Las URLs por idioma se arman en **`lib/locale-url.ts`**; ningún componente las arma a mano. `getLocalizedPath` (el selector) cambia el prefijo de idioma y traduce los segmentos (`proyectos` ↔ `projects`), porque el i18n de Astro no los traduce; `getSectionPath` y `getProjectPath` arman los links a secciones y proyectos. La misma lógica alimenta:
 
 - el selector ES | EN;
 - los `<link rel="alternate" hreflang>` del `<head>`, que le indican a los buscadores que ambas páginas son la misma en otro idioma.

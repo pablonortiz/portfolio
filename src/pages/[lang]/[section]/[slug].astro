@@ -1,0 +1,43 @@
+---
+import type {
+  GetStaticPaths,
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+} from "astro";
+
+import { routeSegments } from "@/config/navigation";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { locales } from "@/lib/i18n";
+import { getProjects } from "@/lib/projects";
+import ProjectDetail from "@/sections/projects/ProjectDetail.astro";
+
+export const getStaticPaths = (async () => {
+  const pathsPerLocale = await Promise.all(
+    locales.map(async (lang) =>
+      (await getProjects(lang)).map((project) => ({
+        params: {
+          lang,
+          section: routeSegments.projects[lang],
+          slug: project.slug,
+        },
+        props: { project },
+      })),
+    ),
+  );
+  return pathsPerLocale.flat();
+}) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { lang } = Astro.params as Params;
+const { project } = Astro.props as Props;
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${project.title} — Pablo Ortiz`}
+  description={project.summary}
+>
+  <ProjectDetail lang={lang} project={project} />
+</BaseLayout>

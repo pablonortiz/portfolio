@@ -1,0 +1,105 @@
+---
+import { Picture } from "astro:assets";
+import { render } from "astro:content";
+
+import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import type { Locale } from "@/lib/i18n";
+import { getSectionPath } from "@/lib/locale-url";
+import type { Project } from "@/lib/projects";
+
+import { projectsTexts } from "./projects.texts";
+
+interface Props {
+  lang: Locale;
+  project: Project;
+}
+
+const { lang, project } = Astro.props;
+const texts = projectsTexts[lang];
+const { Content } = await render(project.body);
+---
+
+<article class="mx-auto max-w-6xl px-6 py-10">
+  <div class="rounded-2xl border border-border p-6 md:p-10">
+    <a
+      href={getSectionPath(lang, "projects")}
+      class="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-foreground"
+    >
+      <ArrowLeftIcon class="size-4" aria-hidden="true" />
+      {texts.back}
+    </a>
+
+    <h1 class="mt-6 text-center font-display text-4xl font-extrabold tracking-tight md:text-5xl">
+      {project.title}
+    </h1>
+
+    <div class="mt-10 grid gap-10 md:grid-cols-2">
+      <div class="space-y-8">
+        <section>
+          <h2 class="detail-label">{texts.problem}</h2>
+          <p class="mt-3">{project.problem}</p>
+        </section>
+        <section>
+          <h2 class="detail-label">{texts.solution}</h2>
+          <p class="mt-3">{project.solution}</p>
+        </section>
+      </div>
+
+      <div class="flex flex-col items-center gap-6">
+        <Picture
+          src={project.poster}
+          alt=""
+          formats={["avif", "webp"]}
+          widths={[480, 720, 960]}
+          sizes="(min-width: 768px) 32rem, 90vw"
+          class="w-full rounded-xl"
+        />
+        {project.demo && (
+          <a
+            href={project.demo}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
+          >
+            {texts.tryIt}
+            <ArrowUpRightIcon class="size-4" aria-hidden="true" />
+            <span class="sr-only">{texts.opensInNewTab}</span>
+          </a>
+        )}
+      </div>
+    </div>
+
+    <section class="mt-10">
+      <h2 class="detail-label">{texts.stack}</h2>
+      <ul class="mt-3 flex flex-wrap gap-2 font-mono text-sm">
+        {project.stack.map((technology) => (
+          <li class="rounded-full border border-border px-3 py-1">
+            {technology}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="mt-10 border-t border-border pt-8">
+      <h2 class="detail-label">{texts.technical}</h2>
+      <div class="technical-body mt-3">
+        <Content />
+      </div>
+    </section>
+  </div>
+</article>
+
+<style>
+  .detail-label {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .technical-body :global(* + *) {
+    margin-top: 1em;
+  }
+</style>
