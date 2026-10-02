@@ -37,6 +37,8 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **Con CSS Scroll Snap, no interceptando el scroll con JS:** el área de proyectos tiene scroll propio, cada página ocupa toda el área, `scroll-snap-type: y mandatory` obliga a terminar siempre en una página y `scroll-snap-stop: always` impide saltarse páginas con un gesto fuerte. Al llegar a la última, el scroll pasa solo a la página de abajo (encadenamiento nativo). Teclado, trackpad, mouse y touch funcionan como en cualquier lado. Interceptar la rueda con JS trae los problemas clásicos: la inercia del trackpad salta páginas, se queda atrapado en la carpeta, y el teclado y los lectores de pantalla dejan de funcionar como se espera.
 - Al encajar una página, sus tarjetas entran con una animación.
 - **Indicador de página** (puntos o "1/2"), para que se sepa que hay más.
+- **Sin barra de scroll visible** en la carpeta (`scrollbar-width: none`, más `::-webkit-scrollbar` para Safari viejo): el indicador de página cumple esa función. El scroll sigue funcionando igual con rueda, trackpad, teclado y touch.
+- Comportamiento medido: un toque chico de rueda (120 px) rebota a la página actual y hace falta un gesto de ~media página para avanzar; Re Pág y las flechas (con foco) avanzan de a una. Probado por Pablo y aceptado.
 - **Las tarjetas se dimensionan según el alto disponible** de la carpeta: 2 filas tienen que entrar enteras (en 1280×720 quedan ~600 px tras el header y las pestañas).
 - Soporta cualquier cantidad de proyectos por pestaña (hoy se estiman entre 4 y 8).
 
@@ -54,6 +56,14 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **El video queda pausado en el frame en el que se tocó** y ese frame es el fondo de la página del proyecto (`transition:persist` mantiene vivo el `<video>` entre páginas).
 - **Al volver** (botón del navegador o "← Proyectos"), la animación se invierte, el video sigue desde donde estaba y se vuelve **a la misma página de proyectos** (Astro restaura el scroll de la ventana pero no el de un área interna: hay que guardarlo y restaurarlo).
 - Costo asumido: `ClientRouter` hace que el sitio navegue como una SPA; los scripts existentes (menú, tema) se reinicializan en cada navegación y el tema guardado se vuelve a aplicar después de cada cambio de página.
+
+**Notas de implementación**, validadas en la prueba técnica de la fase 0:
+
+- **El video que viaja conserva los atributos de la página de origen**, incluida la marca de aislamiento de estilos de Astro. Se le da estilo desde un contenedor propio de cada página, con el selector liberado: `.contenedor :global(video)`; Astro aísla cada parte del selector, así que `.contenedor video` no encuentra un video que vino de otra página.
+- **`transition:name` va en los contenedores** (el recuadro de la tarjeta y el fondo del detalle), **`transition:persist` en el video** que viaja adentro. Los dos en el mismo elemento rompen el zoom: el nombre de transición depende de una regla de la página de origen que desaparece al navegar, y queda un fundido.
+- **Los listeners en `document` sobreviven a la página** con `ClientRouter`: se sacan en `astro:before-swap` (pasó con el Esc del detalle, que seguía activo en la grilla).
+- **El scroll de la carpeta no lo restaura Astro** (solo el de la ventana): se guarda en `sessionStorage` al tocar una tarjeta y se restaura en `astro:page-load`.
+- Al volver, solo sigue el video que se tocó; los demás arrancan de nuevo. Y volver a la home vuelve a montar el Hero, cuya animación se repite (fuera de pantalla, porque se vuelve scrolleado a la carpeta).
 
 ### 42.5. Página de un proyecto
 
