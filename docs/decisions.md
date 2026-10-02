@@ -73,3 +73,4 @@ Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones 
 - **La carpeta sin barra de scroll visible** (§42.2), a pedido de Pablo: el indicador de página cumple esa función.
 - **Contenido de proyectos: `project.yaml` compartido + un `.md` por idioma** (§18), en vez de toda la metadata repetida en cada idioma. Dos colecciones validadas con Zod y una función que las combina; el build falla ante un idioma faltante, una categoría inexistente o un resumen de más de 160 caracteres (verificado).
 - **`.md` en vez de `.mdx`** (§18): MDX solo hace falta para componentes dentro del texto; se adopta cuando un proyecto lo necesite.
+- **Contenido de ejemplo hasta tener el real**: 10 proyectos marcados como ejemplo (5 web para probar dos páginas, 2 mobile, 1 desktop, 2 dev). Los reales tienen que estar antes de cerrar la sección.

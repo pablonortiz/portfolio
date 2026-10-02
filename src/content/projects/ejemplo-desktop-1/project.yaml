@@ -1,0 +1,6 @@
+category: desktop
+order: 1
+year: 2026
+stack: [Electron, React, SQLite]
+poster: ./poster.png
+demo: https://example.com

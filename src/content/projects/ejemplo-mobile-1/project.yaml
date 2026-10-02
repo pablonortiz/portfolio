@@ -1,0 +1,6 @@
+category: mobile
+order: 1
+year: 2026
+stack: [React Native, Expo, TypeScript]
+poster: ./poster.png
+demo: https://example.com

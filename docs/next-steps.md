@@ -28,3 +28,4 @@ Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). 
 - [ ] **Link al CV en la navegación.** Quedó afuera para no tener un link roto. _Disparador:_ tener el PDF del CV (uno por idioma).
 - [ ] **Especificación de los videos de proyectos** (§42.7): duración, resolución, formato, peso máximo y datos inventados, para que otra IA los produzca consistentes. _Disparador:_ antes de producir el primer video (fase 4 de la §42.8).
 - [ ] **Dónde alojar los videos** (§42.7): fuera de git. _Disparador:_ definir el hosting.
+- [ ] **Datos reales de los proyectos.** Hoy hay 10 de ejemplo (`src/content/projects/ejemplo-*`), para construir la sección. Pablo pasa la lista real (nombre, categoría, problema, solución, stack, imágenes). _Disparador:_ antes de dar por terminada la sección de proyectos y pasar a la siguiente.
