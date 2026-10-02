@@ -29,6 +29,7 @@ Resumen de la §36 de `docs/architecture.md`; ante conflicto, gana ese archivo.
 8. No predecir reutilización: a `components/<dominio>/` solo cuando realmente lo usa una segunda sección.
 9. La web tiene que ser clara sin animaciones.
 10. La performance es parte del portfolio.
+11. Accesibilidad: WCAG 2.2 nivel AA como piso.
 
 ## Commits
 

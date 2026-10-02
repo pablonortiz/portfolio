@@ -986,3 +986,12 @@ Estado
 8. **No predecir reutilización: mover a `components/<dominio>/` cuando realmente se reutiliza.**
 9. **La web debe seguir siendo clara sin animaciones.**
 10. **Performance también forma parte del portfolio.**
+11. **Accesibilidad: WCAG 2.2 nivel AA como piso.**
+
+### Accesibilidad (decidido)
+
+[WCAG](https://www.w3.org/TR/WCAG22/) (_Web Content Accessibility Guidelines_) son las pautas de accesibilidad del W3C: criterios verificables con tres niveles. A es lo mínimo (sin eso, alguien no puede usar la página), AA es el objetivo habitual y el que piden las leyes que la exigen, y AAA es el más exigente. Un portfolio personal no tiene obligación legal; se adopta como estándar de calidad.
+
+- **Todo lo nuevo cumple A y AA.** AAA cuando sale barato: el contraste del texto ya es AAA (1.4.6, §23) y las animaciones que dispara una interacción se apagan con "reducir movimiento" (2.3.3).
+- **Lo que se mueve o titila solo** (empieza sin que nadie lo pida, dura más de 5 segundos y convive con otro contenido) **tiene que poder pausarse** (2.2.2, nivel A). "Reducir movimiento" no alcanza: es una preferencia del sistema, no un control en la página, y el W3C no la acepta como técnica para este criterio. Casos: el cursor de Dev titila menos de 5 segundos (§42.1), la tira de tecnologías nace con pausa (§42.5) y la órbita del Hero está pendiente (§41).
+- **Cómo se verifica:** reglas de accesibilidad de ESLint en cada commit (lo estático: atributos, roles, textos alternativos), contraste medido al definir colores y pruebas con teclado de cada componente interactivo. Con lector de pantalla todavía no se probó nada (§41).

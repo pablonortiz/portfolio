@@ -102,6 +102,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **"Probalo"**: lleva a la demo (§5, §26), solo si el proyecto tiene una.
 - **"← Proyectos"** arriba a la izquierda; Esc también vuelve.
 - **Tira de tecnologías:** se mueve sola hacia la derecha en loop infinito y se puede arrastrar hacia adelante o hacia atrás. Se pausa con el hover o el foco; con "reducir movimiento" es una lista quieta; las copias que se repiten para el loop quedan ocultas para los lectores de pantalla.
+  - **Necesita una pausa que ande también en touch** (WCAG 2.2.2, §36): el hover no existe en una pantalla táctil y el foco no es una forma evidente de pausar. La opción segura es un botón de pausa visible; se define en la fase 5.
 
 ### 42.6. Transición del Hero a Proyectos
 
