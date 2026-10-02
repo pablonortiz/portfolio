@@ -6,4 +6,9 @@
   --color-muted: #737373;
   --color-border: #e5e5e5;
   --color-accent: #525252;
+
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 800ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }

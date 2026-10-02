@@ -4,6 +4,7 @@ export type Platform = "web" | "mobile" | "desktop";
 
 interface HeroTexts {
   greeting: string;
+  intro: string;
   name: string;
   taglineLines: [string, string];
   photoAlt: string;
@@ -16,7 +17,8 @@ const platforms = { web: "Web", mobile: "Mobile", desktop: "Desktop" };
 
 export const heroTexts = {
   es: {
-    greeting: "Hola, soy",
+    greeting: "Hola,",
+    intro: "soy",
     name: "Pablo Ortiz",
     taglineLines: ["Diseño y desarrollo", "software y sistemas"],
     photoAlt: "Retrato de Pablo Ortiz",
@@ -25,7 +27,8 @@ export const heroTexts = {
     cta: "Conocé mis proyectos",
   },
   en: {
-    greeting: "Hi, I'm",
+    greeting: "Hi,",
+    intro: "I'm",
     name: "Pablo Ortiz",
     taglineLines: ["I design and build", "software and systems"],
     photoAlt: "Portrait of Pablo Ortiz",

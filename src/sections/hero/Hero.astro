@@ -14,26 +14,59 @@ interface Props {
 const { lang } = Astro.props;
 const texts = heroTexts[lang];
 const projectsHref = `#${sectionIds[lang].projects}`;
+
+const countWords = (text: string) => text.trim().split(/\s+/).length;
+
+const revealGroups = [
+  [texts.greeting],
+  [texts.intro, texts.name],
+  [texts.taglineLines[0]],
+  [texts.taglineLines[1]],
+];
+const wordCounts = revealGroups.map((group) => countWords(group.join(" ")));
+const totalWords = wordCounts.reduce((sum, count) => sum + count, 0);
+
+const revealStyle = (groupIndex: number) => {
+  const wordsBefore = wordCounts
+    .slice(0, groupIndex)
+    .reduce((sum, count) => sum + count, 0);
+  return `--words-before: ${wordsBefore}; --words: ${wordCounts[groupIndex]}`;
+};
 ---
 
-<section class="relative mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl content-center justify-items-center gap-5 px-6 pt-6 pb-14 text-center md:grid-cols-2 md:grid-rows-[1fr_auto_auto_auto_1fr] md:justify-items-start md:gap-x-12 md:text-left">
+<section
+  style={`--total-words: ${totalWords}`}
+  class="hero relative mx-auto grid min-h-[calc(100dvh-4rem)] max-w-6xl content-center justify-items-center gap-5 px-6 pt-6 pb-14 text-center md:grid-cols-2 md:grid-rows-[1fr_auto_auto_auto_1fr] md:justify-items-start md:gap-x-12 md:text-left"
+>
   <h1 class="md:col-start-1 md:row-start-2">
-    <span class="block text-xl text-muted">{texts.greeting}</span>
-    <span class="block text-5xl font-bold">{texts.name}</span>
+    <span class="block text-xl text-muted">
+      <span class="hero-reveal" style={revealStyle(0)}>
+        {texts.greeting}
+      </span>{" "}
+      <span class="hero-reveal" style={revealStyle(1)}>
+        {texts.intro}
+      </span>
+    </span>
+    <span class="hero-reveal block text-5xl font-bold" style={revealStyle(1)}>
+      {texts.name}
+    </span>
   </h1>
 
   <HeroPhoto
     alt={texts.photoAlt}
-    class="w-[min(70vw,30dvh)] md:col-start-2 md:row-span-full md:w-full md:max-w-md md:self-center md:justify-self-end"
+    class="w-[min(70vw,30dvh)] md:col-start-2 md:row-span-full md:w-full md:max-w-md md:self-center md:justify-self-end max-md:[@media(max-height:700px)]:w-[min(70vw,25dvh)]"
   />
 
   <p class="text-2xl md:col-start-1 md:row-start-3">
-    {texts.taglineLines[0]}
-    <br />
-    {texts.taglineLines[1]}
+    <span class="hero-reveal block" style={revealStyle(2)}>
+      {texts.taglineLines[0]}
+    </span>
+    <span class="hero-reveal block" style={revealStyle(3)}>
+      {texts.taglineLines[1]}
+    </span>
   </p>
 
-  <div class="flex flex-col items-center gap-6 md:col-start-1 md:row-start-4 md:items-start">
+  <div class="flex flex-col items-center gap-5 md:col-start-1 md:row-start-4 md:items-start">
     <PlatformList lang={lang} />
     <a
       href={projectsHref}
@@ -52,3 +85,25 @@ const projectsHref = `#${sectionIds[lang].projects}`;
     <ArrowDownIcon class="size-4" />
   </a>
 </section>
+
+<style>
+  .hero {
+    --reading-pace: 350ms;
+    --orbit-start: calc(var(--total-words) * var(--reading-pace));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* backwards: while waiting for its turn, each group shows the first keyframe (dimmed). */
+    .hero-reveal {
+      animation: hero-reveal var(--ease-in-out) backwards;
+      animation-duration: calc(var(--words) * var(--reading-pace));
+      animation-delay: calc(var(--words-before) * var(--reading-pace));
+    }
+  }
+
+  @keyframes hero-reveal {
+    from {
+      opacity: 0.35;
+    }
+  }
+</style>

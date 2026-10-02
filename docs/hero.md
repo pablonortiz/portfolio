@@ -119,7 +119,7 @@ Recomendación:
 - No escribir letra por letra.
 - El texto debe estar visible desde el inicio en menor contraste.
 - La animación simplemente lo ilumina por grupos naturales.
-- Duración total aproximada: **1.5–2.5 segundos**.
+- Duración: **a velocidad de lectura**, 350 ms por palabra (unos 3,5 s en español). Cada grupo dura lo que tarda en leerse.
 - Reproducir una vez.
 
 Secuencia conceptual:
@@ -206,11 +206,14 @@ o:
 
 No deben ser una rotación tipo sistema solar rápida.
 
-La idea es:
+Decidido (reemplaza la idea original de "floating / orbital drift"): **giran alrededor de un centro, muy lento**.
 
-> **floating / orbital drift**
-
-Movimiento lento, sutil e independiente.
+- No se ven en absoluto hasta que termina el texto (§9). Ahí, en secuencia: el círculo **se dibuja** como un trazo (desde las 12, en sentido horario, 0,7 s), después **aparecen los íconos** en su lugar, en orden de lectura y al mismo ritmo que el texto (350 ms entre uno y otro), y recién entonces **empieza el giro**. Terminan de aparecer a los ~5,6 s.
+- Después giran una vuelta por minuto.
+- Posición inicial: Web y Mobile a la misma altura, Desktop abajo al centro.
+- El círculo queda como una línea tenue que marca el recorrido, para que se lea como órbita y no como tres etiquetas sueltas; cada etiqueta tapa la línea debajo de su texto.
+- Las etiquetas quedan siempre derechas, y la órbita se pausa con el hover para poder leer y apuntar.
+- Con "reducir movimiento", queda quieta en la posición inicial.
 
 ### Hover en desktop
 
@@ -223,7 +226,7 @@ Al hacer hover:
 
 Los íconos deben ser simples, preferentemente lineales, no enormes ni demasiado ilustrativos.
 
-**Son información, no decoración** (decidido): desde que la frase del §7 no nombra las plataformas, la órbita es la que las comunica. Por eso se ven sin hover ni animación, llevan su etiqueta en texto y se marcan como lista (Web, Mobile, Desktop) para lectores de pantalla.
+**Son información, no decoración** (decidido): desde que la frase del §7 no nombra las plataformas, la órbita es la que las comunica. Por eso se ven sin hover, aparecen como parte de la lectura (y desde el primer instante con "reducir movimiento"), llevan su etiqueta en texto y se marcan como lista (Web, Mobile, Desktop) para lectores de pantalla.
 
 ### Coreografía del Hero (decidido)
 

@@ -4,7 +4,7 @@ import MobileIcon from "@/assets/icons/smartphone.svg";
 import WebIcon from "@/assets/icons/globe.svg";
 import type { Locale } from "@/lib/i18n";
 
-import { heroTexts } from "./hero.texts";
+import { heroTexts, type Platform } from "./hero.texts";
 
 interface Props {
   lang: Locale;
@@ -13,22 +13,156 @@ interface Props {
 
 const { lang, class: className } = Astro.props;
 const { platforms, platformsLabel } = heroTexts[lang];
+
+const orbitItems: {
+  platform: Platform;
+  Icon: typeof WebIcon;
+  angle: number;
+}[] = [
+  { platform: "web", Icon: WebIcon, angle: 210 },
+  { platform: "mobile", Icon: MobileIcon, angle: 330 },
+  { platform: "desktop", Icon: DesktopIcon, angle: 90 },
+];
 ---
 
-<ul
-  aria-label={platformsLabel}
-  class:list={["grid w-fit grid-cols-2 gap-x-10 gap-y-3", className]}
->
-  <li class="flex translate-y-3 items-center gap-2">
-    <WebIcon class="size-5" aria-hidden="true" />
-    {platforms.web}
-  </li>
-  <li class="flex items-center gap-2">
-    <MobileIcon class="size-5" aria-hidden="true" />
-    {platforms.mobile}
-  </li>
-  <li class="col-span-2 flex items-center gap-2 justify-self-center">
-    <DesktopIcon class="size-5" aria-hidden="true" />
-    {platforms.desktop}
-  </li>
-</ul>
+<div class:list={["platform-orbit", className]}>
+  <svg class="orbit-ring" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="50" pathLength="1"></circle>
+  </svg>
+  <ul aria-label={platformsLabel}>
+    {orbitItems.map(({ platform, Icon, angle }, index) => (
+      <li
+        class="platform-slot"
+        style={`--angle: ${angle}deg; --slot-index: ${index}`}
+      >
+        <span class="platform-item flex items-center gap-2">
+          <Icon class="size-5" aria-hidden="true" />
+          {platforms[platform]}
+        </span>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  @property --spin {
+    syntax: "<angle>";
+    inherits: true;
+    initial-value: 0deg;
+  }
+
+  .platform-orbit {
+    --radius: 3.5rem;
+    --revolution: 60s;
+    --pace: var(--reading-pace, 350ms);
+    --draw-start: var(--orbit-start, 0s);
+    --items-start: calc(var(--draw-start) + 2 * var(--pace));
+    --spin-start: calc(var(--items-start) + 4 * var(--pace));
+    position: relative;
+    width: calc(2 * var(--radius) + 7rem);
+    height: calc(2 * var(--radius) + 1.5rem);
+  }
+
+  @media (width >= 48rem) {
+    .platform-orbit {
+      --radius: 4rem;
+    }
+  }
+
+  /* Rotated so the stroke starts at 12 o'clock; pathLength="1" makes the dash math 0 to 1. */
+  .orbit-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(2 * var(--radius));
+    overflow: visible;
+    translate: -50% -50%;
+    rotate: -90deg;
+  }
+
+  .orbit-ring circle {
+    fill: none;
+    stroke: var(--color-border);
+    stroke-width: 0.85;
+    stroke-dasharray: 1;
+  }
+
+  /* Rotating by the angle, moving out and rotating back keeps each label upright. */
+  .platform-slot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: rotate(calc(var(--angle) + var(--spin)))
+      translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + var(--spin))));
+  }
+
+  /* The background hides the orbit line behind each label. */
+  .platform-item {
+    translate: -50% -50%;
+    padding-inline: 0.375rem;
+    white-space: nowrap;
+    background: var(--color-background);
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      scale var(--duration-fast) var(--ease-out);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .platform-orbit {
+      animation: platform-orbit var(--revolution) linear var(--spin-start)
+        infinite;
+    }
+
+    .platform-orbit:hover {
+      animation-play-state: paused;
+    }
+
+    .orbit-ring circle {
+      animation: orbit-draw calc(2 * var(--pace)) var(--ease-in-out)
+        var(--draw-start) backwards;
+    }
+
+    .platform-item {
+      animation: platform-appear calc(2 * var(--pace)) var(--ease-out) backwards;
+      animation-delay: calc(
+        var(--items-start) + var(--slot-index) * var(--pace)
+      );
+    }
+  }
+
+  @media (hover: hover) {
+    .platform-orbit:has(.platform-item:hover) .platform-item:not(:hover) {
+      opacity: 0.5;
+    }
+
+    .platform-item:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .platform-item:hover {
+      scale: 1.08;
+    }
+  }
+
+  @keyframes orbit-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes platform-appear {
+    from {
+      opacity: 0;
+      scale: 0.6;
+    }
+  }
+
+  @keyframes platform-orbit {
+    to {
+      --spin: 360deg;
+    }
+  }
+</style>
