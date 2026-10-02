@@ -102,6 +102,42 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
     }
   }
 
+  /*
+   * Each card enters as it scrolls into the folder and settles once it's fully
+   * in, which is when its page snaps. Tied to the folder's scroll, not to time:
+   * no added delay, and it rewinds when scrolling back.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      /*
+       * Longhands on purpose: the build's minifier (Lightning CSS) folds a
+       * shorthand plus animation-timeline into one "animation" that Chrome
+       * rejects, which silently drops the animation.
+       */
+      .project-page-item {
+        animation-name: card-enter;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: view();
+        animation-range: entry 0% entry 100%;
+      }
+
+      @media (width >= 48rem) {
+        .project-page-item:nth-child(even) {
+          animation-range: entry 25% entry 100%;
+        }
+      }
+    }
+  }
+
+  @keyframes card-enter {
+    from {
+      opacity: 0;
+      translate: 0 1.5rem;
+      scale: 0.96;
+    }
+  }
+
   .project-pages-indicator {
     position: absolute;
     right: 1rem;
