@@ -1,0 +1,196 @@
+---
+import DesktopIcon from "@/assets/icons/monitor.svg";
+import MobileIcon from "@/assets/icons/smartphone.svg";
+import TerminalIcon from "@/assets/icons/terminal.svg";
+import WebIcon from "@/assets/icons/globe.svg";
+import { projectCategories } from "@/config/projects";
+import type { Locale } from "@/lib/i18n";
+import type { Project } from "@/lib/projects";
+
+import ProjectPages from "./ProjectPages.astro";
+import { projectsTexts } from "./projects.texts";
+
+interface Props {
+  lang: Locale;
+  projects: Project[];
+}
+
+const { lang, projects } = Astro.props;
+const texts = projectsTexts[lang];
+
+const categoryIcons = {
+  web: WebIcon,
+  mobile: MobileIcon,
+  desktop: DesktopIcon,
+  dev: TerminalIcon,
+};
+const projectsByCategory = Map.groupBy(projects, (project) => project.category);
+const categories = projectCategories.filter((category) =>
+  projectsByCategory.has(category),
+);
+const [defaultCategory] = categories;
+---
+
+<div class="project-folder" data-project-folder data-url-param={texts.urlParam}>
+  <div role="tablist" aria-label={texts.tablistLabel} class="project-tabs">
+    {categories.map((category) => {
+      const Icon = categoryIcons[category];
+      const selected = category === defaultCategory;
+      return (
+        <button
+          type="button"
+          role="tab"
+          id={`tab-${category}`}
+          aria-controls={`panel-${category}`}
+          aria-selected={selected}
+          tabindex={selected ? 0 : -1}
+          data-category={category}
+          class="project-tab"
+        >
+          <Icon class="size-4" aria-hidden="true" />
+          <span class="project-tab-label">{texts.categories[category]}</span>
+        </button>
+      );
+    })}
+  </div>
+  <div class="project-panels">
+    {categories.map((category) => (
+      <div
+        role="tabpanel"
+        id={`panel-${category}`}
+        aria-labelledby={`tab-${category}`}
+        hidden={category !== defaultCategory}
+        class="project-panel"
+      >
+        <ProjectPages
+          lang={lang}
+          projects={projectsByCategory.get(category) ?? []}
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-project-folder]")
+    .forEach(setupFolder);
+
+  function setupFolder(folder: HTMLElement) {
+    const tabs = [
+      ...folder.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+    ];
+    const urlParam = folder.dataset.urlParam ?? "platform";
+
+    const panelOf = (tab: HTMLButtonElement) =>
+      document.getElementById(tab.getAttribute("aria-controls") ?? "");
+
+    const activate = (tab: HTMLButtonElement, updateUrl: boolean) => {
+      if (tab.getAttribute("aria-selected") === "true") return;
+      tabs.forEach((candidate) => {
+        const selected = candidate === tab;
+        candidate.setAttribute("aria-selected", String(selected));
+        candidate.tabIndex = selected ? 0 : -1;
+        panelOf(candidate)?.toggleAttribute("hidden", !selected);
+      });
+      panelOf(tab)?.dispatchEvent(new Event("panel-shown"));
+      if (updateUrl) pushCategory(tab.dataset.category ?? "");
+    };
+
+    const pushCategory = (category: string) => {
+      const url = new URL(location.href);
+      url.searchParams.set(urlParam, category);
+      history.pushState(null, "", url);
+    };
+
+    const tabForUrl = () => {
+      const category = new URL(location.href).searchParams.get(urlParam);
+      return tabs.find((tab) => tab.dataset.category === category) ?? tabs[0];
+    };
+
+    const keyboardTarget = (key: string, index: number) =>
+      ({
+        ArrowRight: tabs[(index + 1) % tabs.length],
+        ArrowLeft: tabs[(index - 1 + tabs.length) % tabs.length],
+        Home: tabs[0],
+        End: tabs[tabs.length - 1],
+      })[key];
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activate(tab, true));
+      tab.addEventListener("keydown", (event) => {
+        const target = keyboardTarget(event.key, index);
+        if (!target) return;
+        event.preventDefault();
+        target.focus();
+        activate(target, true);
+      });
+    });
+
+    window.addEventListener("popstate", () => activate(tabForUrl(), false));
+    activate(tabForUrl(), false);
+  }
+</script>
+
+<style>
+  .project-folder {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (width >= 48rem) {
+    .project-folder {
+      height: calc(100dvh - 8rem);
+    }
+  }
+
+  .project-tabs {
+    display: flex;
+    gap: 0.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .project-tab {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 0.75rem 0.75rem 0 0;
+    color: var(--color-muted);
+  }
+
+  /* On narrow screens inactive tabs show only their icon; the label stays for screen readers. */
+  @media (width < 48rem) {
+    .project-tab[aria-selected="false"] .project-tab-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+
+  .project-tab[aria-selected="true"] {
+    border-color: var(--color-border);
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .project-panels {
+    flex: 1;
+    min-height: 0;
+    margin-top: -1px;
+    border: 1px solid var(--color-border);
+    border-radius: 0 1rem 1rem 1rem;
+    overflow: hidden;
+  }
+
+  .project-panel {
+    height: 100%;
+  }
+</style>

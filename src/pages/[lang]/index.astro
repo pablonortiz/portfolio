@@ -5,6 +5,7 @@ import { siteTexts } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 import Hero from "@/sections/hero/Hero.astro";
+import ProjectsSection from "@/sections/projects/ProjectsSection.astro";
 
 export const getStaticPaths = (() =>
   locales.map((lang) => ({ params: { lang } }))) satisfies GetStaticPaths;
@@ -17,4 +18,5 @@ const { title, description } = siteTexts[lang];
 
 <BaseLayout lang={lang} title={title} description={description}>
   <Hero lang={lang} />
+  <ProjectsSection lang={lang} />
 </BaseLayout>

@@ -1,0 +1,31 @@
+---
+import { Picture } from "astro:assets";
+
+import type { Locale } from "@/lib/i18n";
+import { getProjectPath } from "@/lib/locale-url";
+import type { Project } from "@/lib/projects";
+
+interface Props {
+  lang: Locale;
+  project: Project;
+}
+
+const { lang, project } = Astro.props;
+---
+
+<a
+  href={getProjectPath(lang, project.slug)}
+  class="relative block size-full overflow-hidden rounded-xl"
+>
+  <Picture
+    src={project.poster}
+    alt=""
+    formats={["avif", "webp"]}
+    widths={[400, 640, 960]}
+    sizes="(min-width: 768px) 34rem, 90vw"
+    class="size-full object-cover"
+  />
+  <span class="absolute bottom-3 left-3 rounded-md bg-background/85 px-2 py-1 text-sm">
+    {project.title}
+  </span>
+</a>

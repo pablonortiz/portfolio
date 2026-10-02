@@ -1,0 +1,137 @@
+---
+import type { Locale } from "@/lib/i18n";
+import type { Project } from "@/lib/projects";
+
+import ProjectCard from "./ProjectCard.astro";
+
+interface Props {
+  lang: Locale;
+  projects: Project[];
+}
+
+const { lang, projects } = Astro.props;
+
+const roundUpToEven = (count: number) => count + (count % 2);
+const rowsMobile = roundUpToEven(projects.length);
+const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
+---
+
+<div class="project-pages-frame">
+  <ul
+    class="project-pages"
+    data-project-pages
+    style={`--rows-mobile: ${rowsMobile}; --rows-desktop: ${rowsDesktop}`}
+  >
+    {projects.map((project) => (
+      <li class="project-page-item">
+        <ProjectCard lang={lang} project={project} />
+      </li>
+    ))}
+  </ul>
+  <p
+    class="project-pages-indicator"
+    data-project-indicator
+    aria-hidden="true"
+  ></p>
+</div>
+
+<script>
+  document
+    .querySelectorAll<HTMLElement>("[data-project-pages]")
+    .forEach(setupIndicator);
+
+  function setupIndicator(pages: HTMLElement) {
+    const indicator = pages.parentElement?.querySelector(
+      "[data-project-indicator]",
+    );
+    if (!indicator) return;
+    const items = [...pages.children] as HTMLElement[];
+
+    const update = () => {
+      const paddingTop = parseFloat(getComputedStyle(pages).paddingTop);
+      const pageStarts = items.filter(
+        (item) => getComputedStyle(item).scrollSnapAlign !== "none",
+      );
+      const currentPage =
+        pageStarts.findLastIndex(
+          (item) => item.offsetTop - paddingTop <= pages.scrollTop + 1,
+        ) + 1;
+      indicator.textContent =
+        pageStarts.length > 1 ? `${currentPage} / ${pageStarts.length}` : "";
+    };
+
+    pages.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    pages.closest('[role="tabpanel"]')?.addEventListener("panel-shown", update);
+    update();
+  }
+</script>
+<style>
+  .project-pages-frame {
+    position: relative;
+    height: 100%;
+    container-type: inline-size;
+  }
+
+  /*
+   * One grid, two page sizes: each row is half the visible height, so a page is
+   * two rows (2 projects on mobile, 4 on desktop). The first item of each page
+   * is the snap target; rows are padded to an even count so the last page can
+   * still snap to the top. Mobile rows get their height from the width (16:9
+   * cards); desktop rows are half the visible height. The padding is smaller
+   * than the gap so the next page's first row always stays below the edge.
+   */
+  .project-pages {
+    --gap: 1.25rem;
+    --padding: 1rem;
+    --rows: var(--rows-mobile);
+    --row-height: calc((100cqw - 2 * var(--padding)) * 9 / 16);
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(var(--rows), var(--row-height));
+    gap: var(--gap);
+    height: calc(2 * var(--row-height) + var(--gap) + 2 * var(--padding));
+    padding: var(--padding);
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: var(--padding);
+    scrollbar-width: none;
+  }
+
+  .project-pages::-webkit-scrollbar {
+    display: none;
+  }
+
+  .project-page-item:nth-child(2n + 1) {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  @media (width >= 48rem) {
+    .project-pages {
+      --rows: var(--rows-desktop);
+      --row-height: calc((100% - var(--gap)) / 2);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      height: 100%;
+    }
+
+    .project-page-item:nth-child(2n + 1) {
+      scroll-snap-align: none;
+    }
+
+    .project-page-item:nth-child(4n + 1) {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+  }
+
+  .project-pages-indicator {
+    position: absolute;
+    right: 1rem;
+    bottom: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+  }
+</style>

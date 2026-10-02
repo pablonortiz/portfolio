@@ -2,7 +2,7 @@ import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
-export const projectCategories = ["web", "mobile", "desktop", "dev"] as const;
+import { projectCategories } from "./config/projects";
 
 const projectsBase = "./src/content/projects";
 

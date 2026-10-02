@@ -25,7 +25,8 @@ Un recuadro dentro de la página, con bordes, que funciona como una **carpeta co
 - **Cada pestaña tiene su color**, todos de la familia del violeta de marca (índigo, violeta, fucsia; Dev, un oscuro tipo terminal), cada uno en claro y oscuro con contraste verificado. Cuatro colores fuertes ajenos al violeta diluirían la identidad.
 - **Al cambiar de pestaña:** el indicador de la pestaña activa se desliza hasta la nueva, y un **círculo del color nuevo crece desde el punto del click** hasta cubrir la carpeta. Con "reducir movimiento", el cambio es instantáneo.
 - **Accesibilidad:** semántica de pestañas (se recorren con las flechas del teclado y se anuncian como pestañas).
-- **La pestaña activa va en la URL** (`?plataforma=mobile`, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior.
+- **La pestaña activa va en la URL** (`?plataforma=mobile` en español, `?platform=mobile` en inglés, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior. Cambiar de pestaña requiere JS; el HTML llega con Web activa, así que lo primero que se ve no depende del script.
+- **En mobile, las pestañas inactivas muestran solo el ícono** (el nombre queda para lectores de pantalla): las cuatro con nombre no entraban en 375 px y Dev quedaba afuera. Son los mismos íconos que la órbita del Hero acaba de mostrar con su nombre.
 - **Dev tiene estética de terminal** (monoespaciada), con un cursor que titila (`_` o `|`) como animación característica, y su propio tipo de tarjeta: un paquete no tiene video, pero sí nombre, descripción, versión y descargas (traídas de npm al compilar).
 - Idea a evaluar: tocar un ícono de la órbita del Hero abre esa pestaña.
 
@@ -39,7 +40,9 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **Indicador de página** (puntos o "1/2"), para que se sepa que hay más.
 - **Sin barra de scroll visible** en la carpeta (`scrollbar-width: none`, más `::-webkit-scrollbar` para Safari viejo): el indicador de página cumple esa función. El scroll sigue funcionando igual con rueda, trackpad, teclado y touch.
 - Comportamiento medido: un toque chico de rueda (120 px) rebota a la página actual y hace falta un gesto de ~media página para avanzar; Re Pág y las flechas (con foco) avanzan de a una. Probado por Pablo y aceptado.
-- **Las tarjetas se dimensionan según el alto disponible** de la carpeta: 2 filas tienen que entrar enteras (en 1280×720 quedan ~600 px tras el header y las pestañas).
+- **Una sola grilla, sin partir la lista en el HTML:** el primer elemento de cada página es el punto de encaje (`nth-child(4n+1)` en desktop, `nth-child(2n+1)` en mobile) y las filas se completan hasta una cantidad par para que la última página también encaje arriba. Así el mismo HTML da 4 por página en desktop y 2 en mobile.
+- **Tamaño de las tarjetas:** en desktop, cada fila mide la mitad del alto disponible (en 1280×720 entran 2 filas enteras); en mobile, el alto sale del ancho (16:9, con unidades `cqw`) y la carpeta mide justo dos tarjetas, para no recortar los videos.
+- **El margen interno de la carpeta es menor que la separación entre tarjetas** (1 rem contra 1,25 rem): con los dos iguales, la fila de la página siguiente empezaba exactamente en el borde y un redondeo la dejaba asomar 1 px.
 - Soporta cualquier cantidad de proyectos por pestaña (hoy se estiman entre 4 y 8).
 
 ### 42.3. Tarjetas con video
