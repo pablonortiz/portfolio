@@ -5,6 +5,7 @@ interface NavigationTexts {
   homeLabel: string;
   navigationLabel: string;
   languageLabel: string;
+  darkTheme: string;
   openMenu: string;
   closeMenu: string;
   menuLabel: string;
@@ -16,6 +17,7 @@ export const navigationTexts = {
     homeLabel: "Pablo Ortiz, inicio",
     navigationLabel: "Principal",
     languageLabel: "Idioma",
+    darkTheme: "Tema oscuro",
     openMenu: "Abrir menú",
     closeMenu: "Cerrar menú",
     menuLabel: "Menú",
@@ -25,6 +27,7 @@ export const navigationTexts = {
     homeLabel: "Pablo Ortiz, home",
     navigationLabel: "Main",
     languageLabel: "Language",
+    darkTheme: "Dark theme",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     menuLabel: "Menu",

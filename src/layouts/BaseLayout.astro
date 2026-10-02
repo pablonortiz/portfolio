@@ -18,6 +18,17 @@ const { lang, title, description } = Astro.props;
 <html lang={lang}>
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      // Applies the saved theme before the first paint, so the page never flashes the wrong one.
+      try {
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.dataset.theme = savedTheme;
+        }
+      } catch {
+        // Storage blocked: the page follows the system theme.
+      }
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width" />

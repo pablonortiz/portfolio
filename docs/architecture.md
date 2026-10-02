@@ -647,7 +647,7 @@ Viven en `src/styles/global.css` (se separan a `tokens.css` si el archivo crece)
 | `duration-*`, `ease-out`                 | motion tokens (§24)                                                                  |
 
 - **Colores en OKLCH**, con los neutros teñidos de violeta (mismo matiz que el acento). OKLCH separa luminosidad de tono: el violeta del modo oscuro es el mismo, más claro.
-- **Cada color define sus dos temas a la vez** con `light-dark(claro, oscuro)`; cuál se usa lo decide `color-scheme` en `:root` (`light dark` = sigue al sistema).
+- **Cada color define sus dos temas a la vez** con `light-dark(claro, oscuro)`; cuál se usa lo decide `color-scheme` en `:root` (`light dark` = sigue al sistema). Si el visitante elige un tema con el botón del Header, `data-theme` en `<html>` lo fuerza y se guarda en `localStorage`.
 - **Contraste verificado (WCAG):** texto ≥ 17:1 (AAA), texto secundario, botón y acento sobre fondo ≥ 5.6:1 (AA), en claro y en oscuro.
 - **Fuentes alojadas en el sitio** con la API de fuentes de Astro (proveedor Fontsource): solo los pesos usados, estilo normal, subconjunto `latin` (incluye á, é, ñ, ü, ¿, ¡). 4 archivos, 84 KB; se precargan solo Inter y Bricolage (las que se ven al primer instante). Astro genera fuentes de respaldo con métricas ajustadas: CLS 0 medido.
 
