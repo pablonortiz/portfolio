@@ -22,7 +22,10 @@ Un recuadro dentro de la página, con bordes, que funciona como una **carpeta co
 ```
 
 - **Pestañas por plataforma** (Web, Mobile, Desktop), las mismas de la órbita del Hero, más **Dev**: herramientas internas, paquetes de npm y lo más técnico, para quien quiera profundizar ("superficialmente producto, en profundidad ingeniería", §4).
-- **Cada pestaña tiene su color**, todos de la familia del violeta de marca (índigo, violeta, fucsia; Dev, un oscuro tipo terminal), cada uno en claro y oscuro con contraste verificado. Cuatro colores fuertes ajenos al violeta diluirían la identidad.
+- **Cada pestaña tiene su color**, todos de la familia del violeta de marca, en orden de pestañas: Web índigo (tono 268), Mobile violeta (292), Desktop fucsia (328) y Dev un oscuro tipo terminal **en los dos temas**. Cuatro colores fuertes ajenos al violeta diluirían la identidad.
+  - Fondos con croma suficiente para distinguirse (claro `oklch(94% 0.05 H)`, oscuro `oklch(23% ~0.08 H)`): con menos croma, en claro las tres eran lavandas casi iguales.
+  - Contraste verificado en claro y oscuro: texto ≥ 15:1, texto secundario ≥ 5.9:1, acento ≥ 5.1:1.
+  - **La carpeta es un ámbito de tema:** dentro de los paneles y la pestaña activa se redefinen los tokens semánticos (`--color-background`, `--color-foreground`, etc.) con los de la categoría activa (`data-active-category` en la carpeta). Todo lo de adentro toma los colores sin conocerlos; las pestañas inactivas quedan afuera, sobre el fondo de la página.
 - **Al cambiar de pestaña:** el indicador de la pestaña activa se desliza hasta la nueva, y un **círculo del color nuevo crece desde el punto del click** hasta cubrir la carpeta. Con "reducir movimiento", el cambio es instantáneo.
 - **Accesibilidad:** semántica de pestañas (se recorren con las flechas del teclado y se anuncian como pestañas).
 - **La pestaña activa va en la URL** (`?plataforma=mobile` en español, `?platform=mobile` en inglés, §34): se puede compartir y el "atrás" del navegador vuelve a la anterior. Cambiar de pestaña requiere JS; el HTML llega con Web activa, así que lo primero que se ve no depende del script.

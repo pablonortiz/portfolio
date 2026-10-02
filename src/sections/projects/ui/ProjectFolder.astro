@@ -31,7 +31,12 @@ const categories = projectCategories.filter((category) =>
 const [defaultCategory] = categories;
 ---
 
-<div class="project-folder" data-project-folder data-url-param={texts.urlParam}>
+<div
+  class="project-folder"
+  data-project-folder
+  data-url-param={texts.urlParam}
+  data-active-category={defaultCategory}
+>
   <div role="tablist" aria-label={texts.tablistLabel} class="project-tabs">
     {categories.map((category) => {
       const Icon = categoryIcons[category];
@@ -85,6 +90,55 @@ const [defaultCategory] = categories;
     flex-direction: column;
   }
 
+  /* Each category's colors (all from the violet family; Dev is a dark terminal in both themes). */
+  .project-folder[data-active-category="web"] {
+    --folder-background: light-dark(oklch(94% 0.05 268), oklch(23% 0.075 268));
+    --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
+    --folder-muted: light-dark(oklch(46% 0.04 268), oklch(74% 0.04 268));
+    --folder-accent: light-dark(oklch(50% 0.2 268), oklch(76% 0.13 268));
+  }
+
+  .project-folder[data-active-category="mobile"] {
+    --folder-background: light-dark(oklch(94% 0.05 292), oklch(23% 0.085 292));
+    --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
+    --folder-muted: light-dark(oklch(46% 0.04 292), oklch(74% 0.04 292));
+    --folder-accent: light-dark(oklch(52% 0.23 292), oklch(76% 0.15 292));
+  }
+
+  .project-folder[data-active-category="desktop"] {
+    --folder-background: light-dark(oklch(94% 0.05 328), oklch(23% 0.08 328));
+    --folder-foreground: light-dark(oklch(17% 0.03 285), oklch(96% 0.01 285));
+    --folder-muted: light-dark(oklch(46% 0.04 328), oklch(74% 0.04 328));
+    --folder-accent: light-dark(oklch(52% 0.21 328), oklch(76% 0.15 328));
+  }
+
+  .project-folder[data-active-category="dev"] {
+    --folder-background: light-dark(
+      oklch(17% 0.025 285),
+      oklch(11.5% 0.02 285)
+    );
+    --folder-foreground: oklch(94% 0.015 290);
+    --folder-muted: oklch(70% 0.03 290);
+    --folder-accent: oklch(80% 0.13 300);
+  }
+
+  /*
+   * The folder (panels and the active tab) is a theme scope: it redefines the
+   * semantic tokens, so everything inside takes the active category's colors.
+   */
+  .project-tab[aria-selected="true"],
+  .project-panels {
+    --color-background: var(--folder-background);
+    --color-foreground: var(--folder-foreground);
+    --color-muted: var(--folder-muted);
+    --color-accent: var(--folder-accent);
+    --color-border: color-mix(
+      in oklab,
+      var(--folder-foreground) 14%,
+      var(--folder-background)
+    );
+  }
+
   @media (width >= 48rem) {
     .project-folder {
       height: calc(100dvh - 8rem);
@@ -128,6 +182,10 @@ const [defaultCategory] = categories;
     color: var(--color-foreground);
   }
 
+  .project-tab[aria-selected="true"] :global(svg) {
+    color: var(--color-accent);
+  }
+
   .project-panels {
     flex: 1;
     min-height: 0;
@@ -135,6 +193,8 @@ const [defaultCategory] = categories;
     border: 1px solid var(--color-border);
     border-radius: 0 1rem 1rem 1rem;
     overflow: hidden;
+    background: var(--color-background);
+    color: var(--color-foreground);
   }
 
   .project-panel {

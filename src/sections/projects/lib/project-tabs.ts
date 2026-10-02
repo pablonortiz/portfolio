@@ -38,6 +38,7 @@ export function setupProjectTabs(folder: HTMLElement) {
   const activate = (tab: HTMLElement, updateUrl: boolean) => {
     if (isSelected(tab)) return;
     tabs.forEach((candidate) => setSelected(candidate, candidate === tab));
+    folder.dataset.activeCategory = tab.dataset.category;
     panelOf(tab)?.dispatchEvent(new Event("panel-shown"));
     if (updateUrl) pushCategory(urlParam, tab.dataset.category ?? "");
   };
