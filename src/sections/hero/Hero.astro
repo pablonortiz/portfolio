@@ -47,7 +47,10 @@ const revealStyle = (groupIndex: number) => {
         {texts.intro}
       </span>
     </span>
-    <span class="hero-reveal block text-5xl font-bold" style={revealStyle(1)}>
+    <span
+      class="hero-reveal block font-display text-5xl font-extrabold tracking-tight"
+      style={revealStyle(1)}
+    >
       {texts.name}
     </span>
   </h1>
@@ -70,7 +73,7 @@ const revealStyle = (groupIndex: number) => {
     <PlatformList lang={lang} />
     <a
       href={projectsHref}
-      class="rounded-full bg-foreground px-6 py-3 text-background"
+      class="rounded-full bg-accent px-6 py-3 text-accent-foreground"
     >
       {texts.cta}
     </a>

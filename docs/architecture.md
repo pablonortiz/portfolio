@@ -631,9 +631,25 @@ Ejemplo:
 }
 ```
 
-Con Tailwind v4 estos tokens se declaran una sola vez dentro de `@theme` (en `tokens.css`): de ahí salen tanto las variables CSS como las utilities. No duplicarlos en otro archivo.
+Con Tailwind v4 estos tokens se declaran una sola vez dentro de `@theme`: de ahí salen tanto las variables CSS como las utilities. No duplicarlos en otro archivo.
 
-Esto es especialmente útil porque **la paleta todavía no está definida**.
+### Tokens actuales (decidido)
+
+Viven en `src/styles/global.css` (se separan a `tokens.css` si el archivo crece).
+
+| Token                                    | Uso                                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ |
+| `background`, `foreground`               | fondo y texto                                                                        |
+| `muted`                                  | texto secundario                                                                     |
+| `border`                                 | bordes y líneas                                                                      |
+| `accent`, `accent-foreground`            | violeta de marca y el texto que va encima (botones)                                  |
+| `font-sans`, `font-display`, `font-mono` | Inter (texto), Bricolage Grotesque (nombre/títulos), Geist Mono (etiquetas técnicas) |
+| `duration-*`, `ease-out`                 | motion tokens (§24)                                                                  |
+
+- **Colores en OKLCH**, con los neutros teñidos de violeta (mismo matiz que el acento). OKLCH separa luminosidad de tono: el violeta del modo oscuro es el mismo, más claro.
+- **Cada color define sus dos temas a la vez** con `light-dark(claro, oscuro)`; cuál se usa lo decide `color-scheme` en `:root` (`light dark` = sigue al sistema).
+- **Contraste verificado (WCAG):** texto ≥ 17:1 (AAA), texto secundario, botón y acento sobre fondo ≥ 5.6:1 (AA), en claro y en oscuro.
+- **Fuentes alojadas en el sitio** con la API de fuentes de Astro (proveedor Fontsource): solo los pesos usados, estilo normal, subconjunto `latin` (incluye á, é, ñ, ü, ¿, ¡). 4 archivos, 84 KB; se precargan solo Inter y Bricolage (las que se ven al primer instante). Astro genera fuentes de respaldo con métricas ajustadas: CLS 0 medido.
 
 ---
 
