@@ -45,17 +45,18 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
 <style>
   .project-pages-frame {
     position: relative;
-    height: 100%;
     container-type: inline-size;
   }
 
   /*
-   * One grid, two page sizes: each row is half the visible height, so a page is
-   * two rows (2 projects on mobile, 4 on desktop). The first item of each page
-   * is the snap target; rows are padded to an even count so the last page can
-   * still snap to the top. Mobile rows get their height from the width (16:9
-   * cards); desktop rows are half the visible height. The padding is smaller
-   * than the gap so the next page's first row always stays below the edge.
+   * One grid, two page sizes: the visible area is exactly two rows, so a page is
+   * 2 projects on mobile and 4 on desktop. The first item of each page is the
+   * snap target; rows are padded to an even count so the last page can still
+   * snap to the top. Cards are always 16:9, with the row height taken from the
+   * width; on desktop it's capped so two rows fit the folder's maximum
+   * (--pages-max-height), and then cards narrow instead of cropping their video.
+   * The padding is smaller than the gap so the next page's first row always
+   * stays below the edge.
    */
   .project-pages {
     --gap: 1.25rem;
@@ -87,9 +88,23 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
   @media (width >= 48rem) {
     .project-pages {
       --rows: var(--rows-desktop);
-      --row-height: calc((100% - var(--gap)) / 2);
+      --row-height: min(
+        (100cqw - 2 * var(--padding) - var(--gap)) / 2 * 9 / 16,
+        (var(--pages-max-height, 100dvh) - 2 * var(--padding) - var(--gap)) / 2
+      );
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      height: 100%;
+    }
+
+    .project-page-item {
+      width: min(100%, var(--row-height) * 16 / 9);
+    }
+
+    .project-page-item:nth-child(odd) {
+      justify-self: end;
+    }
+
+    .project-page-item:nth-child(even) {
+      justify-self: start;
     }
 
     .project-page-item:nth-child(2n + 1) {

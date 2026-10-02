@@ -94,7 +94,14 @@ const [defaultCategory] = categories;
 </script>
 
 <style>
+  /*
+   * --pages-max-height is the tallest the pages may be so the whole folder fits
+   * below the header (4rem) and the section's padding (2 × 2rem); the panels'
+   * top border overlaps the tabs by 1px.
+   */
   .project-folder {
+    --tabs-height: 2.75rem;
+    --pages-max-height: calc(100dvh - 8rem - var(--tabs-height) - 1px);
     display: flex;
     flex-direction: column;
   }
@@ -158,17 +165,12 @@ const [defaultCategory] = categories;
     );
   }
 
-  @media (width >= 48rem) {
-    .project-folder {
-      height: calc(100dvh - 8rem);
-    }
-  }
-
   .project-tabs {
     position: relative;
     z-index: 1;
     display: flex;
     gap: 0.25rem;
+    height: var(--tabs-height);
   }
 
   /*
@@ -211,7 +213,7 @@ const [defaultCategory] = categories;
     flex-shrink: 0;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.625rem 1rem;
+    padding: 0 1rem;
     border: 1px solid transparent;
     border-bottom: none;
     border-radius: 0.75rem 0.75rem 0 0;
@@ -276,8 +278,6 @@ const [defaultCategory] = categories;
   .project-panels {
     position: relative;
     isolation: isolate;
-    flex: 1;
-    min-height: 0;
     margin-top: -1px;
     border: 1px solid var(--color-border);
     border-radius: 0 1rem 1rem 1rem;
@@ -288,7 +288,6 @@ const [defaultCategory] = categories;
   .project-panel {
     position: relative;
     z-index: 1;
-    height: 100%;
     background: var(--color-background);
     color: var(--color-foreground);
   }
