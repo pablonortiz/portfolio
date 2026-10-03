@@ -62,11 +62,13 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 ### 42.3. Tarjetas con video
 
-- Cada tarjeta reproduce un **video corto en loop** del proyecto (5–10 s, sin sonido, muy comprimido, ~0,5 MB).
-- **Solo se reproducen las tarjetas visibles**; mientras carga, se ve una imagen fija (poster).
-- Con "reducir movimiento" o en modo ahorro de datos, quedan quietas con la imagen fija.
+- Cada tarjeta tiene un **clip de 3 a 5 segundos**, sin sonido (especificación en la §42.7).
+- **Se reproduce una vez, sola, cuando su página de la carpeta queda a la vista, y queda quieta en el último frame.** Vuelve a reproducirse con el hover o el foco, y cuando su página vuelve a entrar. No hay loop: lo que se mueve solo más de 5 segundos tiene que poder pausarse (WCAG 2.2.2, §36), y un clip que dura menos no necesita controles.
+- Mientras carga se ve su primer frame, así no hay salto cuando arranca.
+- Con "reducir movimiento" o en modo ahorro de datos, la tarjeta muestra una imagen fija del último frame y no carga el video.
+- **El último frame es el más visto:** queda en la tarjeta después de reproducirse y es el fondo de la página del proyecto al hacer zoom (§42.4).
 - **Datos inventados** en todas las grabaciones (regla de privacidad del CLAUDE.md).
-- **Todos los videos son horizontales (16:9)**, para que las tarjetas no desentonen: los de apps mobile se graban verticales y se componen en horizontal, con el teléfono al centro y los costados en negro o difuminados.
+- **Todos los clips son horizontales (16:9)**, como las tarjetas, que nunca los recortan (§42.2). Los de apps mobile se graban verticales y el script los compone en horizontal: la pantalla del teléfono al centro y, a los costados, una copia agrandada y desenfocada de la misma pantalla (en tema claro, unos costados negros se veían pesados sobre las carpetas).
 
 ### 42.4. Del grid al proyecto: el zoom
 
@@ -102,7 +104,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
    fondo: el frame del video en el que se tocó
 ```
 
-- A la izquierda, el problema y lo que se construyó (capa 1, §2). A la derecha, el video con todos los controles (pantalla completa, avanzar, retroceder).
+- A la izquierda, el problema y lo que se construyó (capa 1, §2). A la derecha, **el recorrido** (§42.7), si el proyecto tiene uno: un video de 30 a 90 segundos con todos los controles (pantalla completa, avanzar, retroceder), que arranca solo cuando el visitante lo pone. Sin recorrido, el layout de esa columna se define al construir la página.
 - **"Probalo"**: lleva a la demo (§5, §26), solo si el proyecto tiene una.
 - **"← Proyectos"** arriba a la izquierda; Esc también vuelve.
 - **Tira de tecnologías:** se mueve sola hacia la derecha en loop infinito y se puede arrastrar hacia adelante o hacia atrás. Se pausa con el hover o el foco; con "reducir movimiento" es una lista quieta; las copias que se repiten para el loop quedan ocultas para los lectores de pantalla.
@@ -116,7 +118,63 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 ### 42.7. Videos
 
-Los produce otra IA siguiendo una especificación (duración, resolución, formato, peso máximo, datos inventados), para que salgan consistentes y livianos. No se guardan en git: cada video quedaría para siempre en el historial; van a un almacenamiento aparte, a decidir junto con el hosting.
+Especificación para quien produce los videos (otra IA). Está escrita para poder pasarse tal cual: no hace falta leer el resto de este documento.
+
+Los videos no se guardan en git (cada uno quedaría para siempre en el historial): van a un almacenamiento aparte, a decidir junto con el hosting. Mientras tanto, el sitio usa placeholders generados por un script.
+
+#### Dos piezas por proyecto
+
+|               | Clip de tarjeta                                            | Recorrido                                     |
+| ------------- | ---------------------------------------------------------- | --------------------------------------------- |
+| ¿Obligatorio? | Sí, en todos los proyectos                                 | No: solo en los que lo amerite                |
+| Duración      | De 3 a 5 segundos (máximo 5,0)                             | De 30 a 90 segundos                           |
+| Dónde se ve   | En la tarjeta del proyecto y como fondo de su página       | En un reproductor con controles, en su página |
+| Reproducción  | Sola, una vez, sin sonido; queda quieto en el último frame | La inicia el visitante                        |
+
+El clip dura 5 segundos como máximo por una norma de accesibilidad: lo que se mueve solo más tiempo tiene que poder pausarse, y una tarjeta con controles de video sería ruido.
+
+#### Qué se entrega (el master)
+
+- **Web y desktop:** 1920×1080 (16:9), 30 fps constantes.
+- **Apps mobile:** la grabación vertical de la pantalla del teléfono, a su resolución nativa (al menos 1080 px de ancho), 30 fps constantes. No hace falta componerla en horizontal: lo hace el script.
+- **Formato:** MP4 con H.264 de bitrate alto (20 Mbps o más) o ProRes 422. Sin audio; si trae, se descarta.
+- **Nombres:** `<slug>-clip.mp4` y `<slug>-tour.mp4`, donde `<slug>` es el nombre de la carpeta del proyecto (por ejemplo, `ejemplo-web-1`).
+
+#### Cómo tiene que ser el clip
+
+- **Una acción y su resultado.** Por ejemplo: filtrar una lista y ver qué queda, completar un formulario y ver la confirmación, abrir un detalle.
+- **Primer frame:** el estado inicial, prolijo y ya en la pantalla donde pasa la acción (sin cargas, sin splash, sin login).
+- **Último medio segundo o más:** quieto en el resultado. Es el frame más importante: queda en la tarjeta después de reproducirse y es el fondo de la página del proyecto.
+- **Una sola toma:** sin cortes, fundidos ni transiciones. Como mucho, un zoom lento hacia la zona de la acción si la interfaz queda chica.
+- **Velocidad real** o apenas acelerada (hasta 1,5×), sin saltos.
+- **Web y desktop:** solo el contenido de la app, sin la barra del navegador, el escritorio ni el dock. Puntero visible, con movimiento suave.
+- **Mobile:** solo la pantalla, sin marco de dispositivo. Cada toque marcado con un círculo semitransparente.
+- **Zona reservada:** abajo a la izquierda (el 60% del ancho y el 30% del alto) va la etiqueta con el nombre del proyecto. Ahí no puede quedar nada importante. El resto del cuadro se ve siempre entero: las tarjetas son 16:9 y no recortan.
+- **Sin texto sobreimpreso,** subtítulos, logos ni marcas de agua. El idioma de la interfaz es el que tenga el producto; como no hay textos agregados, no hay nada que traducir.
+- **Tema claro u oscuro:** el que mejor muestre la app, el mismo en el clip y en el recorrido.
+
+#### Cómo tiene que ser el recorrido
+
+- Las funciones principales, de 30 a 90 segundos. Se permiten cortes simples entre escenas, sin transiciones llamativas.
+- El mismo encuadre, puntero, marcas de toque y datos que el clip. Sin audio.
+
+#### Datos inventados (obligatorio)
+
+- **Todo lo que aparece en pantalla es ficticio:** nombres de personas, mails, teléfonos, direcciones, documentos, importes y empresas.
+- **El proyecto lleva el nombre que tiene en el portfolio,** no el real. Sin nombres ni logos de clientes, ni colores de marca que los identifiquen.
+- **Sin fotos de personas reales:** avatares ilustrados o con iniciales.
+- **Sin datos del entorno:** URLs o dominios del cliente, tokens, IDs internos.
+- **Datos creíbles,** no "test", "asdf" ni "Lorem ipsum": tiene que parecer un producto en uso. Los mismos en el clip y en el recorrido.
+
+#### Lo que hace el script (y no hace falta entregar)
+
+`just encode-video <slug>` toma los masters y genera todo lo que usa el sitio, siempre con los mismos parámetros:
+
+- **Valida** la duración (clip de 5,0 s como máximo) y la proporción.
+- **Compone los clips de mobile en 16:9:** la pantalla al centro, al 86% del alto y con esquinas redondeadas; a los costados, una copia agrandada, desenfocada y levemente oscurecida de la misma pantalla.
+- **Codifica el clip a 1280×720** en AV1 (el formato más liviano) y en H.264 (Safari decodifica AV1 solo con soporte por hardware, desde el iPhone 15 Pro y los Mac con M3), sin pista de audio. Peso objetivo: 400 KB en AV1, a confirmar con los primeros masters reales.
+- **Codifica el recorrido a 1920×1080** en AV1 y H.264.
+- **Extrae dos imágenes del clip:** el primer frame (se ve mientras el video carga) y el último, que pasa a ser el `poster.png` del proyecto en git. Es la imagen fija con "reducir movimiento", sin JS y en buscadores.
 
 ### 42.8. Fases
 
