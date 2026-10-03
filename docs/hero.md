@@ -242,6 +242,11 @@ hover     íconos de la órbita (solo desktop): escala + acento + atenúa al res
 
 Con `prefers-reduced-motion: reduce`: todo aparece en su estado final y la órbita no se mueve. El hover conserva el cambio de color/contraste pero no la escala (el color no es movimiento).
 
+**La intro se ve una vez por visita.** Al volver a la home desde un proyecto (o al llegar por cualquier navegación posterior), el Hero aparece en su estado final y la órbita ya gira: repetir la intro no aporta, y como se vuelve scrolleado a la carpeta, pasaría fuera de pantalla y se vería a mitad si se sube rápido. Una visita que empieza en un proyecto ve la intro la primera vez que llega a la home, y una recarga es una visita nueva.
+
+- **Cómo:** todas las demoras y duraciones de la intro salen de `--reading-pace`, así que alcanza con ponerla en `0ms` (`html[data-hero-intro-seen]`). El giro dura `--revolution` y no depende del ritmo, así que sigue girando.
+- **La marca la pone `lib/hero-intro.ts`** en la página que llega, antes del swap (el router copia los atributos del `<html>`). Como un módulo corre una sola vez, se carga recién cuando se mostró una página con el Hero: ahí la intro ya se vio.
+
 ---
 
 ## 11. “Futuro ingeniero”

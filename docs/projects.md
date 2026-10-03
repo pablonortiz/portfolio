@@ -94,7 +94,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **`transition:name` va en los contenedores** (el recuadro de la tarjeta y el fondo del detalle), **`transition:persist` en el video** que viaja adentro. Los dos en el mismo elemento rompen el zoom: el nombre de transición depende de una regla de la página de origen que desaparece al navegar, y queda un fundido.
 - **Los listeners en `document` sobreviven a la página** con `ClientRouter`: se sacan en `astro:before-swap` (pasó con el Esc del detalle, que seguía activo en la grilla).
 - **El scroll de la carpeta no lo restaura Astro** (solo el de la ventana): al tocar una tarjeta se guarda en `sessionStorage` el punto de retorno (el proyecto, el `index` del historial que mantiene el router y el `scrollTop` de la carpeta), y al cargar la home se restaura solo si se está en esa misma entrada del historial. Una visita nueva a la home tiene otro `index` y arranca en la primera página (`lib/project-return.ts`).
-- Al volver, solo sigue el video que se tocó; los demás arrancan de nuevo. Y volver a la home vuelve a montar el Hero, cuya animación se repite (fuera de pantalla, porque se vuelve scrolleado a la carpeta).
+- Al volver, solo sigue el video que se tocó; los demás arrancan de nuevo. Volver a la home vuelve a montar el Hero, pero sin su intro: se ve una vez por visita (§10).
 
 **Cómo está hecho el zoom** (`lib/project-zoom.ts`, `ui/ProjectBackdrop.astro`):
 

@@ -79,10 +79,21 @@ const { groupStyles, totalWords } = getRevealTiming([
   </a>
 </section>
 
+<script>
+  import { skipIntroOnLaterNavigations } from "./lib/hero-intro";
+
+  skipIntroOnLaterNavigations();
+</script>
+
 <style>
   .hero {
     --reading-pace: 350ms;
     --orbit-start: calc(var(--total-words) * var(--reading-pace));
+  }
+
+  /* Intro already seen this visit: every intro timing derives from the pace, so it all lands in its final state (the orbit still spins). */
+  :global(html[data-hero-intro-seen]) .hero {
+    --reading-pace: 0ms;
   }
 
   @media (prefers-reduced-motion: no-preference) {
