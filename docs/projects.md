@@ -205,10 +205,10 @@ Mientras no haya masters reales, `just placeholder-videos` crea uno de ejemplo p
 
 ### 42.8. Fases
 
-0. **Prueba técnica** (página descartable): grilla con páginas, zoom con `ClientRouter`, video que sigue vivo entre páginas y vuelta a la misma página de proyectos. Es lo más riesgoso y define la arquitectura.
-1. **Content Collection** de proyectos, con su schema de Zod (categoría, textos ES/EN, stack, video, imagen, demo).
-2. **La carpeta sin efectos:** pestañas que filtran, páginas con scroll snap, tarjetas con imagen y las páginas de proyecto.
-3. **Animaciones de la carpeta:** indicador que se desliza, círculo de color, entrada de las tarjetas.
-4. **Videos en las tarjetas**, el zoom y la continuidad del frame.
+0. ✅ **Prueba técnica** (página descartable): grilla con páginas, zoom con `ClientRouter`, video que sigue vivo entre páginas y vuelta a la misma página de proyectos. Es lo más riesgoso y define la arquitectura.
+1. ✅ **Content Collection** de proyectos, con su schema de Zod (categoría, textos ES/EN, stack, video, imagen, demo).
+2. ✅ **La carpeta sin efectos:** pestañas que filtran, páginas con scroll snap, tarjetas con imagen y las páginas de proyecto.
+3. ✅ **Animaciones de la carpeta:** indicador que se desliza, círculo de color, entrada de las tarjetas y el cursor de Dev.
+4. ✅ **Videos en las tarjetas**, el zoom y la continuidad del frame. Con videos placeholder hasta tener los masters reales (§41); falta la tarjeta de paquete de npm para Dev, junto con los datos reales.
 5. **La tira de tecnologías.**
 6. **La transición del Hero a Proyectos.**
