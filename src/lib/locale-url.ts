@@ -19,8 +19,13 @@ export function getLocalizedPath(pathname: string, targetLocale: Locale) {
   return getRelativeLocaleUrl(targetLocale, segments.join("/"));
 }
 
-export function getSectionPath(lang: Locale, section: Section) {
-  return `${getRelativeLocaleUrl(lang)}#${sectionIds[lang][section]}`;
+export function getSectionPath(
+  lang: Locale,
+  section: Section,
+  params?: Record<string, string>,
+) {
+  const search = params ? `?${new URLSearchParams(params)}` : "";
+  return `${getRelativeLocaleUrl(lang)}${search}#${sectionIds[lang][section]}`;
 }
 
 export function getProjectPath(lang: Locale, slug: string) {

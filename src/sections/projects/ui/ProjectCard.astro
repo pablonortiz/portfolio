@@ -19,6 +19,8 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
 <a
   href={getProjectPath(lang, project.slug)}
   class="relative block size-full overflow-hidden rounded-xl"
+  data-project-card
+  data-slug={project.slug}
 >
   <Picture
     src={project.poster}

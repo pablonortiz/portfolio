@@ -95,6 +95,10 @@ const [defaultCategory] = categories;
 
   import { setupCardVideos } from "../lib/card-videos";
   import { setupPageIndicator } from "../lib/page-indicator";
+  import {
+    rememberReturnPoints,
+    restoreReturnPoint,
+  } from "../lib/project-return";
   import { setupProjectTabs } from "../lib/project-tabs";
 
   onEveryPage((signal) =>
@@ -102,6 +106,8 @@ const [defaultCategory] = categories;
       .querySelectorAll<HTMLElement>("[data-project-folder]")
       .forEach((folder) => {
         setupProjectTabs(folder, signal);
+        restoreReturnPoint(folder);
+        rememberReturnPoints(folder);
         setupPageIndicator(folder, signal);
         setupCardVideos(folder, signal);
       }),

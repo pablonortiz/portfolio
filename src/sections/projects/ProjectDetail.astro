@@ -26,8 +26,12 @@ const { Content } = await render(project.body);
 <article class="project-detail">
   <header class="detail-header">
     <a
-      href={getSectionPath(lang, "projects")}
+      href={getSectionPath(lang, "projects", {
+        [texts.urlParam]: project.category,
+      })}
       class="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-foreground"
+      data-project-back
+      data-slug={project.slug}
     >
       <ArrowLeftIcon class="size-4" aria-hidden="true" />
       {texts.back}
@@ -93,6 +97,18 @@ const { Content } = await render(project.body);
     </ul>
   </section>
 </article>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupProjectBack } from "./lib/project-return";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLAnchorElement>("[data-project-back]")
+      .forEach((link) => setupProjectBack(link, signal)),
+  );
+</script>
 
 <style>
   /*
