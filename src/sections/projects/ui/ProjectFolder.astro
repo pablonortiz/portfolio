@@ -91,6 +91,7 @@ const [defaultCategory] = categories;
 </div>
 
 <script>
+  import { setupCardVideos } from "../lib/card-videos";
   import { setupPageIndicator } from "../lib/page-indicator";
   import { setupProjectTabs } from "../lib/project-tabs";
 
@@ -99,6 +100,7 @@ const [defaultCategory] = categories;
     .forEach((folder) => {
       setupProjectTabs(folder);
       setupPageIndicator(folder);
+      setupCardVideos(folder);
     });
 </script>
 
