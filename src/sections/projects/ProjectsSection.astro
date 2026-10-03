@@ -22,51 +22,57 @@ const projects = await getProjects(lang);
   <h2 id="projects-title" class="sr-only">
     {projectsTexts[lang].sectionTitle}
   </h2>
-  <div class="projects-rise">
+  <div class="projects-rise" data-folder-rise>
     <ProjectFolder lang={lang} projects={projects} />
   </div>
 </section>
 
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupFolderLanding } from "./lib/folder-landing";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLElement>(".projects-section")
+      .forEach((section) => setupFolderLanding(section, signal)),
+  );
+</script>
+
 <style>
   /*
-   * Scrolling from the Hero, the folder arrives tilted back from its tabs, like
-   * a lid, and flattens as it rises into place (docs/projects.md §42.6). It
-   * follows the section's own entry into view, which always completes: with
-   * the page's scroll as the timeline, a folder shorter than the screen (mobile,
-   * large screens) never got there, as the page ran out of scroll first. The
-   * Hero dims on this same timeline. Flat (`none`) from 70% on, so nothing 3D
-   * lingers. Without support (Firefox) or with reduced motion, it's just there.
-   * Longhands because the build's minifier breaks the shorthand plus
-   * animation-timeline.
+   * The folder lands (docs/projects.md §42.6): it travels tilted back from its
+   * tabs, like a lid, and once in place it flattens on its own time
+   * (lib/folder-landing.ts sets and clears data-landing). Flat is the base
+   * state: without JS or with reduced motion it's just there.
    */
-  @supports (animation-timeline: view()) {
-    .projects-section {
-      view-timeline-name: --projects-entry;
-    }
+  .projects-rise {
+    transform-origin: 50% 0;
+    /* In-out, so the tilt holds a moment on arrival: with ease-out it was almost flat within 200ms. */
+    transition:
+      transform var(--duration-slow) var(--ease-in-out),
+      translate var(--duration-slow) var(--ease-in-out),
+      scale var(--duration-slow) var(--ease-in-out),
+      opacity var(--duration-slow) var(--ease-in-out);
+  }
 
-    @media (prefers-reduced-motion: no-preference) {
-      .projects-rise {
-        transform-origin: 50% 0;
-        animation-name: folder-rise;
-        animation-fill-mode: both;
-        animation-timing-function: linear;
-        animation-timeline: --projects-entry;
-        animation-range: entry 0% entry 100%;
-      }
+  .projects-rise[data-landing] {
+    transform: perspective(1400px) rotateX(38deg);
+    translate: 0 3rem;
+    scale: 0.94;
+    opacity: 0.3;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .projects-rise {
+      transition: none;
     }
   }
 
-  @keyframes folder-rise {
-    from {
-      transform: perspective(1400px) rotateX(38deg);
-      translate: 0 3rem;
-      scale: 0.94;
-      opacity: 0.3;
-    }
-
-    70% {
-      transform: none;
-      opacity: 1;
+  /* The Hero dims while this section enters (its timeline is shared by the home page). */
+  @supports (animation-timeline: view()) {
+    .projects-section {
+      view-timeline-name: --projects-entry;
     }
   }
 </style>
