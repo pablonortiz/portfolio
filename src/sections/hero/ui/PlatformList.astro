@@ -25,11 +25,16 @@ const orbitItems: {
 ];
 ---
 
-<div class:list={["platform-orbit", className]}>
+<div
+  class:list={["platform-orbit", className]}
+  role="group"
+  aria-label={platformsLabel}
+  data-orbit
+>
   <svg class="orbit-ring" viewBox="0 0 100 100" aria-hidden="true">
     <circle cx="50" cy="50" r="50" pathLength="1"></circle>
   </svg>
-  <ul aria-label={platformsLabel}>
+  <ul>
     {orbitItems.map(({ platform, Icon, angle }, index) => (
       <li
         class="platform-slot"
@@ -43,6 +48,18 @@ const orbitItems: {
     ))}
   </ul>
 </div>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupOrbitPause } from "../lib/orbit-pause";
+
+  onEveryPage(() =>
+    document
+      .querySelectorAll<HTMLElement>("[data-orbit]")
+      .forEach(setupOrbitPause),
+  );
+</script>
 
 <style>
   @property --spin {
@@ -114,8 +131,17 @@ const orbitItems: {
         infinite;
     }
 
-    .platform-orbit:hover {
+    /* Pauses (WCAG 2.2.2): keyboard focus while it lasts, and a tap or click until the next one (lib/orbit-pause.ts). */
+    .platform-orbit:focus-visible,
+    .platform-orbit[data-paused] {
       animation-play-state: paused;
+    }
+
+    /* Only with a real hover: on touch screens a tapped element stays :hover, and the second tap couldn't resume it. */
+    @media (hover: hover) {
+      .platform-orbit:hover {
+        animation-play-state: paused;
+      }
     }
 
     .orbit-ring circle {
