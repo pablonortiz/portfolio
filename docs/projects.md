@@ -62,7 +62,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 ### 42.3. Tarjetas con video
 
-- Cada tarjeta tiene un **clip de 3 a 5 segundos**, sin sonido (especificación en la §42.7).
+- Cada tarjeta tiene un **clip de 3 a 5 segundos**, sin sonido (especificación en la §42.7). Los paquetes de npm no: su tarjeta muestra nombre, versión y descargas (§42.1).
 - **Se reproduce una vez, sola, cuando su página de la carpeta queda a la vista, y queda quieta en el último frame.** Vuelve a reproducirse con el hover o el foco, y cuando su página vuelve a entrar. No hay loop: lo que se mueve solo más de 5 segundos tiene que poder pausarse (WCAG 2.2.2, §36), y un clip que dura menos no necesita controles.
 - Mientras carga se ve su primer frame, así no hay salto cuando arranca.
 - Con "reducir movimiento" o en modo ahorro de datos, la tarjeta muestra una imagen fija del último frame y no carga el video.
@@ -126,7 +126,7 @@ Los videos no se guardan en git (cada uno quedaría para siempre en el historial
 
 |               | Clip de tarjeta                                            | Recorrido                                     |
 | ------------- | ---------------------------------------------------------- | --------------------------------------------- |
-| ¿Obligatorio? | Sí, en todos los proyectos                                 | No: solo en los que lo amerite                |
+| ¿Obligatorio? | Sí, salvo en los paquetes de npm (sin video, §42.1)        | No: solo en los que lo amerite                |
 | Duración      | De 3 a 5 segundos (máximo 5,0)                             | De 30 a 90 segundos                           |
 | Dónde se ve   | En la tarjeta del proyecto y como fondo de su página       | En un reproductor con controles, en su página |
 | Reproducción  | Sola, una vez, sin sonido; queda quieto en el último frame | La inicia el visitante                        |
