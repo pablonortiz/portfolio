@@ -12,9 +12,10 @@ import { technologyNames, type TechnologyId } from "@/config/technologies";
 
 interface Props {
   technologies: TechnologyId[];
+  label: string;
 }
 
-const { technologies } = Astro.props;
+const { technologies, label } = Astro.props;
 
 const technologyIcons = {
   astro: AstroIcon,
@@ -30,28 +31,73 @@ const technologyIcons = {
 } satisfies Record<TechnologyId, unknown>;
 ---
 
-<ul class="technology-list">
-  {technologies.map((technology) => {
-    const Icon = technologyIcons[technology];
-    return (
-      <li class="technology">
-        <Icon class="size-4 shrink-0" aria-hidden="true" />
-        {technologyNames[technology]}
-      </li>
-    );
-  })}
-</ul>
+<div class="technology-strip" data-technology-strip data-label={label}>
+  <div class="technology-track" data-technology-track>
+    <ul class="technology-list">
+      {technologies.map((technology) => {
+        const Icon = technologyIcons[technology];
+        return (
+          <li class="technology">
+            <Icon class="size-4 shrink-0" aria-hidden="true" />
+            {technologyNames[technology]}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+</div>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupTechnologyStrip } from "../lib/technology-strip";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLElement>("[data-technology-strip]")
+      .forEach((strip) => setupTechnologyStrip(strip, signal)),
+  );
+</script>
 
 <style>
-  /* One line; until the moving strip arrives, it scrolls sideways if it doesn't fit. */
+  /* One line: still, it scrolls sideways if it doesn't fit (no JS, reduced motion). */
+  .technology-strip {
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+
+  /* Moving (JS, only when it doesn't fit): the edges fade and it can be dragged sideways. */
+  .technology-strip[data-moving] {
+    overflow: hidden;
+    cursor: grab;
+    user-select: none;
+    touch-action: pan-y;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      black 2rem,
+      black calc(100% - 2rem),
+      transparent
+    );
+  }
+
+  .technology-strip[data-moving]:active {
+    cursor: grabbing;
+  }
+
+  .technology-track {
+    display: flex;
+    gap: 0.5rem;
+    width: max-content;
+  }
+
   .technology-list {
     display: flex;
     gap: 0.5rem;
-    overflow-x: auto;
     font-family: var(--font-mono);
     font-size: 0.875rem;
     white-space: nowrap;
-    scrollbar-width: thin;
   }
 
   .technology {
