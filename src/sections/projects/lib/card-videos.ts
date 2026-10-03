@@ -54,7 +54,7 @@ const loadWhenEntering = (
  * view and rests on its last frame, and plays again when its page comes back
  * or on hover and focus. With reduced motion or data saver, the still stays.
  */
-export function setupCardVideos(folder: HTMLElement) {
+export function setupCardVideos(folder: HTMLElement, signal: AbortSignal) {
   if (!allowsClips()) return;
   const cards = [...folder.querySelectorAll("a:has([data-card-video])")];
   const playedSinceEntering = new WeakSet<Element>();
@@ -82,9 +82,17 @@ export function setupCardVideos(folder: HTMLElement) {
     threshold: [0, 0.99],
   });
 
+  signal.addEventListener("abort", () => {
+    loader.disconnect();
+    player.disconnect();
+  });
+
   cards.forEach((card) => {
     const video = videoOf(card);
     if (!video) return;
+    // ClientRouter builds the next page with DOMParser, whose videos don't get muted from the
+    // attribute; unmuted, the browser blocks play() without a user gesture.
+    video.muted = true;
     fallBackToStillOnError(video);
     replayOnHoverAndFocus(card, video);
     loader.observe(card);

@@ -21,7 +21,7 @@ const pagesOf = (panel: Element | undefined) =>
   panel?.querySelector<HTMLElement>("[data-project-pages]") ?? null;
 
 /** Keeps the folder's "1 / 2" indicator in sync with the pages of the panel on display. */
-export function setupPageIndicator(folder: HTMLElement) {
+export function setupPageIndicator(folder: HTMLElement, signal: AbortSignal) {
   const indicator = folder.querySelector("[data-project-indicator]");
   const panels = [...folder.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
   if (!indicator) return;
@@ -44,6 +44,6 @@ export function setupPageIndicator(folder: HTMLElement) {
       update();
     });
   });
-  window.addEventListener("resize", update);
+  window.addEventListener("resize", update, { signal });
   update();
 }

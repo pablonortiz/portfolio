@@ -25,11 +25,15 @@ const { darkTheme } = navigationTexts[lang];
 </button>
 
 <script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
   import { setupThemeToggle } from "../lib/theme-toggle";
 
-  document
-    .querySelectorAll<HTMLElement>("[data-theme-toggle]")
-    .forEach(setupThemeToggle);
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLElement>("[data-theme-toggle]")
+      .forEach((toggle) => setupThemeToggle(toggle, signal)),
+  );
 </script>
 
 <style>

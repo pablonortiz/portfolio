@@ -91,17 +91,21 @@ const [defaultCategory] = categories;
 </div>
 
 <script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
   import { setupCardVideos } from "../lib/card-videos";
   import { setupPageIndicator } from "../lib/page-indicator";
   import { setupProjectTabs } from "../lib/project-tabs";
 
-  document
-    .querySelectorAll<HTMLElement>("[data-project-folder]")
-    .forEach((folder) => {
-      setupProjectTabs(folder);
-      setupPageIndicator(folder);
-      setupCardVideos(folder);
-    });
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLElement>("[data-project-folder]")
+      .forEach((folder) => {
+        setupProjectTabs(folder, signal);
+        setupPageIndicator(folder, signal);
+        setupCardVideos(folder, signal);
+      }),
+  );
 </script>
 
 <style>

@@ -25,10 +25,16 @@ const setSelected = (tab: HTMLElement, selected: boolean) => {
   tab.tabIndex = selected ? 0 : -1;
 };
 
-const pushCategory = (urlParam: string, category: string) => {
+/**
+ * Replaces the URL instead of adding a history entry: "back" goes to the
+ * previous page, not the previous tab. The router's state (history index,
+ * scroll) is kept: ClientRouter ignores entries without it, and going back to
+ * one would leave the previous page on screen.
+ */
+const replaceCategory = (urlParam: string, category: string) => {
   const url = new URL(location.href);
   url.searchParams.set(urlParam, category);
-  history.pushState(null, "", url);
+  history.replaceState(history.state, "", url);
 };
 
 const centerOf = (element: HTMLElement): Point => {
@@ -42,7 +48,7 @@ const moveIndicator = (tablist: HTMLElement, tab: HTMLElement) => {
 };
 
 /** Accessible tabs (click, arrows, Home/End) with a sliding indicator, a circular reveal and the active category in the URL. */
-export function setupProjectTabs(folder: HTMLElement) {
+export function setupProjectTabs(folder: HTMLElement, signal: AbortSignal) {
   const tablist = folder.querySelector<HTMLElement>('[role="tablist"]');
   const tabs = [...folder.querySelectorAll<HTMLElement>('[role="tab"]')];
   const panels = [...folder.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
@@ -66,7 +72,7 @@ export function setupProjectTabs(folder: HTMLElement) {
   const activate = (tab: HTMLElement, origin: Point = centerOf(tab)) => {
     if (isSelected(tab)) return;
     select(tab, origin);
-    pushCategory(urlParam, tab.dataset.category ?? "");
+    replaceCategory(urlParam, tab.dataset.category ?? "");
   };
 
   const tabForUrl = () => {
@@ -92,16 +98,11 @@ export function setupProjectTabs(folder: HTMLElement) {
     });
   });
 
-  window.addEventListener("popstate", () => {
-    const tab = tabForUrl();
-    if (isSelected(tab)) return;
-    select(tab, centerOf(tab));
-  });
-
   const resizeObserver = new ResizeObserver(() =>
     moveIndicator(tablist, selectedTab()),
   );
   tabs.forEach((tab) => resizeObserver.observe(tab));
+  signal.addEventListener("abort", () => resizeObserver.disconnect());
 
   select(tabForUrl());
   tablist.dataset.indicatorReady = "";

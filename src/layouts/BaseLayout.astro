@@ -2,6 +2,7 @@
 import "@/styles/global.css";
 
 import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
 
 import Header from "@/components/navigation/Header.astro";
 import type { Locale } from "@/lib/i18n";
@@ -20,14 +21,19 @@ const { lang, title, description } = Astro.props;
     <meta charset="utf-8" />
     <script is:inline>
       // Applies the saved theme before the first paint, so the page never flashes the wrong one.
-      try {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "light" || savedTheme === "dark") {
-          document.documentElement.dataset.theme = savedTheme;
+      // ClientRouter replaces <html>'s attributes on every navigation, so it's applied after each swap too.
+      const applySavedTheme = () => {
+        try {
+          const savedTheme = localStorage.getItem("theme");
+          if (savedTheme === "light" || savedTheme === "dark") {
+            document.documentElement.dataset.theme = savedTheme;
+          }
+        } catch {
+          // Storage blocked: the page follows the system theme.
         }
-      } catch {
-        // Storage blocked: the page follows the system theme.
-      }
+      };
+      applySavedTheme();
+      document.addEventListener("astro:after-swap", applySavedTheme);
     </script>
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -39,6 +45,7 @@ const { lang, title, description } = Astro.props;
     <Font cssVariable="--font-bricolage" preload />
     <Font cssVariable="--font-geist-mono" />
     <meta name="description" content={description} />
+    <ClientRouter />
   </head>
   <body class="bg-background text-foreground">
     <Header lang={lang} />

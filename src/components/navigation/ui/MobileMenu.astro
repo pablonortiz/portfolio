@@ -67,15 +67,19 @@ const texts = navigationTexts[lang];
 </div>
 
 <script>
-  const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
+  import { onEveryPage } from "@/lib/page-lifecycle";
 
-  document
-    .querySelector("[data-mobile-menu-open]")
-    ?.addEventListener("click", () => menu?.showModal());
+  onEveryPage(() => {
+    const menu = document.querySelector<HTMLDialogElement>("#mobile-menu");
 
-  menu
-    ?.querySelectorAll("[data-mobile-menu-close], a")
-    .forEach((element) =>
-      element.addEventListener("click", () => menu.close()),
-    );
+    document
+      .querySelector("[data-mobile-menu-open]")
+      ?.addEventListener("click", () => menu?.showModal());
+
+    menu
+      ?.querySelectorAll("[data-mobile-menu-close], a")
+      .forEach((element) =>
+        element.addEventListener("click", () => menu.close()),
+      );
+  });
 </script>

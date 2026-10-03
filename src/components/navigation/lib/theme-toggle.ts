@@ -21,7 +21,7 @@ const saveTheme = (theme: Theme) => {
 };
 
 /** Two-state toggle that follows the system theme until the visitor picks one. */
-export function setupThemeToggle(toggle: HTMLElement) {
+export function setupThemeToggle(toggle: HTMLElement, signal: AbortSignal) {
   const root = document.documentElement;
   const systemDark = matchMedia("(prefers-color-scheme: dark)");
 
@@ -38,6 +38,6 @@ export function setupThemeToggle(toggle: HTMLElement) {
     syncPressed();
   });
 
-  systemDark.addEventListener("change", syncPressed);
+  systemDark.addEventListener("change", syncPressed, { signal });
   syncPressed();
 }
