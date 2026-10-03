@@ -9,6 +9,7 @@ import { getSectionPath } from "@/lib/locale-url";
 import type { Project } from "@/lib/projects";
 
 import ProjectBackdrop from "./ui/ProjectBackdrop.astro";
+import TechnologyList from "./ui/TechnologyList.astro";
 import { projectsTexts } from "./projects.texts";
 
 interface Props {
@@ -88,13 +89,7 @@ const { Content } = await render(project.body);
 
   <section class="detail-stack">
     <h2 class="detail-label">{texts.stack}</h2>
-    <ul class="detail-stack-list">
-      {project.stack.map((technology) => (
-        <li class="rounded-full border border-border px-3 py-1">
-          {technology}
-        </li>
-      ))}
-    </ul>
+    <TechnologyList technologies={project.stack} />
   </section>
 </article>
 
@@ -196,17 +191,6 @@ const { Content } = await render(project.body);
     align-items: center;
     gap: 1rem;
     min-width: 0;
-  }
-
-  /* One line until the moving strip of phase 5; meanwhile it scrolls sideways if it doesn't fit. */
-  .detail-stack-list {
-    display: flex;
-    gap: 0.5rem;
-    overflow-x: auto;
-    font-family: var(--font-mono);
-    font-size: 0.875rem;
-    white-space: nowrap;
-    scrollbar-width: thin;
   }
 
   .detail-label {

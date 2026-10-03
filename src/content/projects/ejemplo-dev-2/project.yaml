@@ -1,5 +1,5 @@
 category: dev
 order: 2
 year: 2026
-stack: [Node.js, TypeScript, npm]
+stack: [nodejs, typescript, npm]
 poster: ./poster.png

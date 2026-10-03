@@ -1,0 +1,67 @@
+---
+import AstroIcon from "@/assets/icons/tech/astro.svg";
+import ElectronIcon from "@/assets/icons/tech/electron.svg";
+import ExpoIcon from "@/assets/icons/tech/expo.svg";
+import NodejsIcon from "@/assets/icons/tech/nodejs.svg";
+import NpmIcon from "@/assets/icons/tech/npm.svg";
+import ReactIcon from "@/assets/icons/tech/react.svg";
+import SqliteIcon from "@/assets/icons/tech/sqlite.svg";
+import TailwindCssIcon from "@/assets/icons/tech/tailwind-css.svg";
+import TypescriptIcon from "@/assets/icons/tech/typescript.svg";
+import { technologyNames, type TechnologyId } from "@/config/technologies";
+
+interface Props {
+  technologies: TechnologyId[];
+}
+
+const { technologies } = Astro.props;
+
+const technologyIcons = {
+  astro: AstroIcon,
+  electron: ElectronIcon,
+  expo: ExpoIcon,
+  nodejs: NodejsIcon,
+  npm: NpmIcon,
+  react: ReactIcon,
+  "react-native": ReactIcon,
+  sqlite: SqliteIcon,
+  "tailwind-css": TailwindCssIcon,
+  typescript: TypescriptIcon,
+} satisfies Record<TechnologyId, unknown>;
+---
+
+<ul class="technology-list">
+  {technologies.map((technology) => {
+    const Icon = technologyIcons[technology];
+    return (
+      <li class="technology">
+        <Icon class="size-4 shrink-0" aria-hidden="true" />
+        {technologyNames[technology]}
+      </li>
+    );
+  })}
+</ul>
+
+<style>
+  /* One line; until the moving strip arrives, it scrolls sideways if it doesn't fit. */
+  .technology-list {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    scrollbar-width: thin;
+  }
+
+  .technology {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    /* Mixed from the text color so it shows over any backdrop (the project's frame), in both themes. */
+    border: 1px solid
+      color-mix(in oklab, var(--color-foreground) 18%, transparent);
+    border-radius: 9999px;
+  }
+</style>

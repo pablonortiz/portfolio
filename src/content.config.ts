@@ -3,6 +3,7 @@ import { glob } from "astro/loaders";
 import { z } from "astro/zod";
 
 import { projectCategories } from "./config/projects";
+import { technologyIds } from "./config/technologies";
 
 const projectsBase = "./src/content/projects";
 
@@ -17,7 +18,7 @@ const projects = defineCollection({
       category: z.enum(projectCategories),
       order: z.number().int().positive(),
       year: z.number().int(),
-      stack: z.array(z.string()).nonempty(),
+      stack: z.array(z.enum(technologyIds)).nonempty(),
       poster: image(),
       demo: z.url().optional(),
       repository: z.url().optional(),

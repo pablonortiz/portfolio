@@ -296,7 +296,7 @@ src/content/projects/
 category: mobile # web | mobile | desktop | dev
 order: 1 # posición dentro de su pestaña
 year: 2026
-stack: [React Native, Expo, TypeScript]
+stack: [react-native, expo, typescript] # ids de config/technologies.ts (validados)
 poster: ./poster.png
 demo: https://… # opcional: sin demo, no aparece "Probalo"
 repository: https://… # opcional
