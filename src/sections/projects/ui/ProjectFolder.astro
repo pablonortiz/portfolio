@@ -66,6 +66,11 @@ const [defaultCategory] = categories;
       );
     })}
   </div>
+  <p
+    class="project-page-indicator"
+    data-project-indicator
+    aria-hidden="true"
+  ></p>
   <div class="project-panels">
     {categories.map((category) => (
       <div
@@ -86,11 +91,15 @@ const [defaultCategory] = categories;
 </div>
 
 <script>
+  import { setupPageIndicator } from "../lib/page-indicator";
   import { setupProjectTabs } from "../lib/project-tabs";
 
   document
     .querySelectorAll<HTMLElement>("[data-project-folder]")
-    .forEach(setupProjectTabs);
+    .forEach((folder) => {
+      setupProjectTabs(folder);
+      setupPageIndicator(folder);
+    });
 </script>
 
 <style>
@@ -102,8 +111,17 @@ const [defaultCategory] = categories;
   .project-folder {
     --tabs-height: 2.75rem;
     --pages-max-height: calc(100dvh - 8rem - var(--tabs-height) - 1px);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "tabs" "panels" "indicator";
+  }
+
+  /* The page indicator sits beside the tabs on desktop; on mobile they leave no room for it, so it goes below. */
+  @media (width >= 48rem) {
+    .project-folder {
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas: "tabs indicator" "panels panels";
+    }
   }
 
   /*
@@ -165,7 +183,28 @@ const [defaultCategory] = categories;
     );
   }
 
+  /* Its line is reserved even when empty, so switching tabs doesn't shift what's below. */
+  .project-page-indicator {
+    grid-area: indicator;
+    justify-self: end;
+    min-height: 1lh;
+    margin-top: 0.5rem;
+    padding-inline-end: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  @media (width >= 48rem) {
+    .project-page-indicator {
+      align-self: center;
+      margin-top: 0;
+    }
+  }
+
   .project-tabs {
+    grid-area: tabs;
     position: relative;
     z-index: 1;
     display: flex;
@@ -276,6 +315,7 @@ const [defaultCategory] = categories;
   }
 
   .project-panels {
+    grid-area: panels;
     position: relative;
     isolation: isolate;
     margin-top: -1px;

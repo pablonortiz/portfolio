@@ -28,23 +28,9 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
       </li>
     ))}
   </ul>
-  <p
-    class="project-pages-indicator"
-    data-project-indicator
-    aria-hidden="true"
-  ></p>
 </div>
-
-<script>
-  import { setupPageIndicator } from "../lib/page-indicator";
-
-  document
-    .querySelectorAll<HTMLElement>("[data-project-pages]")
-    .forEach(setupPageIndicator);
-</script>
 <style>
   .project-pages-frame {
-    position: relative;
     container-type: inline-size;
   }
 
@@ -151,14 +137,5 @@ const rowsDesktop = roundUpToEven(Math.ceil(projects.length / 2));
       translate: 0 1.5rem;
       scale: 0.96;
     }
-  }
-
-  .project-pages-indicator {
-    position: absolute;
-    right: 1rem;
-    bottom: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    color: var(--color-muted);
   }
 </style>
