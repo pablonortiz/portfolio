@@ -144,9 +144,13 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 ### 42.6. Transición del Hero a Proyectos
 
-- **La carpeta sube desde abajo y se "abre" a medida que se scrollea**, siguiendo el scroll (también al tocar la flecha del Hero).
+- **La carpeta llega inclinada hacia atrás desde sus pestañas, como una tapa, y se endereza mientras sube a su lugar**, siguiendo el scroll. El Hero, mientras tanto, baja a 40% de opacidad y se achica apenas (96%), así la carpeta parece pasar por encima. Elegida por Pablo después de probar dos prototipos en `pnpm dev`: esta (T) y otra que retenía la carpeta con solo las pestañas a la vista y después desplegaba el cuerpo hacia abajo (D).
+  - **Keyframes:** desde `perspective(1400px) rotateX(38deg)`, 3rem más abajo, al 94% y con 30% de opacidad. Plana (`transform: none`) y opaca **desde el 70%**; la posición y la escala terminan al 100%. Si terminara en `perspective() rotateX(0)`, el navegador dejaría una matriz 3D identidad: plana a la vista, pero una capa 3D que puede desenfocar el texto.
 - **Sin bloquear el scroll** (scroll-jacking): la animación sigue al scroll, el control lo tiene quien visita.
-- Las animaciones de CSS ligadas al scroll no andan en Firefox, así que va con JS. Candidatas: `scroll()` de Motion (versión sin React) o GSAP ScrollTrigger (§15). Se decide con prototipos.
+- **Con CSS, sin JS** (`animation-timeline`), como la entrada de las tarjetas: sin dependencias y fuera del hilo principal. Verificado en MDN: está en Chrome 115+ y Safari 26+, y en Firefox solo en la versión preview. **En Firefox estable no hay transición**: la carpeta simplemente está (principio 9). Se descartó `scroll()` de Motion: una dependencia casi solo para Firefox, y ahí correría en el hilo principal.
+- **La línea de tiempo es la entrada de la sección de proyectos en pantalla** (`view-timeline-name: --projects-entry`, rango `entry`), no el scroll de la página. Con el scroll de la página como línea de tiempo (la primera versión), en las pantallas donde la carpeta es más baja que la pantalla la página se quedaba sin scroll antes de terminar: en 2560×1440 la carpeta quedaba al 56%, inclinada y semitransparente para siempre. La entrada de la sección siempre se completa. **El Hero usa la misma línea de tiempo**: la página de inicio la comparte con `timeline-scope`, porque el Hero no está dentro de la sección. Verificado en siete tamaños de pantalla, de 375×667 a 2560×1440: al llegar al fondo, la carpeta plana y el Hero en 40%.
+- **El botón del Hero y la flecha hacen scroll suave** hasta la carpeta, para que se vea la transición (`lib/smooth-scroll.ts`). Es con JS y no con `scroll-behavior: smooth` en CSS: el router restaura el scroll al volver de un proyecto sin indicar el comportamiento, y con la propiedad CSS esa restauración también se animaría, mientras el zoom de vuelta captura la página. Con "reducir movimiento" o sin JS, el salto normal del ancla.
+- Con "reducir movimiento", ni la carpeta ni el Hero se animan.
 
 ### 42.7. Videos
 
@@ -218,4 +222,4 @@ Mientras no haya masters reales, `just placeholder-videos` crea uno de ejemplo p
 3. ✅ **Animaciones de la carpeta:** indicador que se desliza, círculo de color, entrada de las tarjetas y el cursor de Dev.
 4. ✅ **Videos en las tarjetas**, el zoom y la continuidad del frame. Con videos placeholder hasta tener los masters reales (§41); falta la tarjeta de paquete de npm para Dev, junto con los datos reales.
 5. ✅ **La tira de tecnologías:** logos y nombres; se mueve solo si no entra.
-6. **La transición del Hero a Proyectos.**
+6. ✅ **La transición del Hero a Proyectos:** la carpeta llega inclinada y se endereza.

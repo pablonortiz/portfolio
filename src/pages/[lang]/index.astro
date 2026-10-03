@@ -17,6 +17,15 @@ const { title, description } = siteTexts[lang];
 ---
 
 <BaseLayout lang={lang} title={title} description={description}>
-  <Hero lang={lang} />
-  <ProjectsSection lang={lang} />
+  <div class="home">
+    <Hero lang={lang} />
+    <ProjectsSection lang={lang} />
+  </div>
 </BaseLayout>
+
+<style>
+  /* The Hero dims in step with the folder's entry, whose timeline is the projects section's (docs/projects.md §42.6): this shares it with the Hero, which isn't inside that section. */
+  .home {
+    timeline-scope: --projects-entry;
+  }
+</style>

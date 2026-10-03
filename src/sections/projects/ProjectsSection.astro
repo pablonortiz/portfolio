@@ -17,10 +17,56 @@ const projects = await getProjects(lang);
 <section
   id={sectionIds[lang].projects}
   aria-labelledby="projects-title"
-  class="mx-auto max-w-6xl scroll-mt-16 px-6 py-8"
+  class="projects-section mx-auto max-w-6xl scroll-mt-16 px-6 py-8"
 >
   <h2 id="projects-title" class="sr-only">
     {projectsTexts[lang].sectionTitle}
   </h2>
-  <ProjectFolder lang={lang} projects={projects} />
+  <div class="projects-rise">
+    <ProjectFolder lang={lang} projects={projects} />
+  </div>
 </section>
+
+<style>
+  /*
+   * Scrolling from the Hero, the folder arrives tilted back from its tabs, like
+   * a lid, and flattens as it rises into place (docs/projects.md §42.6). It
+   * follows the section's own entry into view, which always completes: with
+   * the page's scroll as the timeline, a folder shorter than the screen (mobile,
+   * large screens) never got there, as the page ran out of scroll first. The
+   * Hero dims on this same timeline. Flat (`none`) from 70% on, so nothing 3D
+   * lingers. Without support (Firefox) or with reduced motion, it's just there.
+   * Longhands because the build's minifier breaks the shorthand plus
+   * animation-timeline.
+   */
+  @supports (animation-timeline: view()) {
+    .projects-section {
+      view-timeline-name: --projects-entry;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .projects-rise {
+        transform-origin: 50% 0;
+        animation-name: folder-rise;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: --projects-entry;
+        animation-range: entry 0% entry 100%;
+      }
+    }
+  }
+
+  @keyframes folder-rise {
+    from {
+      transform: perspective(1400px) rotateX(38deg);
+      translate: 0 3rem;
+      scale: 0.94;
+      opacity: 0.3;
+    }
+
+    70% {
+      transform: none;
+      opacity: 1;
+    }
+  }
+</style>

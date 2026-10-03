@@ -130,6 +130,8 @@ Entra cuando CSS no alcance, por ejemplo:
 
 Tiene dos APIs: `motion/react` (componentes, para piezas que ya viven en una isla React) y `motion` vanilla (funciones como `animate`, más livianas, usables desde un `<script>` de Astro sin React). Elegir según dónde viva la pieza.
 
+Hasta ahora no hizo falta: el círculo de color de la carpeta usa Web Animations del navegador, y la entrada de las tarjetas y la transición del Hero a Proyectos (§42.6) usan animaciones CSS ligadas al scroll, que en Firefox estable todavía no existen y ahí no hay animación.
+
 ### GSAP
 
 No instalar de entrada.

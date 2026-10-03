@@ -64,6 +64,7 @@ const { groupStyles, totalWords } = getRevealTiming([
     <a
       href={projectsHref}
       class="rounded-full bg-accent px-6 py-3 text-accent-foreground"
+      data-smooth-scroll
     >
       {texts.cta}
     </a>
@@ -73,6 +74,7 @@ const { groupStyles, totalWords } = getRevealTiming([
     href={projectsHref}
     aria-hidden="true"
     tabindex="-1"
+    data-smooth-scroll
     class="absolute bottom-0 left-1/2 flex h-8 w-16 -translate-x-1/2 items-end justify-center rounded-t-full border border-b-0 border-border pb-1"
   >
     <ArrowDownIcon class="size-4" />
@@ -80,15 +82,48 @@ const { groupStyles, totalWords } = getRevealTiming([
 </section>
 
 <script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
   import { skipIntroOnLaterNavigations } from "./lib/hero-intro";
+  import { scrollSmoothlyOnClick } from "./lib/smooth-scroll";
 
   skipIntroOnLaterNavigations();
+  onEveryPage(() =>
+    document
+      .querySelectorAll<HTMLAnchorElement>("[data-smooth-scroll]")
+      .forEach(scrollSmoothlyOnClick),
+  );
 </script>
 
 <style>
   .hero {
     --reading-pace: 350ms;
     --orbit-start: calc(var(--total-words) * var(--reading-pace));
+  }
+
+  /*
+   * Scrolling to the projects, the Hero dims and shrinks a little while the
+   * folder rises over it (docs/projects.md §42.6), on the folder's own
+   * timeline (shared by the home page). Longhands because the build's minifier
+   * breaks the shorthand plus animation-timeline.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero {
+        animation-name: hero-recede;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: --projects-entry;
+        animation-range: entry 0% entry 100%;
+      }
+    }
+  }
+
+  @keyframes hero-recede {
+    to {
+      opacity: 0.4;
+      scale: 0.96;
+    }
   }
 
   /* Intro already seen this visit: every intro timing derives from the pace, so it all lands in its final state (the orbit still spins). */
