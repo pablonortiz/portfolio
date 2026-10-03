@@ -259,8 +259,12 @@ const [defaultCategory] = categories;
     color: var(--color-muted);
   }
 
-  /* On narrow screens inactive tabs show only their icon; the label stays for screen readers. */
+  /* Narrow screens: tighter tabs, and inactive ones show only their icon (the label stays for screen readers). All four fit at 320px. */
   @media (width < 48rem) {
+    .project-tab {
+      padding-inline: 0.75rem;
+    }
+
     .project-tab[aria-selected="false"] .project-tab-label {
       position: absolute;
       width: 1px;
