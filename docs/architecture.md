@@ -454,6 +454,19 @@ para generar automáticamente las páginas de proyectos.
 
 ---
 
+### La home scrollea por capítulos (decidido)
+
+La página de inicio siempre queda detenida al principio de una sección, nunca entre dos (`scroll-snap-type: y mandatory` en el `<html>` de la home y `scroll-snap-align: start` en cada sección). Lo pidió Pablo: con el puntero en el medio de la pantalla, al bajar desde el Hero la carpeta de proyectos quedaba debajo del puntero antes de llegar a su lugar, y la rueda o el dedo empezaban a pasar sus páginas a medio entrar. El navegador le da el scroll al elemento con scroll más interno que está bajo el puntero, y la carpeta tiene el suyo.
+
+- **Con el encaje, la página encaja la carpeta antes de que su lista tome el scroll**, con cualquier gesto: verificado con gestos de mouse y táctiles de 100 a 600 px, la lista nunca se movió. La transición del Hero a la carpeta (§42.6) se ve entera durante el encaje.
+- **Es CSS nativo, sin interceptar el scroll:** teclado, rueda, trackpad y touch siguen siendo del navegador. Re Pág y Av Pág saltan de capítulo en capítulo.
+- **Un gesto corto rebota al capítulo actual:** con mouse o trackpad hace falta recorrer más de la mitad de la distancia al siguiente (en 1280×800, más de ~370 px). En el celular, un deslizamiento con inercia alcanza. Es la misma regla que el encaje de páginas dentro de la carpeta (§42.2).
+- **Cada sección nueva de la home tiene que ser hija directa de `.home`** (en `pages/[lang]/index.astro`) para tener su punto de encaje. Si no, el encaje obligatorio la salta y vuelve a la anterior. Una sección más alta que la pantalla se puede scrollear por dentro.
+- **El margen superior de las secciones (65 px, el header más su borde) se define ahí** para el encaje y para las anclas (`#proyectos`), en un solo lugar.
+- **Los elementos que se animan con escala tienen que mantener fijo su borde superior** (`transform-origin` arriba): Chrome calcula el punto de encaje con la caja transformada. El Hero se achica al bajar, y con el origen en el centro su capítulo quedaba 15 px corrido.
+- **Solo en la home** (`html:has(.home)`): en la página de un proyecto el scroll es libre.
+- Mientras Proyectos sea la última sección, en pantallas donde la carpeta es más baja que la pantalla (mobile, monitores grandes), su capítulo es el final de la página: la carpeta queda entera a la vista, pero no pegada arriba.
+
 ## 21. `client:*` en Astro
 
 Concepto central.

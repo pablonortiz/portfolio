@@ -24,6 +24,24 @@ const { title, description } = siteTexts[lang];
 </BaseLayout>
 
 <style>
+  /*
+   * The home scrolls by chapters (docs/architecture.md §20): it always rests on
+   * the start of a section, never between two. Otherwise, scrolling from the
+   * Hero with the pointer in the middle, the folder's own scroll took over
+   * before the folder was in place. Each section of the home has to be a
+   * direct child here to get its snap point; a section taller than the screen
+   * can still be scrolled through. The margin keeps sections below the sticky
+   * header (4rem plus its 1px border), for anchors too.
+   */
+  :global(html:has(.home)) {
+    scroll-snap-type: y mandatory;
+  }
+
+  .home > :global(section) {
+    scroll-snap-align: start;
+    scroll-margin-top: calc(4rem + 1px);
+  }
+
   /* The Hero dims in step with the folder's entry, whose timeline is the projects section's (docs/projects.md §42.6): this shares it with the Hero, which isn't inside that section. */
   .home {
     timeline-scope: --projects-entry;

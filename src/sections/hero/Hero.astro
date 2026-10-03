@@ -109,7 +109,9 @@ const { groupStyles, totalWords } = getRevealTiming([
    */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
+      /* Shrinking from its top edge: Chrome snaps to the transformed box, and from the center the Hero's chapter point moved 15px. */
       .hero {
+        transform-origin: 50% 0;
         animation-name: hero-recede;
         animation-fill-mode: both;
         animation-timing-function: linear;
