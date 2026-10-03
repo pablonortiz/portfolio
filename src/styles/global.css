@@ -30,3 +30,16 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 }
+
+/*
+ * Zoom from a project card to its page (docs/projects.md §42.4): the card and
+ * the page's backdrop share a transition name and this class. It lives here
+ * because a transition uses the destination page's styles, and each way the
+ * other page lacks one of the two.
+ */
+::view-transition-group(.project-zoom),
+::view-transition-old(.project-zoom),
+::view-transition-new(.project-zoom) {
+  animation-duration: var(--duration-normal);
+  animation-timing-function: var(--ease-in-out);
+}

@@ -3,45 +3,76 @@ import { Picture } from "astro:assets";
 
 import type { Project } from "@/lib/projects";
 
+import { getClipSources } from "../lib/clip-sources";
+
 interface Props {
   project: Project;
 }
 
 const { project } = Astro.props;
+const clip = project.npmPackage ? undefined : getClipSources(project.slug);
 ---
 
-<div class="project-backdrop" aria-hidden="true">
+<div
+  class="project-backdrop"
+  transition:name={`project-${project.slug}`}
+  aria-hidden="true"
+>
   <Picture
     src={project.poster}
     alt=""
     formats={["avif", "webp"]}
     widths={[640, 1280]}
     sizes="100vw"
-    class="project-backdrop-image"
   />
+  {
+    /* Where the router leaves the card's clip when the zoom brings it along; on a direct visit it stays hidden. */
+    clip && (
+      <video
+        transition:persist={`clip-${project.slug}`}
+        data-clip-placeholder
+        muted
+        preload="none"
+        hidden
+      >
+        {clip.sources.map((source) => (
+          <source src={source.src} type={source.type} />
+        ))}
+      </video>
+    )
+  }
 </div>
 
 <style>
   /*
-   * The project's last frame behind the whole page. It's blurred and veiled
-   * with the theme's background color, so the text on top keeps its contrast
-   * in both themes; the image is scaled up so the blur leaves no clear edges.
-   * The veil is the lightest that keeps secondary text at 4.5:1 or more over a
-   * pure white or black frame, in either theme (measured: 4.9:1 at worst).
+   * The project's frame behind the whole page: the clip that came with the
+   * zoom, or the still on a direct visit. It's blurred and veiled with the
+   * theme's background color, so the text on top keeps its contrast in both
+   * themes; it's scaled up so the blur leaves no clear edges. The veil is the
+   * lightest that keeps secondary text at 4.5:1 or more over a pure white or
+   * black frame, in either theme (measured: 4.9:1 at worst).
    */
   .project-backdrop {
     position: fixed;
     inset: 0;
     z-index: -1;
     overflow: hidden;
+    view-transition-class: project-zoom;
   }
 
-  .project-backdrop :global(img) {
+  /* The clip arrives with the card's classes and scope: it's styled from here, unscoped. */
+  .project-backdrop :global(img),
+  .project-backdrop :global(video) {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     scale: 1.1;
     filter: blur(24px);
+    transition:
+      scale var(--duration-normal) var(--ease-out),
+      filter var(--duration-normal) var(--ease-out);
   }
 
   .project-backdrop::after {
@@ -49,5 +80,25 @@ const { project } = Astro.props;
     position: absolute;
     inset: 0;
     background: color-mix(in oklab, var(--color-background) 88%, transparent);
+    transition: opacity var(--duration-normal) var(--ease-out);
+  }
+
+  /* Arriving from a card: sharp and unveiled until the zoom ends, then it blurs. */
+  :global(html[data-project-arrival]) .project-backdrop :global(img),
+  :global(html[data-project-arrival]) .project-backdrop :global(video) {
+    scale: 1;
+    filter: none;
+  }
+
+  :global(html[data-project-arrival]) .project-backdrop::after {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-backdrop :global(img),
+    .project-backdrop :global(video),
+    .project-backdrop::after {
+      transition: none;
+    }
   }
 </style>

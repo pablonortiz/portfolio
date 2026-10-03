@@ -15,6 +15,12 @@ const restart = (video: HTMLVideoElement) => {
   video.play().catch(() => undefined);
 };
 
+/** Back from its project page: the clip continues from the frame it stopped on. */
+const resume = (video: HTMLVideoElement) => {
+  delete video.dataset.resume;
+  if (!video.ended) video.play().catch(() => undefined);
+};
+
 /** Nothing is requested before this, not even the first frame: until then the card shows its still. */
 const startLoading = (video: HTMLVideoElement) => {
   video.poster = video.dataset.firstFrame ?? "";
@@ -70,7 +76,8 @@ export function setupCardVideos(folder: HTMLElement, signal: AbortSignal) {
       }
       if (intersectionRatio < 0.99 || playedSinceEntering.has(target)) return;
       playedSinceEntering.add(target);
-      restart(video);
+      if (video.dataset.resume === undefined) restart(video);
+      else resume(video);
     });
 
   // The cards are observed, not the videos, which stay hidden (without a box) until they load.

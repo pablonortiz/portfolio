@@ -18,9 +18,10 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
 
 <a
   href={getProjectPath(lang, project.slug)}
-  class="relative block size-full overflow-hidden rounded-xl"
+  class="relative block size-full overflow-hidden rounded-xl [view-transition-class:project-zoom]"
   data-project-card
   data-slug={project.slug}
+  transition:name={`project-${project.slug}`}
 >
   <Picture
     src={project.poster}
@@ -34,6 +35,7 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
     <video
       class="absolute inset-0 size-full object-cover"
       data-card-video
+      transition:persist={`clip-${project.slug}`}
       muted
       playsinline
       preload="none"

@@ -18,7 +18,12 @@ const { lang } = Astro.props;
 const texts = navigationTexts[lang];
 ---
 
-<header class="sticky top-0 z-10 border-b border-border bg-background/70 backdrop-blur-md">
+{/* Its own transition group, painted above the rest: otherwise a full-screen element zooming in covers it until the navigation ends. */}
+<header
+  class="sticky top-0 z-10 border-b border-border bg-background/70 backdrop-blur-md"
+  transition:name="site-header"
+  transition:animate="none"
+>
   <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
     <a href={getRelativeLocaleUrl(lang)} aria-label={texts.homeLabel}>
       <Signature class="h-12 w-auto" aria-hidden="true" />
