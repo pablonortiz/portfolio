@@ -8,6 +8,7 @@ import type { Locale } from "@/lib/i18n";
 import { getSectionPath } from "@/lib/locale-url";
 import type { Project } from "@/lib/projects";
 
+import ProjectBackdrop from "./ui/ProjectBackdrop.astro";
 import { projectsTexts } from "./projects.texts";
 
 interface Props {
@@ -20,8 +21,10 @@ const texts = projectsTexts[lang];
 const { Content } = await render(project.body);
 ---
 
-<article class="mx-auto max-w-6xl px-6 py-10">
-  <div class="rounded-2xl border border-border p-6 md:p-10">
+<ProjectBackdrop project={project} />
+
+<article class="project-detail">
+  <header class="detail-header">
     <a
       href={getSectionPath(lang, "projects")}
       class="inline-flex items-center gap-2 font-mono text-sm text-muted hover:text-foreground"
@@ -29,68 +32,150 @@ const { Content } = await render(project.body);
       <ArrowLeftIcon class="size-4" aria-hidden="true" />
       {texts.back}
     </a>
-
-    <h1 class="mt-6 text-center font-display text-4xl font-extrabold tracking-tight md:text-5xl">
+    <h1 class="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
       {project.title}
     </h1>
+  </header>
 
-    <div class="mt-10 grid gap-10 md:grid-cols-2">
-      <div class="space-y-8">
-        <section>
-          <h2 class="detail-label">{texts.problem}</h2>
-          <p class="mt-3">{project.problem}</p>
-        </section>
-        <section>
-          <h2 class="detail-label">{texts.solution}</h2>
-          <p class="mt-3">{project.solution}</p>
-        </section>
-      </div>
-
-      <div class="flex flex-col items-center gap-6">
-        <Picture
-          src={project.poster}
-          alt=""
-          formats={["avif", "webp"]}
-          widths={[480, 720, 960]}
-          sizes="(min-width: 768px) 32rem, 90vw"
-          class="w-full rounded-xl"
-        />
-        {project.demo && (
-          <a
-            href={project.demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
-          >
-            {texts.tryIt}
-            <ArrowUpRightIcon class="size-4" aria-hidden="true" />
-            <span class="sr-only">{texts.opensInNewTab}</span>
-          </a>
-        )}
-      </div>
-    </div>
-
-    <section class="mt-10">
-      <h2 class="detail-label">{texts.stack}</h2>
-      <ul class="mt-3 flex flex-wrap gap-2 font-mono text-sm">
-        {project.stack.map((technology) => (
-          <li class="rounded-full border border-border px-3 py-1">
-            {technology}
-          </li>
-        ))}
-      </ul>
+  <div
+    class="detail-text"
+    tabindex="0"
+    role="region"
+    aria-label={texts.descriptionLabel}
+  >
+    <section>
+      <h2 class="detail-label">{texts.problem}</h2>
+      <p class="mt-3">{project.problem}</p>
     </section>
-
-    <section class="mt-10 border-t border-border pt-8">
+    <section>
+      <h2 class="detail-label">{texts.solution}</h2>
+      <p class="mt-3">{project.solution}</p>
+    </section>
+    <section>
       <h2 class="detail-label">{texts.technical}</h2>
       <div class="technical-body mt-3">
         <Content />
       </div>
     </section>
   </div>
+
+  <div class="detail-media">
+    <Picture
+      src={project.poster}
+      alt=""
+      formats={["avif", "webp"]}
+      widths={[480, 720, 960]}
+      sizes="(min-width: 768px) 32rem, 90vw"
+      class="detail-media-image"
+    />
+    {project.demo && (
+      <a
+        href={project.demo}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
+      >
+        {texts.tryIt}
+        <ArrowUpRightIcon class="size-4" aria-hidden="true" />
+        <span class="sr-only">{texts.opensInNewTab}</span>
+      </a>
+    )}
+  </div>
+
+  <section class="detail-stack">
+    <h2 class="detail-label">{texts.stack}</h2>
+    <ul class="detail-stack-list">
+      {project.stack.map((technology) => (
+        <li class="rounded-full border border-border px-3 py-1">
+          {technology}
+        </li>
+      ))}
+    </ul>
+  </section>
 </article>
 
 <style>
+  /*
+   * Mobile: one column that scrolls with the page, the image right after the
+   * title. Desktop: exactly one screen below the sticky header (4rem plus its
+   * 1px border); if the text doesn't fit, its own column scrolls.
+   */
+  .project-detail {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "header" "media" "text" "stack";
+    gap: 2rem;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 1.5rem;
+  }
+
+  @media (width >= 48rem) {
+    .project-detail {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      grid-template-areas: "header header" "text media" "stack stack";
+      gap: 2rem 3rem;
+      height: calc(100dvh - 4rem - 1px);
+      padding-block: 2rem;
+    }
+
+    .detail-text {
+      overflow-y: auto;
+      padding-inline-end: 1rem;
+    }
+  }
+
+  .detail-header {
+    grid-area: header;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .detail-text {
+    grid-area: text;
+    display: grid;
+    align-content: start;
+    gap: 2rem;
+  }
+
+  .detail-media {
+    grid-area: media;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 0;
+  }
+
+  .detail-media :global(.detail-media-image) {
+    min-height: 0;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0.75rem;
+    object-fit: contain;
+  }
+
+  .detail-stack {
+    grid-area: stack;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  /* One line until the moving strip of phase 5; meanwhile it scrolls sideways if it doesn't fit. */
+  .detail-stack-list {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    white-space: nowrap;
+    scrollbar-width: thin;
+  }
+
   .detail-label {
     font-family: var(--font-mono);
     font-size: 0.875rem;
@@ -101,5 +186,42 @@ const { Content } = await render(project.body);
 
   .technical-body :global(* + *) {
     margin-top: 1em;
+  }
+
+  /*
+   * When the text column scrolls, its bottom edge fades out to show there's
+   * more, until the end is reached. Tied to its own scroll; with nothing to
+   * scroll the timeline is inactive and there's no fade. Longhands because the
+   * build's minifier breaks the shorthand plus animation-timeline.
+   */
+  @property --text-fade {
+    syntax: "<length>";
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  @supports (animation-timeline: scroll()) {
+    .detail-text {
+      mask-image: linear-gradient(
+        to bottom,
+        black calc(100% - var(--text-fade)),
+        transparent
+      );
+      animation-name: text-fade-until-end;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+      animation-timeline: scroll(self);
+    }
+  }
+
+  @keyframes text-fade-until-end {
+    0%,
+    90% {
+      --text-fade: 3rem;
+    }
+
+    100% {
+      --text-fade: 0px;
+    }
   }
 </style>

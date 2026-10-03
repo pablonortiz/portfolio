@@ -11,6 +11,7 @@ interface ProjectsTexts {
   solution: string;
   stack: string;
   technical: string;
+  descriptionLabel: string;
   tryIt: string;
   opensInNewTab: string;
 }
@@ -31,6 +32,7 @@ export const projectsTexts = {
     solution: "Qué se construyó",
     stack: "Tecnologías",
     technical: "Detalles técnicos",
+    descriptionLabel: "Descripción del proyecto",
     tryIt: "Probalo",
     opensInNewTab: "(se abre en otra pestaña)",
   },
@@ -49,6 +51,7 @@ export const projectsTexts = {
     solution: "What was built",
     stack: "Technologies",
     technical: "Technical details",
+    descriptionLabel: "About the project",
     tryIt: "Try it",
     opensInNewTab: "(opens in a new tab)",
   },
