@@ -694,13 +694,18 @@ Objetivo:
 Separar por proyecto, y según si Astro las procesa o no:
 
 - **Imágenes** (cover, screenshots) → dentro de `src/`, junto al contenido del proyecto (estructura exacta: ver §18), referenciadas desde el frontmatter con el helper `image()` del schema. Así Astro las optimiza en build: formatos modernos (AVIF/WebP), `srcset` responsive y `width`/`height` automáticos (evita layout shift).
-- **Lo que no se procesa** (videos, PDF del CV, favicon) → `public/`, que se sirve tal cual.
+- **Lo que no se procesa** (PDF del CV, favicon) → `public/`, que se sirve tal cual.
+- **Videos de proyectos** → fuera de git hasta definir el hosting (§42.7). Los masters van en `videos/masters/` y `just encode-video <slug>` escribe lo que usa el sitio en `public/videos/<slug>/`; las dos carpetas están en `.gitignore`. El poster de cada proyecto (el último frame del clip) sí va en git, junto a su contenido, porque es la imagen que se ve sin video.
 
 ```text
-public/
-└─ projects/
-   └─ perfumario/
-      └─ demo.mp4
+videos/masters/                      ← lo que se entrega (fuera de git)
+└─ perfumario-clip.mp4
+public/videos/perfumario/            ← lo que genera el script (fuera de git)
+├─ clip.av1.mp4
+├─ clip.h264.mp4
+└─ clip-start.avif
+src/content/projects/perfumario/
+└─ poster.png                        ← último frame del clip (en git)
 ```
 
 Evitar carpetas genéricas llenas de:

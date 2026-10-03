@@ -3,6 +3,10 @@ dist/
 # generated types
 .astro/
 
+# project videos: masters, intermediate files and encodes stay out of git
+videos/
+public/videos/
+
 # dependencies
 node_modules/
 

@@ -168,13 +168,15 @@ El clip dura 5 segundos como máximo por una norma de accesibilidad: lo que se m
 
 #### Lo que hace el script (y no hace falta entregar)
 
-`just encode-video <slug>` toma los masters y genera todo lo que usa el sitio, siempre con los mismos parámetros:
+`just encode-video <slug>` toma los masters de `videos/masters/` y genera en `public/videos/<slug>/` todo lo que usa el sitio, siempre con los mismos parámetros (estructura en la §25):
 
 - **Valida** la duración (clip de 5,0 s como máximo) y la proporción.
 - **Compone los clips de mobile en 16:9:** la pantalla al centro, al 86% del alto y con esquinas redondeadas; a los costados, una copia agrandada, desenfocada y levemente oscurecida de la misma pantalla.
 - **Codifica el clip a 1280×720** en AV1 (el formato más liviano) y en H.264 (Safari decodifica AV1 solo con soporte por hardware, desde el iPhone 15 Pro y los Mac con M3), sin pista de audio. Peso objetivo: 400 KB en AV1, a confirmar con los primeros masters reales.
 - **Codifica el recorrido a 1920×1080** en AV1 y H.264.
 - **Extrae dos imágenes del clip:** el primer frame (se ve mientras el video carga) y el último, que pasa a ser el `poster.png` del proyecto en git. Es la imagen fija con "reducir movimiento", sin JS y en buscadores.
+
+Mientras no haya masters reales, `just placeholder-videos` crea uno de ejemplo para cada proyecto que no tenga (salvo los paquetes de npm) y lo codifica: 4 segundos de un degradé con los colores de su categoría y una barra de progreso arriba, y medio segundo quieto al final. Los de Mobile salen verticales, para probar la composición.
 
 ### 42.8. Fases
 
