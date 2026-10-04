@@ -1,0 +1,6 @@
+category: desktop
+order: 1
+year: 2026 # TODO: confirmar
+stack: [flutter, dart]
+poster: ./poster.png
+fictionalBrand: true

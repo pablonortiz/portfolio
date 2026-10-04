@@ -1,12 +1,17 @@
 ---
 import AstroIcon from "@/assets/icons/tech/astro.svg";
+import DartIcon from "@/assets/icons/tech/dart.svg";
 import ElectronIcon from "@/assets/icons/tech/electron.svg";
 import ExpoIcon from "@/assets/icons/tech/expo.svg";
+import FlutterIcon from "@/assets/icons/tech/flutter.svg";
 import NodejsIcon from "@/assets/icons/tech/nodejs.svg";
 import NpmIcon from "@/assets/icons/tech/npm.svg";
 import ReactIcon from "@/assets/icons/tech/react.svg";
+import ReduxIcon from "@/assets/icons/tech/redux.svg";
 import SqliteIcon from "@/assets/icons/tech/sqlite.svg";
+import SupabaseIcon from "@/assets/icons/tech/supabase.svg";
 import TailwindCssIcon from "@/assets/icons/tech/tailwind-css.svg";
+import TanstackQueryIcon from "@/assets/icons/tech/tanstack-query.svg";
 import TypescriptIcon from "@/assets/icons/tech/typescript.svg";
 import { technologyNames, type TechnologyId } from "@/config/technologies";
 
@@ -19,15 +24,22 @@ const { technologies, label } = Astro.props;
 
 const technologyIcons = {
   astro: AstroIcon,
+  dart: DartIcon,
   electron: ElectronIcon,
   expo: ExpoIcon,
+  flutter: FlutterIcon,
   nodejs: NodejsIcon,
   npm: NpmIcon,
   react: ReactIcon,
   "react-native": ReactIcon,
+  redux: ReduxIcon,
   sqlite: SqliteIcon,
+  supabase: SupabaseIcon,
   "tailwind-css": TailwindCssIcon,
+  "tanstack-query": TanstackQueryIcon,
   typescript: TypescriptIcon,
+  // Simple Icons has no Zustand logo (its official one is a full-color illustration): name only.
+  zustand: null,
 } satisfies Record<TechnologyId, unknown>;
 ---
 
@@ -38,7 +50,7 @@ const technologyIcons = {
         const Icon = technologyIcons[technology];
         return (
           <li class="technology">
-            <Icon class="size-4 shrink-0" aria-hidden="true" />
+            {Icon && <Icon class="size-4 shrink-0" aria-hidden="true" />}
             {technologyNames[technology]}
           </li>
         );

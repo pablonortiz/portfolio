@@ -23,6 +23,8 @@ const projects = defineCollection({
       demo: z.url().optional(),
       repository: z.url().optional(),
       npmPackage: z.string().optional(),
+      /** Made for a client whose identity stays private: the name and the data on screen are made up. */
+      fictionalBrand: z.boolean().default(false),
     }),
 });
 

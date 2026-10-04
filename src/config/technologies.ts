@@ -5,15 +5,21 @@
  */
 export const technologyNames = {
   astro: "Astro",
+  dart: "Dart",
   electron: "Electron",
   expo: "Expo",
+  flutter: "Flutter",
   nodejs: "Node.js",
   npm: "npm",
   react: "React",
   "react-native": "React Native",
+  redux: "Redux",
   sqlite: "SQLite",
+  supabase: "Supabase",
   "tailwind-css": "Tailwind CSS",
+  "tanstack-query": "TanStack Query",
   typescript: "TypeScript",
+  zustand: "Zustand",
 } as const;
 
 export type TechnologyId = keyof typeof technologyNames;

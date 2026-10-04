@@ -6,6 +6,7 @@ import { getProjectPath } from "@/lib/locale-url";
 import type { Project } from "@/lib/projects";
 
 import { getClipSources } from "../lib/clip-sources";
+import { projectsTexts } from "../projects.texts";
 
 interface Props {
   lang: Locale;
@@ -51,4 +52,9 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
   <span class="absolute bottom-3 left-3 rounded-md bg-background/85 px-2 py-1 text-sm">
     {project.title}
   </span>
+  {project.fictionalBrand && (
+    <span class="absolute top-3 right-3 rounded-md bg-background/85 px-2 py-0.5 font-mono text-xs">
+      {projectsTexts[lang].fictionalBrand}
+    </span>
+  )}
 </a>

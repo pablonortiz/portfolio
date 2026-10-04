@@ -1,0 +1,6 @@
+category: desktop
+order: 2
+year: 2026 # TODO: confirmar
+stack: [electron, react, typescript]
+poster: ./poster.png
+fictionalBrand: true

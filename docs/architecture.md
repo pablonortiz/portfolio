@@ -303,6 +303,7 @@ poster: ./poster.png
 demo: https://… # opcional: sin demo, no aparece "Probalo"
 repository: https://… # opcional
 npmPackage: "@scope/x" # opcional, para la pestaña Dev
+fictionalBrand: true # opcional: proyecto para un cliente con nombre y datos inventados (§42.3)
 ```
 
 ```md

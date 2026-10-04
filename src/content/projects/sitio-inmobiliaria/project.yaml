@@ -1,0 +1,6 @@
+category: web
+order: 2
+year: 2026 # TODO: confirmar
+stack: [astro, tailwind-css, typescript, supabase]
+poster: ./poster.png
+fictionalBrand: true

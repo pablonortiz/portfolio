@@ -1,6 +1,0 @@
-category: web
-order: 1
-year: 2026
-stack: [astro, typescript, tailwind-css]
-poster: ./poster.png
-demo: https://example.com

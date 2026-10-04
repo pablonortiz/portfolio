@@ -1,0 +1,5 @@
+category: mobile
+order: 4
+year: 2026 # TODO: confirmar
+stack: [react-native, expo, typescript, redux]
+poster: ./poster.png

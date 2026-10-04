@@ -14,6 +14,8 @@ interface ProjectsTexts {
   descriptionLabel: string;
   tryIt: string;
   opensInNewTab: string;
+  fictionalBrand: string;
+  fictionalBrandNote: string;
 }
 
 export const projectsTexts = {
@@ -35,6 +37,8 @@ export const projectsTexts = {
     descriptionLabel: "Descripción del proyecto",
     tryIt: "Probalo",
     opensInNewTab: "(se abre en otra pestaña)",
+    fictionalBrand: "Marca ficticia",
+    fictionalBrandNote: "Marca y datos ficticios, para resguardar al cliente.",
   },
   en: {
     sectionTitle: "Projects",
@@ -54,5 +58,7 @@ export const projectsTexts = {
     descriptionLabel: "About the project",
     tryIt: "Try it",
     opensInNewTab: "(opens in a new tab)",
+    fictionalBrand: "Fictional brand",
+    fictionalBrandNote: "Brand and data are fictional, to protect the client.",
   },
 } satisfies Record<Locale, ProjectsTexts>;
