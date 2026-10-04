@@ -1,6 +1,6 @@
 category: web
 order: 2
-year: 2026 # TODO: confirmar
+year: 2025
 stack: [react, typescript, tailwind-css, express, prisma, postgresql]
 poster: ./poster.png
 fictionalBrand: true

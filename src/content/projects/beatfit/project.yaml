@@ -1,5 +1,5 @@
 category: mobile
 order: 4
-year: 2026 # TODO: confirmar
+year: 2026
 stack: [react-native, expo, typescript, sqlite, drizzle]
 poster: ./poster.png

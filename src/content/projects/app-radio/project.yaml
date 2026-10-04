@@ -1,6 +1,6 @@
 category: mobile
 order: 2
-year: 2026 # TODO: confirmar
+year: 2022
 stack: [react-native, javascript, redux]
 poster: ./poster.png
 fictionalBrand: true

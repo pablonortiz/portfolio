@@ -1,6 +1,6 @@
 category: desktop
 order: 2
-year: 2026 # TODO: confirmar
+year: 2025
 stack: [electron, react, typescript, tailwind-css, sqlite, supabase]
 poster: ./poster.png
 fictionalBrand: true

@@ -1,5 +1,5 @@
 category: mobile
 order: 5
-year: 2026 # TODO: confirmar
+year: 2024
 stack: [react-native, expo, typescript, zustand, tanstack-query]
 poster: ./poster.png

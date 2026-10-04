@@ -1,6 +1,6 @@
 category: desktop
 order: 1
-year: 2026 # TODO: confirmar
+year: 2026
 stack: [flutter, dart, riverpod, supabase, postgresql]
 poster: ./poster.png
 fictionalBrand: true
