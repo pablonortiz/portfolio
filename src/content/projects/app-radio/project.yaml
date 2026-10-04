@@ -1,6 +1,6 @@
 category: mobile
 order: 2
 year: 2026 # TODO: confirmar
-stack: [react-native, expo, typescript]
+stack: [react-native, javascript, redux]
 poster: ./poster.png
 fictionalBrand: true

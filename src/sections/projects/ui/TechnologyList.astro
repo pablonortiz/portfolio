@@ -1,11 +1,17 @@
 ---
 import AstroIcon from "@/assets/icons/tech/astro.svg";
 import DartIcon from "@/assets/icons/tech/dart.svg";
+import DrizzleIcon from "@/assets/icons/tech/drizzle.svg";
 import ElectronIcon from "@/assets/icons/tech/electron.svg";
 import ExpoIcon from "@/assets/icons/tech/expo.svg";
+import ExpressIcon from "@/assets/icons/tech/express.svg";
 import FlutterIcon from "@/assets/icons/tech/flutter.svg";
+import JavascriptIcon from "@/assets/icons/tech/javascript.svg";
+import KotlinIcon from "@/assets/icons/tech/kotlin.svg";
 import NodejsIcon from "@/assets/icons/tech/nodejs.svg";
 import NpmIcon from "@/assets/icons/tech/npm.svg";
+import PostgresqlIcon from "@/assets/icons/tech/postgresql.svg";
+import PrismaIcon from "@/assets/icons/tech/prisma.svg";
 import ReactIcon from "@/assets/icons/tech/react.svg";
 import ReduxIcon from "@/assets/icons/tech/redux.svg";
 import SqliteIcon from "@/assets/icons/tech/sqlite.svg";
@@ -25,11 +31,17 @@ const { technologies, label } = Astro.props;
 const technologyIcons = {
   astro: AstroIcon,
   dart: DartIcon,
+  drizzle: DrizzleIcon,
   electron: ElectronIcon,
   expo: ExpoIcon,
+  express: ExpressIcon,
   flutter: FlutterIcon,
+  javascript: JavascriptIcon,
+  kotlin: KotlinIcon,
   nodejs: NodejsIcon,
   npm: NpmIcon,
+  postgresql: PostgresqlIcon,
+  prisma: PrismaIcon,
   react: ReactIcon,
   "react-native": ReactIcon,
   redux: ReduxIcon,
@@ -38,7 +50,8 @@ const technologyIcons = {
   "tailwind-css": TailwindCssIcon,
   "tanstack-query": TanstackQueryIcon,
   typescript: TypescriptIcon,
-  // Simple Icons has no Zustand logo (its official one is a full-color illustration): name only.
+  // Simple Icons has no logo for these two (Zustand's official one is a full-color illustration): name only.
+  riverpod: null,
   zustand: null,
 } satisfies Record<TechnologyId, unknown>;
 ---
