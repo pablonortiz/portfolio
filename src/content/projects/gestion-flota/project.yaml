@@ -3,3 +3,4 @@ order: 1
 year: 2026
 stack: [flutter, dart, riverpod, sqlite, supabase]
 poster: ./poster.png
+tour: true

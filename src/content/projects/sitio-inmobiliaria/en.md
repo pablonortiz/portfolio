@@ -3,6 +3,7 @@ title: "Umbral Properties"
 summary: "Website for a real estate agency: property search with filters, listing pages, valuations via WhatsApp and a panel to publish listings."
 problem: "The agency relied on listing portals and messages to show its properties, without a website of its own it could update unaided."
 solution: "A website with search by neighborhood, operation, type, rooms and price, a page per property with photos and WhatsApp inquiries, valuation requests, and an admin panel to add and publish properties."
+tourDescription: "On the site, properties are filtered, one is opened with its gallery and an appraisal is requested, which goes out through WhatsApp. In the admin panel, a new property is entered with its photos, saved as a draft and then published: it shows up first in the site's listing."
 ---
 
 A React and TypeScript SPA (Vite, Tailwind, shadcn/ui) with its own REST API in Express, Prisma and PostgreSQL, both on Vercel. In the admin panel, properties are saved as drafts with lenient validation, and checked against a strict Zod schema when published.

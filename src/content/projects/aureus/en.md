@@ -3,6 +3,7 @@ title: "Aureus"
 summary: "Personal finance and productivity app: transactions in pesos and dollars, spending by category, payment forecast, tasks and focus sessions."
 problem: "Keeping expenses, recurring payments and tasks in separate apps made it hard to see the month at a glance."
 solution: "A single app with the balance, the month's spending by category, pending payments and their calendar forecast, the dollar exchange rate, a task list and a deep-work timer."
+tourDescription: "An expense in pesos is entered with its category, and the balance updates right away. In the payment forecast, tapping a future day shows how much is due by then and what's left. Then the task list and a 25-minute focus session, where the day's tasks get checked off."
 ---
 
 React Native without Expo, on the New Architecture, with strict TypeScript, Zustand and SQLite (op-sqlite). Everything is local, with no backend. Each dollar transaction stores the exchange rate for its date. Today's rate and the history come from public APIs, with a three-level cache (memory, SQLite and network with a timeout) and fallback values when offline.

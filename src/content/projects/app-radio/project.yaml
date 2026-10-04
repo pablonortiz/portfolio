@@ -3,4 +3,5 @@ order: 2
 year: 2022
 stack: [react-native, javascript, redux]
 poster: ./poster.png
+tour: true
 fictionalBrand: true

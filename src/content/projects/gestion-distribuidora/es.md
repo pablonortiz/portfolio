@@ -3,6 +3,7 @@ title: "Tesela Gestión"
 summary: "Sistema de escritorio para una distribuidora de insumos médicos: compromisos y cheques, inventario, control de calidad y facturación."
 problem: "La distribuidora llevaba pagos, cheques, stock y facturación en planillas y sistemas separados: era difícil saber qué vencía, qué había en el depósito y qué faltaba facturar."
 solution: "Un sistema que reúne todo: un panel con los compromisos y cheques por vencer, importación de cheques desde Excel con categorización automática, registro de temperatura y humedad del depósito, inventario, catálogo y facturación electrónica."
+tourDescription: "Se importa un Excel de cheques, y un extracto bancario en PDF se procesa, se categoriza solo y se exporta a Excel. Después se registran la temperatura y la humedad del depósito, y en facturación se emite una factura A desde un remito: con la vista previa al lado, obtiene su CAE y queda lista para descargar en PDF."
 ---
 
 App Flutter para escritorio (Windows y macOS) y Android, sobre Supabase. Está organizada por feature: la interfaz habla con notifiers de Riverpod, y estos con repositorios detrás de interfaces, que en los tests se reemplazan por fakes con la forma real de las respuestas de PostgREST.

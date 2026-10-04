@@ -3,3 +3,4 @@ order: 3
 year: 2026
 stack: [react-native, typescript, zustand, sqlite, kotlin]
 poster: ./poster.png
+tour: true

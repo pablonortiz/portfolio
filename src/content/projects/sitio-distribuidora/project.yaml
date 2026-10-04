@@ -3,4 +3,5 @@ order: 1
 year: 2026
 stack: [astro, tailwind-css, typescript, supabase]
 poster: ./poster.png
+tour: true
 fictionalBrand: true
