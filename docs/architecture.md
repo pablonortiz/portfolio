@@ -304,6 +304,7 @@ demo: https://… # opcional: sin demo, no aparece "Probalo"
 repository: https://… # opcional
 npmPackage: "@scope/x" # opcional, para la pestaña Dev
 fictionalBrand: true # opcional: proyecto para un cliente con nombre y datos inventados (§42.3)
+tour: true # opcional: tiene recorrido (§42.5), que cada .md describe en tourDescription
 ```
 
 ```md
@@ -312,6 +313,7 @@ title: Perfumario
 summary: Una aplicación para descubrir y organizar perfumes. # ≤ 160 caracteres: tarjeta, descripción y Open Graph
 problem: …
 solution: …
+tourDescription: … # si tiene recorrido: qué muestra (su alternativa en texto)
 ---
 
 La capa técnica (§2): arquitectura, decisiones, problemas interesantes.
@@ -321,7 +323,7 @@ La capa técnica (§2): arquitectura, decisiones, problemas interesantes.
 - Los slugs **no se traducen**: los proyectos tienen nombre propio y los de clientes se renombran igual. Si algún día hace falta, se agrega un campo opcional en el frontmatter.
 - **Lo que no depende del idioma va una sola vez en `project.yaml`**: si estuviera en cada `.md`, se duplicaría y tarde o temprano se desincronizaría.
 - **`.md` y no `.mdx`**: Markdown lo entiende Astro sin instalar nada; se pasa a MDX (renombrar archivos e instalar `@astrojs/mdx`) el día que un proyecto necesite un componente dentro del texto.
-- Dos colecciones en `src/content.config.ts` (`projects` para los YAML, `projectTexts` para los `.md`), validadas con Zod al compilar; `getProjects(lang)` (`lib/projects.ts`) las combina. **El build falla** si a un proyecto le falta un idioma, si la categoría no existe o si el resumen supera los 160 caracteres.
+- Dos colecciones en `src/content.config.ts` (`projects` para los YAML, `projectTexts` para los `.md`), validadas con Zod al compilar; `getProjects(lang)` (`lib/projects.ts`) las combina. **El build falla** si a un proyecto le falta un idioma, si la categoría no existe, si el resumen supera los 160 caracteres o si un proyecto con recorrido no lo describe.
 - Agregar un proyecto = crear una carpeta.
 
 Ventaja:

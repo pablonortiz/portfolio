@@ -1,0 +1,257 @@
+---
+import { Picture } from "astro:assets";
+
+import PlayIcon from "@/assets/icons/play.svg";
+import XIcon from "@/assets/icons/x.svg";
+import type { Locale } from "@/lib/i18n";
+import type { Project } from "@/lib/projects";
+
+import { getTourSources } from "../lib/video-sources";
+import { projectsTexts } from "../projects.texts";
+
+interface Props {
+  lang: Locale;
+  project: Project;
+  description: string;
+}
+
+const { lang, project, description } = Astro.props;
+const texts = projectsTexts[lang];
+---
+
+<button
+  type="button"
+  class="tour-open"
+  commandfor="project-tour"
+  command="show-modal"
+  aria-describedby="project-tour-description"
+>
+  <Picture
+    src={project.poster}
+    alt=""
+    formats={["avif", "webp"]}
+    widths={[480, 720, 960]}
+    sizes="(min-width: 768px) 32rem, 90vw"
+    class="size-full object-cover"
+  />
+  <span class="tour-open-label">
+    <PlayIcon class="size-4" aria-hidden="true" />
+    {texts.watchTour}
+  </span>
+</button>
+
+<dialog
+  id="project-tour"
+  class="tour-dialog"
+  aria-labelledby="project-tour-title"
+  data-tour-dialog
+>
+  <div class="tour-panel">
+    <header class="tour-header">
+      <h2 id="project-tour-title" class="tour-title">
+        {texts.tour} · {project.title}
+      </h2>
+      <button
+        type="button"
+        class="tour-close"
+        commandfor="project-tour"
+        command="close"
+        aria-label={texts.closeTour}
+      >
+        <XIcon class="size-5" aria-hidden="true" />
+      </button>
+    </header>
+    <video
+      class="tour-video"
+      controls
+      muted
+      playsinline
+      preload="none"
+      aria-describedby="project-tour-description"
+      data-tour-video
+    >
+      {getTourSources(project.slug).map((source) => (
+        <source src={source.src} type={source.type} />
+      ))}
+    </video>
+    <p id="project-tour-description" class="tour-description">
+      {description}
+    </p>
+  </div>
+</dialog>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupProjectTour } from "../lib/project-tour";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLDialogElement>("[data-tour-dialog]")
+      .forEach((dialog) => setupProjectTour(dialog, signal)),
+  );
+</script>
+
+<style>
+  /* The poster, 16:9 like every clip. On desktop it fits the media area, which is its size container (ProjectDetail). */
+  .tour-open {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    cursor: pointer;
+  }
+
+  @media (width >= 48rem) {
+    .tour-open {
+      width: min(100cqw, 100cqh * 16 / 9);
+    }
+  }
+
+  .tour-open::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: oklch(0% 0 0 / 20%);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .tour-open:hover::after {
+    background: oklch(0% 0 0 / 35%);
+  }
+
+  .tour-open-label {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 9999px;
+    background: var(--color-accent);
+    color: var(--color-accent-foreground);
+    font-weight: 600;
+    white-space: nowrap;
+    translate: -50% -50%;
+  }
+
+  .tour-open:hover .tour-open-label {
+    scale: 1.05;
+  }
+
+  /*
+   * As large as the screen allows while the panel (header, video and
+   * description) still fits: the video's height is what's left after the
+   * panel's other parts, and its width follows at 16:9.
+   */
+  .tour-dialog {
+    --tour-chrome: 14rem;
+
+    width: min(
+      100vw - 2rem,
+      80rem,
+      (100dvh - 2rem - var(--tour-chrome)) * 16 / 9 + 2rem
+    );
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    margin: auto;
+    padding: 0;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  /* The page behind doesn't scroll while the tour is open (on mobile it did, under the dialog). */
+  :global(html:has(.tour-dialog[open])) {
+    overflow: hidden;
+  }
+
+  .tour-dialog::backdrop {
+    background: oklch(0% 0 0 / 70%);
+  }
+
+  .tour-panel {
+    display: grid;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .tour-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .tour-title {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .tour-close {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 9999px;
+    cursor: pointer;
+  }
+
+  .tour-close:hover {
+    background: color-mix(in oklab, var(--color-foreground) 10%, transparent);
+  }
+
+  .tour-video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 0.5rem;
+    background: black;
+  }
+
+  .tour-description {
+    max-width: 65ch;
+  }
+
+  /* The label grows on hover; the panel fades in and grows a little when it opens, and the reverse on closing where the browser can animate it. */
+  @media (prefers-reduced-motion: no-preference) {
+    .tour-open-label {
+      transition: scale var(--duration-fast) var(--ease-out);
+    }
+
+    .tour-dialog,
+    .tour-dialog::backdrop {
+      transition:
+        opacity var(--duration-fast) var(--ease-out),
+        scale var(--duration-fast) var(--ease-out),
+        display var(--duration-fast) allow-discrete,
+        overlay var(--duration-fast) allow-discrete;
+    }
+
+    .tour-dialog:not([open]),
+    .tour-dialog:not([open])::backdrop {
+      opacity: 0;
+    }
+
+    .tour-dialog:not([open]) {
+      scale: 0.96;
+    }
+
+    @starting-style {
+      .tour-dialog[open],
+      .tour-dialog[open]::backdrop {
+        opacity: 0;
+      }
+
+      .tour-dialog[open] {
+        scale: 0.96;
+      }
+    }
+  }
+</style>

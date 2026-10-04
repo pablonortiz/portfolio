@@ -16,6 +16,9 @@ interface ProjectsTexts {
   opensInNewTab: string;
   fictionalBrand: string;
   fictionalBrandNote: string;
+  tour: string;
+  watchTour: string;
+  closeTour: string;
 }
 
 export const projectsTexts = {
@@ -39,6 +42,9 @@ export const projectsTexts = {
     opensInNewTab: "(se abre en otra pestaña)",
     fictionalBrand: "Marca ficticia",
     fictionalBrandNote: "Marca y datos ficticios, para resguardar al cliente.",
+    tour: "Recorrido",
+    watchTour: "Ver recorrido",
+    closeTour: "Cerrar recorrido",
   },
   en: {
     sectionTitle: "Projects",
@@ -60,5 +66,8 @@ export const projectsTexts = {
     opensInNewTab: "(opens in a new tab)",
     fictionalBrand: "Fictional brand",
     fictionalBrandNote: "Brand and data are fictional, to protect the client.",
+    tour: "Tour",
+    watchTour: "Watch the tour",
+    closeTour: "Close the tour",
   },
 } satisfies Record<Locale, ProjectsTexts>;

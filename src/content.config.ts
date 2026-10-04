@@ -25,6 +25,8 @@ const projects = defineCollection({
       npmPackage: z.string().optional(),
       /** Made for a client whose identity stays private: the name and the data on screen are made up. */
       fictionalBrand: z.boolean().default(false),
+      /** Has a tour video. The videos aren't in git, so the build can't tell on its own. */
+      tour: z.boolean().default(false),
     }),
 });
 
@@ -35,6 +37,8 @@ const projectTexts = defineCollection({
     summary: z.string().max(160),
     problem: z.string(),
     solution: z.string(),
+    /** What the tour shows, as its text alternative (the video has no audio). Required when the project has a tour. */
+    tourDescription: z.string().optional(),
   }),
 });
 

@@ -9,6 +9,7 @@ import { getSectionPath } from "@/lib/locale-url";
 import type { Project } from "@/lib/projects";
 
 import ProjectBackdrop from "./ui/ProjectBackdrop.astro";
+import ProjectTour from "./ui/ProjectTour.astro";
 import TechnologyList from "./ui/TechnologyList.astro";
 import { projectsTexts } from "./projects.texts";
 
@@ -68,14 +69,22 @@ const { Content } = await render(project.body);
   </div>
 
   <div class="detail-media">
-    <Picture
-      src={project.poster}
-      alt=""
-      formats={["avif", "webp"]}
-      widths={[480, 720, 960]}
-      sizes="(min-width: 768px) 32rem, 90vw"
-      class="detail-media-image"
-    />
+    {project.tour ? (
+      <ProjectTour
+        lang={lang}
+        project={project}
+        description={project.tour.description}
+      />
+    ) : (
+      <Picture
+        src={project.poster}
+        alt=""
+        formats={["avif", "webp"]}
+        widths={[480, 720, 960]}
+        sizes="(min-width: 768px) 32rem, 90vw"
+        class="detail-media-image"
+      />
+    )}
     {project.demo && (
       <a
         href={project.demo}
@@ -139,6 +148,11 @@ const { Content } = await render(project.body);
     .detail-text {
       overflow-y: auto;
       padding-inline-end: 1rem;
+    }
+
+    /* The tour's poster sizes itself to this area (ProjectTour). */
+    .detail-media {
+      container-type: size;
     }
   }
 
