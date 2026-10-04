@@ -5,4 +5,6 @@ problem: "Las apps de entrenamiento por intervalos traían rutinas fijas y era i
 solution: "Una app para armar rutinas con bloques, ejercicios por tiempo o repeticiones y descansos, seguirlas con un temporizador guiado y ver las rachas y estadísticas de entrenamiento."
 ---
 
-TODO: capa técnica (arquitectura, decisiones y problemas interesantes del proyecto).
+Expo con TypeScript estricto y la nueva arquitectura, sin backend: todo se guarda en SQLite con Drizzle, y la interfaz nunca toca la base directamente. El motor del entrenamiento es un reducer puro que recibe la hora en cada acción, así cada transición es determinista y se testea sin temporizadores reales.
+
+Se controla por voz ("siguiente", "pausa") en español, inglés y portugués, y los sonidos bajan el volumen de la música en vez de cortarla. En segundo plano, una notificación con cuenta regresiva nativa sigue el entrenamiento. Los pasos por tiempo se agendan de antemano, pero una serie por repeticiones corta esa cadena, porque no se sabe cuándo termina. Las funciones premium van con RevenueCat, detrás de una interfaz con una implementación de desarrollo.

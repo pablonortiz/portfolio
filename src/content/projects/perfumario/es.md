@@ -5,4 +5,4 @@ problem: "El stock de perfumes se controlaba a mano, y los más vendidos se qued
 solution: "Una app para cargar perfumes con su marca y género, sumar o restar stock en un toque, ver alertas de bajo stock, buscar y filtrar, y exportar un reporte del inventario."
 ---
 
-TODO: capa técnica (arquitectura, decisiones y problemas interesantes del proyecto).
+Expo con expo-router, TypeScript, NativeWind y TanStack Query contra una API REST propia. Los tipos de perfumes, marcas y géneros salen de un paquete propio de esquemas en Zod. La búsqueda se hace en el servidor, con debounce. Las consultas se cachean y se invalidan al cambiar el stock. El reporte de inventario se arma como HTML agrupado por género y se exporta a PDF con expo-print para compartirlo.
