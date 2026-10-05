@@ -10,6 +10,8 @@ interface NavigationTexts {
   closeMenu: string;
   menuLabel: string;
   links: Record<Section, string>;
+  cv: string;
+  cvLabel: string;
 }
 
 export const navigationTexts = {
@@ -22,6 +24,8 @@ export const navigationTexts = {
     closeMenu: "Cerrar menú",
     menuLabel: "Menú",
     links: { projects: "Proyectos", about: "Sobre mí", contact: "Contacto" },
+    cv: "CV",
+    cvLabel: "Descargar CV",
   },
   en: {
     homeLabel: "Pablo Ortiz, home",
@@ -32,5 +36,7 @@ export const navigationTexts = {
     closeMenu: "Close menu",
     menuLabel: "Menu",
     links: { projects: "Projects", about: "About", contact: "Contact" },
+    cv: "CV",
+    cvLabel: "Download CV",
   },
 } satisfies Record<Locale, NavigationTexts>;

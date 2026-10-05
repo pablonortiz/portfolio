@@ -1,4 +1,5 @@
 ---
+import { cvPaths } from "@/config/contact";
 import { sections } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 import { getSectionPath } from "@/lib/locale-url";
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const { lang, class: className } = Astro.props;
-const { links } = navigationTexts[lang];
+const { links, cv, cvLabel } = navigationTexts[lang];
 ---
 
 <ul class={className}>
@@ -20,4 +21,9 @@ const { links } = navigationTexts[lang];
       <a href={getSectionPath(lang, section)}>{links[section]}</a>
     </li>
   ))}
+  <li>
+    <a href={cvPaths[lang]} download aria-label={cvLabel}>
+      {cv}
+    </a>
+  </li>
 </ul>
