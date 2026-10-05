@@ -5,15 +5,21 @@ import { Font } from "astro:assets";
 import { ClientRouter } from "astro:transitions";
 
 import Header from "@/components/navigation/Header.astro";
-import type { Locale } from "@/lib/i18n";
+import { siteName } from "@/config/site";
+import { locales, openGraphLocales, type Locale } from "@/lib/i18n";
+import { getLocalizedUrl, languageNeutralUrl } from "@/lib/locale-url";
 
 interface Props {
   lang: Locale;
   title: string;
   description: string;
+  /** The home also has a language-neutral version: the root, which picks the browser's language. */
+  isHome?: boolean;
 }
 
-const { lang, title, description } = Astro.props;
+const { lang, title, description, isHome = false } = Astro.props;
+const canonicalUrl = getLocalizedUrl(Astro.url.pathname, lang);
+const otherLocales = locales.filter((locale) => locale !== lang);
 ---
 
 <html lang={lang}>
@@ -45,6 +51,26 @@ const { lang, title, description } = Astro.props;
     <Font cssVariable="--font-bricolage" preload />
     <Font cssVariable="--font-geist-mono" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {locales.map((locale) => (
+      <link
+        rel="alternate"
+        hreflang={locale}
+        href={getLocalizedUrl(Astro.url.pathname, locale)}
+      />
+    ))}
+    {isHome && (
+      <link rel="alternate" hreflang="x-default" href={languageNeutralUrl} />
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content={openGraphLocales[lang]} />
+    {otherLocales.map((locale) => (
+      <meta property="og:locale:alternate" content={openGraphLocales[locale]} />
+    ))}
     <ClientRouter />
   </head>
   <body class="bg-background text-foreground">

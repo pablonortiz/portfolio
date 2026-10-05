@@ -19,6 +19,15 @@ export function getLocalizedPath(pathname: string, targetLocale: Locale) {
   return getRelativeLocaleUrl(targetLocale, segments.join("/"));
 }
 
+/** The same, as the absolute URL that canonical, hreflang and Open Graph need. */
+export function getLocalizedUrl(pathname: string, targetLocale: Locale) {
+  return new URL(getLocalizedPath(pathname, targetLocale), import.meta.env.SITE)
+    .href;
+}
+
+/** The root, which redirects by the browser's language (vercel.json). */
+export const languageNeutralUrl = new URL("/", import.meta.env.SITE).href;
+
 export function getSectionPath(
   lang: Locale,
   section: Section,

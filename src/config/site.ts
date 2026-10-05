@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 
+export const siteName = "Pablo Ortiz";
+
 interface SiteTexts {
   title: string;
   description: string;

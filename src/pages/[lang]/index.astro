@@ -20,7 +20,7 @@ const { lang } = Astro.params as Params;
 const { title, description } = siteTexts[lang];
 ---
 
-<BaseLayout lang={lang} title={title} description={description}>
+<BaseLayout lang={lang} title={title} description={description} isHome>
   <div class="home">
     <Hero lang={lang} />
     <ProjectsSection lang={lang} />

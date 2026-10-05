@@ -7,6 +7,7 @@ import { defaultLocale, locales } from "./src/lib/i18n.ts";
 
 // https://astro.build/config
 export default defineConfig({
+  site: "https://pablonortiz.com",
   i18n: {
     locales: [...locales],
     defaultLocale,

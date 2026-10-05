@@ -6,6 +6,7 @@ import type {
 } from "astro";
 
 import { routeSegments } from "@/config/navigation";
+import { siteName } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 import { getProjects } from "@/lib/projects";
@@ -36,7 +37,7 @@ const { project } = Astro.props as Props;
 
 <BaseLayout
   lang={lang}
-  title={`${project.title} — Pablo Ortiz`}
+  title={`${project.title} — ${siteName}`}
   description={project.summary}
 >
   <ProjectDetail lang={lang} project={project} />
