@@ -803,6 +803,7 @@ Las demos son **dummies de los proyectos reales**: sin base de datos ni backend 
 
 - **Repo público en GitHub** (`pablonortiz/portfolio`): el código también es parte del portfolio. Antes del primer push se revisó el historial completo (secretos, datos de clientes, metadatos de los binarios) y se reescribió para sacar notas que no tenían que ser públicas.
 - **Proyecto `portfolio` en Vercel, conectado al repo:** cada push a `main` despliega a producción, y las otras ramas y los PR, a un preview. Astro se detecta solo y la salida es estática (sin adapter).
+- **CI en GitHub Actions** (`.github/workflows/ci.yml`): en cada push, a cualquier rama, corre `check`, `lint`, `format:check` y `build` en una máquina limpia, con el Node y el pnpm de `.mise.toml` (`jdx/mise-action`). No bloquea el deploy: si falla, avisa por mail y el badge del README queda en rojo. Cubre lo que el hook de pre-commit no ve: el repo entero, y los commits que se lo saltean.
 - **El build usa pnpm 10 y el Node que permite `engines`** (`>=22.12.0`): sin `packageManager` en `package.json`, Vercel elige pnpm por el lockfile (versión 9) y no lee las versiones de mise (pnpm 12, Node 24). Funciona igual, pero si algún día aparece una diferencia entre local y Vercel, lo primero es fijar las dos versiones en `package.json`.
 - **El dominio se compró en Cloudflare y su DNS está ahí:**
   - `pablonortiz.com` → registro A `76.76.21.21` y `www` → CNAME `cname.vercel-dns.com`, los dos en "DNS only": con el proxy de Cloudflare en el medio, Vercel no puede emitir su certificado.

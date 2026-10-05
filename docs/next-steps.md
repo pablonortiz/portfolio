@@ -16,9 +16,7 @@ Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). 
 
 - [ ] **`prettier-plugin-tailwindcss` → versión estable.** Hoy usa el build `insiders` con el fix [#473](https://github.com/tailwindlabs/prettier-plugin-tailwindcss/pull/473). _Disparador:_ release estable posterior a 0.8.1 que lo incluya (`pnpm outdated` lo muestra). Al migrar, verificar que siga ordenando clases en `.astro`.
 - [ ] **TypeScript 7.1.** _Disparador:_ 7.1 estable y soportado por Astro (`@astrojs/check` o el chequeo de `.astro` desde `tsc`).
-- [ ] **README del proyecto.** Sin roadmap: un portfolio terminado no tiene próximas versiones. _Disparador:_ terminar el portfolio. Si el repo se publica antes, un README mínimo de placeholder. Incluir el setup para quien clone: `mise install`, `pnpm install` y `prek install` (el hook no se versiona), y para los videos, ffmpeg con SVT-AV1 (el de Homebrew lo trae); `just` lo instala `mise install`.
 - [ ] **Viabilidad de cada demo interactiva.** _Disparador:_ llegar a la sección de proyectos (§26).
-- [ ] **CI en GitHub Actions.** Correr `check`, `lint`, `format:check` y `build` en cada push: el hook de pre-commit es local y se puede saltear, CI es la garantía. _Disparador:_ publicar el repo en GitHub.
 - [ ] **Foto final del Hero.** La actual es un placeholder de 512×512 (se ve blanda en pantallas retina y tiene un halo de una edición previa). La final: al menos 1500 px de alto, luz pareja, fondo liso, mirando hacia el texto (izquierda del encuadre) o a cámara; el blanco y negro se aplica después. _Disparador:_ antes de publicar.
 - [ ] **Kairos en Desktop:** la app nativa de macOS (SwiftUI) para tareas, propuesta como proyecto de Desktop. _Disparador:_ tener su clip y su recorrido.
 - [ ] **La UTN en la línea de tiempo** (§43.4): Ingeniería en Sistemas, con su estado real. _Disparador:_ el examen de ingreso del 4 de diciembre.
