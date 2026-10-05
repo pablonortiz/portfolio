@@ -110,13 +110,14 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 ```text
 ┌──────────────────────────────────────────────┐
-│ ← Proyectos          Nombre del proyecto     │
+│ ← Proyectos                                  │
+│ Nombre del proyecto            [ Probalo ↗ ] │
 │                                              │
 │  Problemática                ┌────────────┐  │
-│  ~~~~~~~~~~~~~~              │   video    │  │
-│  ~~~~~~~~~~~~~~              │     ▷      │  │
+│  ~~~~~~~~~~~~~~              │  póster    │  │
+│  ~~~~~~~~~~~~~~              │ ▷ Recorrido│  │
 │                              └────────────┘  │
-│  Se construyó…                 Probalo ↗     │
+│  Se construyó…                               │
 │  ~~~~~~~~~~~~~~                              │
 │                                              │
 │  Tecnologías: React · Jest · Tailwind → → →  │
@@ -135,14 +136,14 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 - **En desktop (desde 48rem), la página entra en la pantalla:** mide exactamente el alto disponible debajo del header, con cuatro áreas de grid (encabezado, texto, imagen, tecnologías). Si el texto no entra, scrollea su columna, no la página.
   - **Un degradé en el borde inferior de la columna avisa que hay más** y desaparece al llegar al final. Es una animación ligada al scroll de la propia columna (`scroll(self)`) que mueve una variable registrada con `@property`. Si no hay nada que scrollear, la línea de tiempo queda inactiva y no hay degradé. En Firefox no hay degradé.
   - **La columna se puede scrollear con teclado:** `tabindex="0"`, `role="region"` y un nombre ("Descripción del proyecto"). Chrome hace enfocables solos a los contenedores con scroll, Safari no. La regla de ESLint que prohíbe `tabindex` en elementos no interactivos admite el rol `region` (config del proyecto).
-- **En mobile, la página scrollea normal:** primero el título, la imagen y "Probalo", después los textos. El HTML conserva el orden de lectura (texto antes que imagen) y el grid lo reordena. Forzar una pantalla habría dejado una columna de texto de ~250 px con scroll propio dentro de una página táctil.
+- **En mobile, la página scrollea normal:** primero el título y "Probalo", la imagen, y después los textos. El HTML conserva el orden de lectura (texto antes que imagen) y el grid lo reordena. Forzar una pantalla habría dejado una columna de texto de ~250 px con scroll propio dentro de una página táctil.
 - **Fondo:** la imagen del último frame (en el commit del zoom, el video que viaja desde la tarjeta), fija detrás de toda la página, agrandada un 10% para que el desenfoque no deje bordes, desenfocada y con un velo del color de fondo del tema: en claro aclara, en oscuro oscurece. **El velo es del 88%**, el mínimo que deja el texto secundario en 4,5:1 o más con un frame blanco o negro puro detrás, en los dos temas: medido, 4,9:1 en el peor caso (el texto principal, de 13,6:1 para arriba). Con 80%, el secundario bajaba a 4:1.
 - **Cada tecnología lleva su logo al lado del nombre** (`ui/TechnologyList.astro`):
   - **Los logos son SVG de Simple Icons** (CC0, versión 16.33.0), copiados a `src/assets/icons/tech/` con su licencia al lado, como los de Lucide. Sin `<title>` ni `role="img"`, porque el nombre está al lado, y en `currentColor`: monocromos, del color del texto, en los dos temas. Los colores de cada marca competían con la identidad. Los logos siguen siendo marcas registradas; mostrarlos para indicar con qué se trabajó es un uso habitual, pero cada marca tiene sus pautas.
   - **Tecnologías sin logo y logos de familia:** Simple Icons no tiene a Zustand (su logo oficial es una ilustración a color) ni a Riverpod, así que se muestran solo con el nombre; en el mapa de íconos va como `null` explícito, para que la verificación siga marcando los olvidos. TanStack Query usa el logo de TanStack: el de React Query (su nombre anterior) es casi igual al de React y se confundía con React Native al lado.
   - **Registro de tecnologías** (`config/technologies.ts`): ids y nombres (`"tailwind-css": "Tailwind CSS"`). El `stack` de cada `project.yaml` usa ids, y el schema los valida: un id mal escrito corta el build (`stack.1: Invalid option`). El mapa de íconos usa `satisfies Record<TechnologyId, unknown>`, así una tecnología agregada sin logo hace fallar `astro check` (verificados los dos). Los íconos viven en la UI y no en el registro, porque el registro lo importa la configuración de contenido.
   - El borde de los chips sale del color del texto con transparencia y no de `--color-border`: sobre el velo del detalle, en tema claro, el borde normal casi no se veía.
-- **"Probalo"**: lleva a la demo (§5, §26), solo si el proyecto tiene una.
+- **"Probalo"**: lleva a la demo (§5, §26), solo si el proyecto tiene una: un botón que no lleva a ningún lado, o uno que dice "próximamente", dejaría el sitio como a medio terminar. Va en el encabezado, a la derecha del título (debajo, si no entra), con el acento de color: es la acción principal de la página, porque probar pesa más que mirar. Por eso la píldora de "Ver recorrido" es neutra (el fondo del tema, como la etiqueta de las tarjetas). Antes iba debajo de la imagen, donde ahora el póster del recorrido ocupa todo el alto.
 - **Marca ficticia:** bajo el título, "Marca y datos ficticios, para resguardar al cliente." en los proyectos con `fictionalBrand` (§42.3).
 - **"← Proyectos"** arriba a la izquierda, y Esc hace lo mismo (salvo con un `<dialog>` abierto, como el menú mobile, donde Esc lo cierra). Si la entrada anterior del historial es la carpeta desde la que se abrió el proyecto, vuelve con `history.back()`: pestaña, página, scroll y animación inversa, todo como estaba. Si no (entrada directa por un link compartido, por ejemplo), el link va a la carpeta en la pestaña del proyecto (`/es/?plataforma=mobile#proyectos`), que es también lo que funciona sin JS.
 - **Tira de tecnologías** (`lib/technology-strip.ts`): una línea. **Si entra, queda quieta**: animar lo que ya se ve entero solo agrega movimiento. Si no entra, se mueve sola hacia la derecha en loop, a velocidad constante (30 px/s, así una lista larga no corre más rápido).

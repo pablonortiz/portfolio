@@ -38,9 +38,23 @@ const { Content } = await render(project.body);
       <ArrowLeftIcon class="size-4" aria-hidden="true" />
       {texts.back}
     </a>
-    <h1 class="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
-      {project.title}
-    </h1>
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <h1 class="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
+        {project.title}
+      </h1>
+      {project.demo && (
+        <a
+          href={project.demo}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
+        >
+          {texts.tryIt}
+          <ArrowUpRightIcon class="size-4" aria-hidden="true" />
+          <span class="sr-only">{texts.opensInNewTab}</span>
+        </a>
+      )}
+    </div>
     {project.fictionalBrand && (
       <p class="font-mono text-sm text-muted">{texts.fictionalBrandNote}</p>
     )}
@@ -84,18 +98,6 @@ const { Content } = await render(project.body);
         sizes="(min-width: 768px) 32rem, 90vw"
         class="detail-media-image"
       />
-    )}
-    {project.demo && (
-      <a
-        href={project.demo}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
-      >
-        {texts.tryIt}
-        <ArrowUpRightIcon class="size-4" aria-hidden="true" />
-        <span class="sr-only">{texts.opensInNewTab}</span>
-      </a>
     )}
   </div>
 
