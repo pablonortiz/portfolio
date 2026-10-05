@@ -189,8 +189,7 @@ src/
 │  └─ utilities.css
 │
 ├─ lib/
-│  ├─ i18n.ts
-│  └─ seo.ts
+│  └─ i18n.ts
 │
 ├─ config/
 │  ├─ site.ts
@@ -592,6 +591,16 @@ Así no hay páginas duplicadas por construcción: un solo archivo por página, 
 - **Antes la hacía Astro**, con una página HTML de `meta refresh` (el redirect manual de `astro.config`, sin la espera de 2 segundos del automático del i18n). Mostraba un instante una pantalla en blanco con "Redirecting to: /es/" (lo vio Pablo). Esa página sigue en el build, para `pnpm preview` y cualquier hosting sin `vercel.json`: Vercel aplica sus redirecciones antes de buscar archivos.
 - **Solo mira el idioma principal:** alguien con el navegador en español que también acepta inglés va a `/es/`. Y solo aplica a `/`: los links directos (el CV, LinkedIn) siguen apuntando a `/es/` o `/en/`.
 
+### Una URL por página y SEO (decidido)
+
+- **Una sola URL por página:** `trailingSlash: true` en `vercel.json` redirige `/es` a `/es/` con un 308, conservando los parámetros. Los archivos (el CV, el favicon, los assets, el sitemap) no se redirigen: se probó en un deploy de preview. Los links internos ya llevan la barra final, porque salen de `getRelativeLocaleUrl`.
+- **En el `<head>` de cada página** (`BaseLayout`), con las URLs absolutas de `getLocalizedUrl` (`lib/locale-url.ts`), que toma el dominio de `site` en `astro.config.mjs`:
+  - el **canonical**, la URL oficial de la página, sin parámetros: `?plataforma=mobile` es la misma home con otra pestaña;
+  - los **`hreflang`** `es` y `en`, que le dicen a los buscadores que las dos versiones son la misma página. La home suma `x-default` hacia `/`, que elige el idioma de quien entra; los proyectos no tienen una versión neutral;
+  - **Open Graph** de texto: título, descripción (en los proyectos, su `summary`), URL, nombre del sitio y `og:locale` (`es_AR`, por el voseo, o `en_US`). La imagen para compartir está en los pendientes (§41).
+- **Sitemap con `@astrojs/sitemap`:** genera `sitemap-index.xml` al compilar, con las rutas del build, y `public/robots.txt` lo declara. Sin la opción de i18n de la integración, que empareja URLs que solo difieren en el prefijo de idioma (acá los segmentos se traducen): los idiomas los declaran los `hreflang` del `<head>`.
+- **Google Search Console**, con una propiedad de dominio (cubre `www` y `media.`), verificada con un registro TXT en el DNS. Ahí se cargó el sitemap.
+
 ### Traducciones cortas (decidido)
 
 Cada sección tiene sus propios textos, **con los dos idiomas juntos**, en un archivo `*.texts.ts` dentro de su carpeta:
@@ -796,6 +805,7 @@ Las demos son **dummies de los proyectos reales**: sin base de datos ni backend 
   - `www.pablonortiz.com` redirige al dominio principal con un 308, conservando la ruta: una sola URL canónica.
   - HTTPS con un certificado de Let's Encrypt que emite y renueva Vercel. `http` redirige a `https`.
   - `media.pablonortiz.com` → el bucket de R2 de los videos (§42.7).
+  - Un registro TXT `google-site-verification` verifica el dominio en Google Search Console (§22).
 
 ---
 
