@@ -1,0 +1,7 @@
+category: dev
+order: 3
+year: 2026
+stack: [typescript, nodejs, mcp, react-native]
+npmPackage: tapfix
+install: claude mcp add-json --scope user tapfix '{"type":"stdio","command":"npx","args":["-y","tapfix"]}'
+repository: https://github.com/pablonortiz/tapfix

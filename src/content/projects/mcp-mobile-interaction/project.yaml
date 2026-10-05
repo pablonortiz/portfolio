@@ -1,0 +1,7 @@
+category: dev
+order: 2
+year: 2026
+stack: [typescript, nodejs, mcp]
+npmPackage: mcp-mobile-interaction
+install: claude mcp add mobile -- npx -y mcp-mobile-interaction
+repository: https://github.com/pablonortiz/mcp-mobile-interaction

@@ -13,6 +13,7 @@ export const technologyNames = {
   flutter: "Flutter",
   javascript: "JavaScript",
   kotlin: "Kotlin",
+  mcp: "MCP",
   nodejs: "Node.js",
   npm: "npm",
   postgresql: "PostgreSQL",

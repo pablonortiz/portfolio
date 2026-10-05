@@ -1,0 +1,7 @@
+category: dev
+order: 1
+year: 2026
+stack: [typescript, nodejs, mcp, react-native]
+npmPackage: mcp-rn-devtools
+install: claude mcp add rn-devtools -- npx -y mcp-rn-devtools
+repository: https://github.com/pablonortiz/mcp-rn-devtools
