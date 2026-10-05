@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig, fontProviders } from "astro/config";
 
+import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 import { defaultLocale, locales } from "./src/lib/i18n.ts";
@@ -8,6 +9,7 @@ import { defaultLocale, locales } from "./src/lib/i18n.ts";
 // https://astro.build/config
 export default defineConfig({
   site: "https://pablonortiz.com",
+  integrations: [sitemap()],
   i18n: {
     locales: [...locales],
     defaultLocale,
