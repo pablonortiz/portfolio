@@ -776,36 +776,16 @@ final-final-2.png
 
 ## 26. Demos y deployments
 
-No meter las aplicaciones demo completas dentro del bundle del portfolio.
+Las demos no van dentro del portfolio: cada una es un deploy aparte, con su propio bundle y su propio stack, y una demo rota no afecta al sitio.
 
-Preferencia:
+### Cómo son las demos (decidido)
 
-```text
-Portfolio
-  ↓
-ProjectDemo
-  ↓
-iframe / sandbox
-  ↓
-deployment independiente
-```
-
-Ejemplos conceptuales:
-
-```text
-demo.perfumario.com
-demo.medical-system.com
-```
-
-Beneficios:
-
-- deploys separados;
-- bundles separados;
-- menos acoplamiento;
-- errores aislados;
-- stacks independientes.
-
-Las demos son **dummies de los proyectos reales**: sin base de datos ni backend reales, todo con datos mock, sin nombres de clientes y con el nombre del proyecto cambiado cuando haga falta. Cómo hacer interactiva cada una se evalúa proyecto por proyecto al llegar a esa etapa.
+- **La interfaz real de cada app, compilada para el navegador**, no una maqueta reescrita: React con Vite, Expo con su export web, Flutter con su build web. Las apps son de stacks distintos, y reescribirlas todas en React sería el camino más caro y mostraría algo que no es el código que se construyó.
+- **Una versión limitada, de prueba:** solo algunos flujos, con datos ficticios en memoria, sin backend ni red. Del código original entra solo lo que usan esos flujos; la lógica compleja se reemplaza por versiones simples de prueba. Lo que se publica es el JavaScript compilado, que cualquiera puede leer: por eso lo que no está en la demo no llega a ningún lado.
+- **En `demos.pablonortiz.com/<slug>/`**, desde un repo privado aparte con su propio proyecto en Vercel. Es otro origen: no comparte `localStorage` ni service workers con el portfolio, y tiene sus propias reglas: `noindex`, y una política de seguridad (CSP) que prohíbe cualquier conexión a otro origen.
+- **Una envoltura común**: la página de cada demo carga la app en un iframe (`/<slug>/app/`) y le suma el marco de teléfono o de ventana (§5), el aviso de datos ficticios, sugerencias de qué probar y un botón para reiniciarla, en el idioma que recibe por `?lang=`. La app queda en su idioma original.
+- **"Probalo" la abre en una pestaña nueva** (§42.5), no en un iframe dentro del portfolio.
+- **Piloto con dos:** Forja (desktop) y Perfumario (mobile). Con lo que cuesten, se decide el resto.
 
 ---
 
