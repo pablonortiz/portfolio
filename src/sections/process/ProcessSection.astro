@@ -28,7 +28,7 @@ const stepNumber = (index: number) => String(index + 1).padStart(2, "0");
   class="process"
   aria-labelledby="process-title"
   style={`--steps: ${steps.length}`}
-  data-process
+  data-reveal="process"
 >
   <h2
     id="process-title"
@@ -63,12 +63,12 @@ const stepNumber = (index: number) => String(index + 1).padStart(2, "0");
 <script>
   import { onEveryPage } from "@/lib/page-lifecycle";
 
-  import { setupProcessReveal } from "./lib/process-reveal";
+  import { revealOnView } from "@/lib/reveal-on-view";
 
   onEveryPage((signal) =>
     document
-      .querySelectorAll<HTMLElement>("[data-process]")
-      .forEach((section) => setupProcessReveal(section, signal)),
+      .querySelectorAll<HTMLElement>('[data-reveal="process"]')
+      .forEach((section) => revealOnView(section, signal)),
   );
 </script>
 
@@ -174,7 +174,7 @@ const stepNumber = (index: number) => String(index + 1).padStart(2, "0");
     }
   }
 
-  /* Held back until the section is in view (lib/process-reveal.ts). Hiding is instant. */
+  /* Held back until the section is in view (lib/reveal-on-view.ts). Hiding is instant. */
   .process[data-pending] .process-line {
     scale: 1 0;
   }

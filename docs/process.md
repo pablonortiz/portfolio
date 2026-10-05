@@ -40,7 +40,7 @@ Idea de Pablo: cuatro principios de trabajo alrededor de una línea vertical que
 
 ### 44.3. La animación
 
-- **Una vez, con tiempo propio, no atada al scroll:** el rebote es una sensación de tiempo. Atado al scroll dependería de la velocidad y se rebobinaría al subir. Un `IntersectionObserver` (`lib/process-reveal.ts`) saca la marca `data-pending` cuando se ve el 30% de la sección, una vez por visita (como el aterrizaje de la carpeta, §42.6). CSS todavía no puede disparar una animación por tiempo al entrar en pantalla sin JS.
+- **Una vez, con tiempo propio, no atada al scroll:** el rebote es una sensación de tiempo. Atado al scroll dependería de la velocidad y se rebobinaría al subir. Un `IntersectionObserver` (`lib/reveal-on-view.ts`) saca la marca `data-pending` cuando se ve el 30% de la sección, una vez por visita (como el aterrizaje de la carpeta, §42.6). CSS todavía no puede disparar una animación por tiempo al entrar en pantalla sin JS.
 - **La línea se dibuja de arriba hacia abajo** (`scale` en Y desde arriba, 1,6 s), en el sentido de lectura de los pasos: el boceto la dibujaba de abajo hacia arriba, que recorre el proceso al revés.
 - **A ritmo constante (`linear`), como una lapicera:** cada paso empieza cuando la línea llega a su fila (el paso n, a n / (pasos + 1) del recorrido). Con una curva `ease-in-out`, los retrasos parejos no coincidían con la línea, y ajustarlos a la curva amontonaba los pasos del medio.
 - **Cada paso aparece desde opacidad 0, subiendo 2rem y asentándose con un rebote** (una curva con desborde, ~6 px), en lugar del temblor del boceto: temblar es el movimiento clásico de "contraseña incorrecta", connota error.

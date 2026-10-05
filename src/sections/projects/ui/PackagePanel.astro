@@ -41,9 +41,9 @@ const release = [info && `v${info.version}`, info?.license]
       type="button"
       class="package-copy"
       aria-label={texts.copyCommand}
-      data-command={project.install}
+      data-copy={project.install}
       data-copied-label={texts.commandCopied}
-      data-copy-command
+      data-copy-status="package-copy-status"
       hidden
     >
       <span class="package-copy-icon">
@@ -66,18 +66,18 @@ const release = [info && `v${info.version}`, info?.license]
       <span class="sr-only">{texts.opensInNewTab}</span>
     </a>
   </div>
-  <p class="sr-only" role="status" data-copy-status></p>
+  <p id="package-copy-status" class="sr-only" role="status"></p>
 </section>
 
 <script>
   import { onEveryPage } from "@/lib/page-lifecycle";
 
-  import { setupCopyCommand } from "../lib/copy-command";
+  import { setupCopyButton } from "@/lib/copy-button";
 
   onEveryPage((signal) =>
     document
-      .querySelectorAll<HTMLButtonElement>("[data-copy-command]")
-      .forEach((button) => setupCopyCommand(button, signal)),
+      .querySelectorAll<HTMLButtonElement>("[data-package-panel] [data-copy]")
+      .forEach((button) => setupCopyButton(button, signal)),
   );
 </script>
 

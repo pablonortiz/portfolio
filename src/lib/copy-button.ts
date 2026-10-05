@@ -1,17 +1,16 @@
 const feedbackDuration = 2000;
 
 /**
- * The install command's copy button. It needs the Clipboard API, so it starts
- * hidden and shows up only with JS. After copying, it shows a check for a
- * moment and tells screen readers through the panel's status line.
+ * A button that copies a text (data-copy). It needs the Clipboard API, so it
+ * starts hidden and shows up only with JS. After copying, it shows its copied
+ * state (data-copied) for a moment and tells screen readers through the
+ * status line it names (data-copy-status, that element's id).
  */
-export function setupCopyCommand(
+export function setupCopyButton(
   button: HTMLButtonElement,
   signal: AbortSignal,
 ) {
-  const status = button
-    .closest("[data-package-panel]")!
-    .querySelector("[data-copy-status]")!;
+  const status = document.getElementById(button.dataset.copyStatus!)!;
   let resetTimer: number | undefined;
 
   const showCopied = () => {
@@ -29,9 +28,9 @@ export function setupCopyCommand(
     "click",
     () =>
       navigator.clipboard
-        .writeText(button.dataset.command!)
+        .writeText(button.dataset.copy!)
         .then(showCopied)
-        // Denied (no permission or an insecure origin): the command stays there to select by hand.
+        // Denied (no permission or an insecure origin): the text stays there to select by hand.
         .catch(() => undefined),
     { signal },
   );
