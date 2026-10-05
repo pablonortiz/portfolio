@@ -587,10 +587,10 @@ Así no hay páginas duplicadas por construcción: un solo archivo por página, 
 
 ### Redirect de `/`
 
-`/` redirige a `/es/` con el redirect **manual** de Astro (`redirects` en `astro.config`, status 302), no con el automático del i18n (`redirectToDefaultLocale`): el automático genera una página que espera 2 segundos antes de redirigir; el manual, 0.
+`/` la redirige **el servidor de Vercel** (`vercel.json`), según el idioma del navegador: si el principal es inglés (el encabezado `Accept-Language` empieza con `en`), a `/en/`; cualquier otro, a `/es/`. Es temporal (`307`), así ningún navegador la recuerda si cambia la regla.
 
-- Es un redirect estático (una página HTML con `meta refresh`). Con un adapter de hosting puede pasar a ser un redirect HTTP del servidor sin tocar páginas.
-- Sin servidor no se puede detectar el idioma del navegador: los links del CV y LinkedIn apuntan directo a `/es/` o `/en/`.
+- **Antes la hacía Astro**, con una página HTML de `meta refresh` (el redirect manual de `astro.config`, sin la espera de 2 segundos del automático del i18n). Mostraba un instante una pantalla en blanco con "Redirecting to: /es/" (lo vio Pablo). Esa página sigue en el build, para `pnpm preview` y cualquier hosting sin `vercel.json`: Vercel aplica sus redirecciones antes de buscar archivos.
+- **Solo mira el idioma principal:** alguien con el navegador en español que también acepta inglés va a `/es/`. Y solo aplica a `/`: los links directos (el CV, LinkedIn) siguen apuntando a `/es/` o `/en/`.
 
 ### Traducciones cortas (decidido)
 
