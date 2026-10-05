@@ -48,12 +48,6 @@ const projects = await getProjects(lang);
    */
   .projects-rise {
     transform-origin: 50% 0;
-    /* In-out, so the tilt holds a moment on arrival: with ease-out it was almost flat within 200ms. */
-    transition:
-      transform var(--duration-slow) var(--ease-in-out),
-      translate var(--duration-slow) var(--ease-in-out),
-      scale var(--duration-slow) var(--ease-in-out),
-      opacity var(--duration-slow) var(--ease-in-out);
   }
 
   .projects-rise[data-landing] {
@@ -63,10 +57,30 @@ const projects = await getProjects(lang);
     opacity: 0.3;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .projects-rise {
-      transition: none;
+  /*
+   * Only flattening animates. Tilting is instant (on load and when it leaves,
+   * always out of view): animated, it ran for 800ms after load and a quick
+   * scroll caught it halfway. In-out, so the tilt holds a moment on arrival:
+   * with ease-out it was almost flat within 200ms.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .projects-rise:not([data-landing]) {
+      transition:
+        transform var(--duration-slow) var(--ease-in-out),
+        translate var(--duration-slow) var(--ease-in-out),
+        scale var(--duration-slow) var(--ease-in-out),
+        opacity var(--duration-slow) var(--ease-in-out);
     }
+  }
+
+  /*
+   * The tilted folder overflows its section, and as the page's last section
+   * that made the page taller: while it flattened, the scroll range shrank
+   * frame by frame and the browser clamped the scroll at the very start of
+   * the landing. Clipped, the tilt never changes the range.
+   */
+  .projects-section {
+    overflow-y: clip;
   }
 
   /* The Hero dims while this section enters (its timeline is shared by the home page). */
