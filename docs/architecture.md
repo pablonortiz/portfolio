@@ -176,8 +176,8 @@ src/
 │  └─ projects/
 │
 ├─ layouts/
-│  ├─ BaseLayout.astro
-│  └─ ProjectLayout.astro
+│  ├─ DocumentLayout.astro
+│  └─ BaseLayout.astro
 │
 ├─ pages/
 │  └─ [lang]/
@@ -408,6 +408,12 @@ Conceptualmente:
 > `Header` = componente.  
 > `BaseLayout` = estructura de una página completa.
 
+**Dos capas (decidido):**
+
+- **`DocumentLayout`:** el `<html>` y el `<head>` que comparten todas las páginas: el tema guardado, los íconos, las fuentes, los estilos globales y el router de `ClientRouter`. Recibe lo propio de cada página por el slot `head`.
+- **`BaseLayout`:** usa `DocumentLayout` y le suma lo de las páginas del sitio: canonical, `hreflang`, Open Graph y el Header. La 404 usa directamente `DocumentLayout`, porque es bilingüe y no tiene SEO (§20).
+- **El router va en `DocumentLayout`, después del slot `head`**, y no en `BaseLayout`: así su CSS queda detrás de `global.css`, como antes de separar las capas, y la 404 también navega con transiciones.
+
 ---
 
 ## 20. `pages/`
@@ -574,11 +580,15 @@ Ventajas:
 
 ```text
 src/pages/
-└─ [lang]/
-   ├─ index.astro        → /es/ y /en/
-   └─ [section]/
-      └─ [slug].astro    → /es/proyectos/… y /en/projects/…
+├─ [lang]/
+│  ├─ index.astro        → /es/ y /en/
+│  └─ [section]/
+│     └─ [slug].astro    → /es/proyectos/… y /en/projects/…
+├─ og/                   → las imágenes para compartir (§22)
+└─ 404.astro             → /404.html
 ```
+
+**La 404 es una sola página, en los dos idiomas:** Vercel sirve `404.html` para cualquier URL que no existe, sin importar el idioma. Una por idioma exigiría reescrituras (que responden 200, y Google las tomaría como páginas válidas) o generarla en el servidor. Cada idioma va en su bloque, con su `lang` y su link al inicio, lado a lado en desktop. Sin menú (es de un solo idioma), sin canonical ni Open Graph, y fuera del sitemap.
 
 Una **ruta dinámica** por página: `getStaticPaths()` le dice a Astro, al compilar, qué versiones generar (una por idioma). La lista de idiomas vive solo en `lib/i18n.ts` (`locales`, tipo `Locale`, `defaultLocale`); `astro.config.mjs` también la importa de ahí. Para los proyectos, `getStaticPaths` genera cada proyecto con el segmento de su idioma (`proyectos` / `projects`, definidos en `routeSegments` de `config/navigation.ts`): `/es/projects/…` no existe.
 
