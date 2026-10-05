@@ -1,0 +1,28 @@
+# The same checks as the pre-commit hook, plus the build, on a clean machine:
+# the hook only sees the commit's files, and it can be skipped.
+name: CI
+
+on: push
+
+permissions:
+  contents: read
+
+# A newer push to the same branch makes the older run pointless.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Node and pnpm at the versions in .mise.toml, the same as locally.
+      - uses: jdx/mise-action@v5
+        with:
+          install_args: node pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm build
