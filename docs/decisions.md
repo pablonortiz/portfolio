@@ -123,3 +123,4 @@ Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones 
 ### 2026-10-05
 
 - **El selector de idioma conserva la sección y la pestaña** (§22), propuesta aceptada por Pablo: calcula el destino al tocarlo, con la sección que se está leyendo y el parámetro de la pestaña traducidos. Se descartó ir actualizando la URL con el scroll.
+- **Los videos van a Cloudflare R2, en `media.pablonortiz.com`** (§42.7), recomendado y aceptado por Pablo: sin costo por transferencia, con el plan gratis de sobra (71 MB), con pedidos por rangos para adelantar los recorridos y fuera de git y de los deploys. El dominio, comprado en Cloudflare, tiene ahí su DNS. Se suben con `rclone`, fijado con mise. Se descartaron Vercel (`public/` en cada deploy y en git), Vercel Blob (cobra la transferencia), YouTube/Vimeo (marca y control) y el streaming adaptativo (excesivo y pago).

@@ -183,7 +183,7 @@ Los proyectos se muestran **por páginas**, no en una grilla que se scrollea lib
 
 Especificación para quien produce los videos (otra IA). Está escrita para poder pasarse tal cual: no hace falta leer el resto de este documento.
 
-Los videos no se guardan en git (cada uno quedaría para siempre en el historial): van a un almacenamiento aparte, a decidir junto con el hosting. Mientras tanto, el sitio usa placeholders generados por un script.
+Los videos no se guardan en git (cada uno quedaría para siempre en el historial): se sirven desde Cloudflare R2, en `media.pablonortiz.com` (ver "Dónde viven", abajo).
 
 #### Dos piezas por proyecto
 
@@ -240,6 +240,14 @@ El clip dura 5 segundos como máximo por una norma de accesibilidad: lo que se m
 - **Extrae dos imágenes del clip:** el primer frame (se ve mientras el video carga) y el último, que pasa a ser el `poster.png` del proyecto en git. Es la imagen fija con "reducir movimiento", sin JS y en buscadores.
 
 Mientras no haya masters reales, `just placeholder-videos` crea uno de ejemplo para cada proyecto que no tenga (salvo los paquetes de npm) y lo codifica: 4 segundos de un degradé con los colores de su categoría y una barra de progreso arriba, y medio segundo quieto al final. Los de Mobile salen verticales, para probar la composición.
+
+#### Dónde viven
+
+- **En Cloudflare R2, en el bucket `pablonortiz-media`, servido en `media.pablonortiz.com`** (decisión en §40). Sin costo por transferencia, con el plan gratis de sobra (son 71 MB: 5,6 MB los clips y 65 MB los recorridos) y con pedidos por rangos, que son los que permiten adelantar un recorrido sin bajarlo entero (verificado: `206` y `Accept-Ranges: bytes`).
+- **`just upload-videos` sincroniza `public/videos/` con el bucket:** sube solo lo que cambió y borra lo que ya no está. Usa `rclone` (fijado en `.mise.toml`) con las credenciales del `.env` (no está en git): un token de cuenta de Cloudflare y el ID de la cuenta. Las credenciales S3 de R2 salen del mismo token (su ID y el SHA-256 de su valor) y se calculan al subir, sin guardarse.
+- **Caché de un día** (`Cache-Control: public, max-age=86400`). Los nombres de los archivos no cambian al volver a codificar, así que un video nuevo puede tardar hasta un día en verse, salvo que se purgue la caché en Cloudflare.
+- **En desarrollo se usa la copia local** (`/videos`, en `public/`): un video recién codificado se ve sin subirlo. La URL sale de `projectVideosBaseUrl` (`config/projects.ts`), el único lugar que la conoce.
+- **El flujo completo:** el master en `videos/masters/`, `just encode-video <slug>`, revisar en `pnpm dev`, `just upload-videos` y commitear el `poster.png`.
 
 ### 42.8. Fases
 

@@ -2,6 +2,8 @@
 
 set shell := ["bash", "-euo", "pipefail", "-c"]
 set quiet
+# Cloudflare's credentials, for upload-videos (.env is not in git).
+set dotenv-load
 
 # SVT-AV1 prints its whole configuration unless told to log only errors.
 export SVT_LOG := "1"
@@ -10,6 +12,8 @@ masters := "videos/masters"
 prepared := "videos/prepared"
 output := "public/videos"
 content := "src/content/projects"
+# The R2 bucket served at media.pablonortiz.com (docs/projects.md §42.7).
+media_bucket := "pablonortiz-media"
 
 # Starting points; to calibrate with the first real masters (docs/projects.md §42.7).
 av1_crf := "35"
@@ -45,6 +49,24 @@ placeholder-videos:
       just _placeholder-master "$slug"
       just encode-video "$slug"
     done
+
+# Only what changed goes up, and what's no longer here is deleted there. Cached for a day, so a
+# re-encoded video can take that long to show (or purge it in Cloudflare).
+# Uploads the encoded videos to Cloudflare R2, served at media.pablonortiz.com (docs/projects.md §42.7).
+upload-videos:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${CLOUDFLARE_API_TOKEN:?missing in .env}" "${CLOUDFLARE_ACCOUNT_ID:?missing in .env}"
+    # R2's S3 credentials come from the (account) API token itself: its id and the SHA-256 of its value.
+    token_id=$(curl -fsS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+      "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/tokens/verify" |
+      python3 -c 'import json, sys; print(json.load(sys.stdin)["result"]["id"])')
+    export RCLONE_CONFIG=/dev/null RCLONE_CONFIG_R2_TYPE=s3 RCLONE_CONFIG_R2_PROVIDER=Cloudflare \
+      RCLONE_CONFIG_R2_ENDPOINT="https://$CLOUDFLARE_ACCOUNT_ID.r2.cloudflarestorage.com" \
+      RCLONE_CONFIG_R2_ACCESS_KEY_ID="$token_id" \
+      RCLONE_CONFIG_R2_SECRET_ACCESS_KEY="$(printf %s "$CLOUDFLARE_API_TOKEN" | shasum -a 256 | cut -d ' ' -f 1)"
+    rclone sync {{ output }} "r2:{{ media_bucket }}/videos" \
+      --header-upload "Cache-Control: public, max-age=86400" --stats-one-line --stats 10s
 
 _check-clip slug:
     #!/usr/bin/env bash
