@@ -729,7 +729,7 @@ Separar por proyecto, y según si Astro las procesa o no:
 
 - **Imágenes** (cover, screenshots) → dentro de `src/`, junto al contenido del proyecto (estructura exacta: ver §18), referenciadas desde el frontmatter con el helper `image()` del schema. Así Astro las optimiza en build: formatos modernos (AVIF/WebP), `srcset` responsive y `width`/`height` automáticos (evita layout shift).
 - **Lo que no se procesa** (PDF del CV, favicon) → `public/`, que se sirve tal cual.
-- **Videos de proyectos** → fuera de git hasta definir el hosting (§42.7). Los masters van en `videos/masters/` y `just encode-video <slug>` escribe lo que usa el sitio en `public/videos/<slug>/`; las dos carpetas están en `.gitignore`. El poster de cada proyecto (el último frame del clip) sí va en git, junto a su contenido, porque es la imagen que se ve sin video.
+- **Videos de proyectos** → fuera de git, servidos desde Cloudflare R2 en `media.pablonortiz.com` (§42.7). Los masters van en `videos/masters/` y `just encode-video <slug>` escribe lo que usa el sitio en `public/videos/<slug>/`; las dos carpetas están en `.gitignore`. El poster de cada proyecto (el último frame del clip) sí va en git, junto a su contenido, porque es la imagen que se ve sin video.
 
 ```text
 videos/masters/                      ← lo que se entrega (fuera de git)
@@ -783,6 +783,19 @@ Beneficios:
 - stacks independientes.
 
 Las demos son **dummies de los proyectos reales**: sin base de datos ni backend reales, todo con datos mock, sin nombres de clientes y con el nombre del proyecto cambiado cuando haga falta. Cómo hacer interactiva cada una se evalúa proyecto por proyecto al llegar a esa etapa.
+
+---
+
+### El sitio: Vercel y `pablonortiz.com` (decidido)
+
+- **Repo público en GitHub** (`pablonortiz/portfolio`): el código también es parte del portfolio. Antes del primer push se revisó el historial completo (secretos, datos de clientes, metadatos de los binarios) y se reescribió para sacar notas que no tenían que ser públicas.
+- **Proyecto `portfolio` en Vercel, conectado al repo:** cada push a `main` despliega a producción, y las otras ramas y los PR, a un preview. Astro se detecta solo y la salida es estática (sin adapter).
+- **El build usa pnpm 10 y el Node que permite `engines`** (`>=22.12.0`): sin `packageManager` en `package.json`, Vercel elige pnpm por el lockfile (versión 9) y no lee las versiones de mise (pnpm 12, Node 24). Funciona igual, pero si algún día aparece una diferencia entre local y Vercel, lo primero es fijar las dos versiones en `package.json`.
+- **El dominio se compró en Cloudflare y su DNS está ahí:**
+  - `pablonortiz.com` → registro A `76.76.21.21` y `www` → CNAME `cname.vercel-dns.com`, los dos en "DNS only": con el proxy de Cloudflare en el medio, Vercel no puede emitir su certificado.
+  - `www.pablonortiz.com` redirige al dominio principal con un 308, conservando la ruta: una sola URL canónica.
+  - HTTPS con un certificado de Let's Encrypt que emite y renueva Vercel. `http` redirige a `https`.
+  - `media.pablonortiz.com` → el bucket de R2 de los videos (§42.7).
 
 ---
 
