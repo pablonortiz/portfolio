@@ -786,6 +786,7 @@ Las demos no van dentro del portfolio: cada una es un deploy aparte, con su prop
 - **Una envoltura común**: la página de cada demo carga la app en un iframe (`/<slug>/app/`) y le suma el marco de teléfono o de ventana (§5), el aviso de datos ficticios, sugerencias de qué probar y un botón para reiniciarla, en el idioma que recibe por `?lang=`. La app queda en su idioma original.
 - **"Probalo" la abre en una pestaña nueva** (§42.5), no en un iframe dentro del portfolio.
 - **Piloto con dos:** Forja (desktop) y Perfumario (mobile). Con lo que cuesten, se decide el resto.
+- **Cómo se conectan con el portfolio:** el campo `demo` del `project.yaml` (con barra final) hace aparecer "Probalo", y `getDemoUrl` (`lib/locale-url.ts`) le suma `?lang=` con el idioma de la página. Las demos son un proyecto aparte en Vercel (`portfolio-demos`), y no van en el sitemap: son `noindex`.
 
 ---
 
@@ -801,6 +802,7 @@ Las demos no van dentro del portfolio: cada una es un deploy aparte, con su prop
   - HTTPS con un certificado de Let's Encrypt que emite y renueva Vercel. `http` redirige a `https`.
   - `media.pablonortiz.com` → el bucket de R2 de los videos (§42.7).
   - Un registro TXT `google-site-verification` verifica el dominio en Google Search Console (§22).
+  - `demos.pablonortiz.com` → CNAME `cname.vercel-dns.com`, "DNS only": el proyecto de Vercel de las demos (§26).
 
 ---
 
