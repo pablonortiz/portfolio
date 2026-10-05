@@ -1,0 +1,53 @@
+---
+import "@/styles/global.css";
+
+import { Font } from "astro:assets";
+import { ClientRouter } from "astro:transitions";
+
+import type { Locale } from "@/lib/i18n";
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description?: string;
+}
+
+const { lang, title, description } = Astro.props;
+---
+
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      // Applies the saved theme before the first paint, so the page never flashes the wrong one.
+      // ClientRouter replaces <html>'s attributes on every navigation, so it's applied after each swap too.
+      const applySavedTheme = () => {
+        try {
+          const savedTheme = localStorage.getItem("theme");
+          if (savedTheme === "light" || savedTheme === "dark") {
+            document.documentElement.dataset.theme = savedTheme;
+          }
+        } catch {
+          // Storage blocked: the page follows the system theme.
+        }
+      };
+      applySavedTheme();
+      document.addEventListener("astro:after-swap", applySavedTheme);
+    </script>
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <Font cssVariable="--font-inter" preload />
+    <Font cssVariable="--font-bricolage" preload />
+    <Font cssVariable="--font-geist-mono" />
+    {description && <meta name="description" content={description} />}
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body class="bg-background text-foreground">
+    <slot />
+  </body>
+</html>
