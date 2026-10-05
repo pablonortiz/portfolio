@@ -6,6 +6,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 import Hero from "@/sections/hero/Hero.astro";
 import AboutSection from "@/sections/about/AboutSection.astro";
+import ProcessSection from "@/sections/process/ProcessSection.astro";
 import ProjectsSection from "@/sections/projects/ProjectsSection.astro";
 
 export const getStaticPaths = (() =>
@@ -23,6 +24,7 @@ const { title, description } = siteTexts[lang];
     <ProjectsSection lang={lang} />
     <div class="home-rest">
       <AboutSection lang={lang} />
+      <ProcessSection lang={lang} />
     </div>
   </div>
 </BaseLayout>

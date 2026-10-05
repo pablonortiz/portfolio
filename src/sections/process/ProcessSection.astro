@@ -1,0 +1,206 @@
+---
+import RepeatIcon from "@/assets/icons/repeat.svg";
+import SearchIcon from "@/assets/icons/search.svg";
+import ShieldCheckIcon from "@/assets/icons/shield-check.svg";
+import WorkflowIcon from "@/assets/icons/workflow.svg";
+import type { Locale } from "@/lib/i18n";
+
+import { processTexts, steps, type StepIcon } from "./process.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = processTexts[lang];
+
+const stepIcons = {
+  search: SearchIcon,
+  workflow: WorkflowIcon,
+  repeat: RepeatIcon,
+  "shield-check": ShieldCheckIcon,
+} satisfies Record<StepIcon, unknown>;
+
+const stepNumber = (index: number) => String(index + 1).padStart(2, "0");
+---
+
+<section
+  class="process"
+  aria-labelledby="process-title"
+  style={`--steps: ${steps.length}`}
+  data-process
+>
+  <h2
+    id="process-title"
+    class="font-display text-4xl font-extrabold tracking-tight md:text-5xl"
+  >
+    {texts.title}
+  </h2>
+  <div class="process-path">
+    <div class="process-line" aria-hidden="true"></div>
+    <ol class="process-steps">
+      {steps.map((step, index) => {
+        const Icon = stepIcons[step.icon];
+        const { title, text, proof } = texts.steps[step.id];
+        return (
+          <li class="process-step" style={`--step: ${index}`}>
+            <p class="process-number" aria-hidden="true">
+              {stepNumber(index)}
+            </p>
+            <h3 class="process-title">
+              <Icon class="size-5 shrink-0" aria-hidden="true" />
+              {title}
+            </h3>
+            <p>{text}</p>
+            <p class="process-proof">{proof}</p>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupProcessReveal } from "./lib/process-reveal";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLElement>("[data-process]")
+      .forEach((section) => setupProcessReveal(section, signal)),
+  );
+</script>
+
+<style>
+  /*
+   * How Pablo works (docs/process.md §44): four steps in order, staggered on
+   * either side of a line that draws itself down once the section is in
+   * view; each step appears, with a small bounce, as the line reaches it.
+   */
+  .process {
+    --line-duration: 1.6s;
+
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 20dvh 1.5rem 15dvh;
+  }
+
+  .process-path {
+    position: relative;
+    margin-top: 4rem;
+  }
+
+  .process-line {
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 2px;
+    translate: -50% 0;
+    transform-origin: 50% 0;
+    background: linear-gradient(
+      var(--color-accent),
+      color-mix(in oklab, var(--color-accent) 25%, transparent)
+    );
+  }
+
+  /* Zigzag down the line: each step a row below the last, alternating sides. */
+  .process-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 8rem;
+  }
+
+  /* Both sides hug the line: the left steps sit at the end of their column (their text still starts on the left). */
+  .process-step {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    grid-column: calc(mod(var(--step), 2) + 1);
+    grid-row: calc(var(--step) + 1) / span 2;
+    max-width: 28rem;
+    padding-block: 1.5rem;
+  }
+
+  .process-step:nth-child(odd) {
+    justify-self: end;
+  }
+
+  .process-number {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .process-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .process-proof {
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid var(--color-accent);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  /* Mobile: one column, with the line on its left edge. */
+  @media (width < 48rem) {
+    .process {
+      padding-top: 10dvh;
+    }
+
+    .process-path {
+      margin-top: 2.5rem;
+    }
+
+    .process-line {
+      left: 0.5rem;
+    }
+
+    .process-steps {
+      grid-template-columns: 1fr;
+      padding-inline-start: 2.5rem;
+    }
+
+    .process-step {
+      grid-column: 1;
+      grid-row: auto;
+      justify-self: start;
+    }
+  }
+
+  /* Held back until the section is in view (lib/process-reveal.ts). Hiding is instant. */
+  .process[data-pending] .process-line {
+    scale: 1 0;
+  }
+
+  .process[data-pending] .process-step {
+    opacity: 0;
+    translate: 0 2rem;
+  }
+
+  /*
+   * The line draws down at a steady pace, like a pen; each step starts as the
+   * line reaches its row (rows are half a step tall, so step n begins at
+   * n / (steps + 1) of the path) and settles with an overshoot: the bounce.
+   * With an eased line the middle steps bunched up.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    .process:not([data-pending]) .process-line {
+      transition: scale var(--line-duration) linear;
+    }
+
+    .process:not([data-pending]) .process-step {
+      --delay: calc(var(--line-duration) * var(--step) / (var(--steps) + 1));
+
+      transition:
+        opacity 500ms var(--ease-out) var(--delay),
+        translate 700ms cubic-bezier(0.34, 1.8, 0.5, 1) var(--delay);
+    }
+  }
+</style>
