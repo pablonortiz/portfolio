@@ -4,11 +4,9 @@
 
 Sin que sean obligatorias, los siguientes pasos naturales serían:
 
-1. Construir la sección de proyectos y la página de cada proyecto, en las fases de la §42.8.
-2. Definir y construir el resto de las secciones de la home:
-   - contacto;
-   - CTA final.
-3. Iterar progresivamente sobre el resto.
+1. ✅ Construir la sección de proyectos y la página de cada proyecto, en las fases de la §42.8.
+2. ✅ Definir y construir el resto de las secciones de la home: Sobre mí (§43), Cómo trabajo (§44) y Contacto con el footer (§45).
+3. Iterar progresivamente sobre el resto, y resolver los pendientes de abajo antes de publicar.
 
 ---
 

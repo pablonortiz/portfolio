@@ -1,6 +1,6 @@
 # Documentación
 
-Qué se construye en este portfolio, cómo y por qué. Las secciones mantienen una numeración global (§1–§44) para que las referencias cruzadas ("ver §18") funcionen entre archivos.
+Qué se construye en este portfolio, cómo y por qué. Las secciones mantienen una numeración global (§1–§45) para que las referencias cruzadas ("ver §18") funcionen entre archivos.
 
 | Archivo                            | Secciones | Contenido                                                                                                                   |
 | ---------------------------------- | --------- | --------------------------------------------------------------------------------------------------------------------------- |
@@ -10,6 +10,7 @@ Qué se construye en este portfolio, cómo y por qué. Las secciones mantienen u
 | [projects.md](projects.md)         | §42       | Sección de proyectos: la carpeta con pestañas, páginas con scroll snap, tarjetas con video, el zoom al proyecto y su página |
 | [about.md](about.md)               | §43       | Sección "Sobre mí": la línea de tiempo con el texto que se enciende, la frase fija y los hitos                              |
 | [process.md](process.md)           | §44       | Sección "Cómo trabajo": los cuatro principios con sus pruebas, en zigzag alrededor de una línea que se dibuja sola          |
+| [contact.md](contact.md)           | §45       | Sección "Contacto" y el footer: el mail copiable, el subrayado que se escribe solo, los links y el CV                       |
 | [decisions.md](decisions.md)       | §40       | Registro de decisiones: qué cambió y por qué. Solo se agregan entradas                                                      |
 | [next-steps.md](next-steps.md)     | §38, §41  | Plan de trabajo y pendientes, cada uno con su disparador                                                                    |
 

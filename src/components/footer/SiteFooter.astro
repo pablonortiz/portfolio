@@ -1,0 +1,26 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+import Signature from "@/assets/images/signature.svg";
+import { navigationTexts } from "@/components/navigation/navigation.texts";
+import type { Locale } from "@/lib/i18n";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer border-t border-border">
+  <div class="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 text-sm text-muted">
+    <a
+      href={getRelativeLocaleUrl(lang)}
+      aria-label={navigationTexts[lang].homeLabel}
+    >
+      <Signature class="h-12 w-auto" aria-hidden="true" />
+    </a>
+    <p>© {year} Pablo Ortiz</p>
+  </div>
+</footer>

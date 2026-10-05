@@ -1,0 +1,245 @@
+---
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import CheckIcon from "@/assets/icons/check.svg";
+import CopyIcon from "@/assets/icons/copy.svg";
+import DownloadIcon from "@/assets/icons/download.svg";
+import { contactEmail, cvPaths, profileLinks } from "@/config/contact";
+import { sectionIds } from "@/config/navigation";
+import type { Locale } from "@/lib/i18n";
+
+import { contactTexts } from "./contact.texts";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = contactTexts[lang];
+const profiles = [
+  { name: "LinkedIn", href: profileLinks.linkedin },
+  { name: "GitHub", href: profileLinks.github },
+];
+---
+
+<section
+  id={sectionIds[lang].contact}
+  class="contact"
+  aria-labelledby="contact-title"
+  data-reveal="contact"
+>
+  <h2 id="contact-title" class="contact-title">
+    {texts.title.before}
+    <span class="contact-underlined">
+      {texts.title.underlined}
+      <svg
+        class="contact-underline"
+        viewBox="0 0 300 16"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M3 11 C 50 5, 95 13, 150 8 S 250 4, 297 10"
+          pathLength="1"
+        ></path>
+      </svg>
+    </span>
+    {texts.title.after}
+  </h2>
+  <p class="contact-text">{texts.text}</p>
+
+  <div class="contact-actions">
+    <a
+      href={`mailto:${contactEmail}`}
+      class="rounded-full bg-accent px-6 py-3 text-accent-foreground"
+    >
+      {texts.cta}
+    </a>
+    <p class="contact-email">
+      <span>{contactEmail}</span>
+      <button
+        type="button"
+        class="contact-copy"
+        aria-label={texts.copyEmail}
+        data-copy={contactEmail}
+        data-copied-label={texts.emailCopied}
+        data-copy-status="contact-copy-status"
+        hidden
+      >
+        <span class="contact-copy-icon">
+          <CopyIcon class="size-4" />
+        </span>
+        <span class="contact-copied-icon">
+          <CheckIcon class="size-4" />
+        </span>
+      </button>
+    </p>
+  </div>
+
+  <ul class="contact-links" aria-label={texts.linksLabel}>
+    {profiles.map(({ name, href }) => (
+      <li>
+        <a href={href} target="_blank" rel="noopener noreferrer">
+          {name}
+          <ArrowUpRightIcon class="size-4" aria-hidden="true" />
+          <span class="sr-only">{texts.opensInNewTab}</span>
+        </a>
+      </li>
+    ))}
+    <li>
+      <a href={cvPaths[lang]} download>
+        {texts.cv}
+        <DownloadIcon class="size-4" aria-hidden="true" />
+      </a>
+    </li>
+  </ul>
+  <p id="contact-copy-status" class="sr-only" role="status"></p>
+</section>
+
+<script>
+  import { setupCopyButton } from "@/lib/copy-button";
+  import { onEveryPage } from "@/lib/page-lifecycle";
+  import { revealOnView } from "@/lib/reveal-on-view";
+
+  onEveryPage((signal) => {
+    document
+      .querySelectorAll<HTMLElement>('[data-reveal="contact"]')
+      .forEach((section) => revealOnView(section, signal, 0.5));
+    document
+      .querySelectorAll<HTMLButtonElement>(
+        "[data-reveal='contact'] [data-copy]",
+      )
+      .forEach((button) => setupCopyButton(button, signal));
+  });
+</script>
+
+<style>
+  /*
+   * The page's closing call (docs/contact.md §45): the question, with a
+   * hand-drawn underline that writes itself once the section is in view,
+   * like the signature in the header; the email, visible and copyable,
+   * since a mailto link does nothing without a mail app; and the profiles
+   * and the CV.
+   */
+  .contact {
+    display: grid;
+    place-items: center;
+    gap: 1.75rem;
+    min-height: 80dvh;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding: 10dvh 1.5rem;
+    text-align: center;
+  }
+
+  .contact-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 8vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .contact-underlined {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .contact-underline {
+    position: absolute;
+    inset: 100% 0 auto;
+    width: 100%;
+    height: 0.3em;
+    overflow: visible;
+    translate: 0 -0.05em;
+  }
+
+  .contact-underline path {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    /*
+     * Dashes measured with the path's normalized length (pathLength="1"): one
+     * dash as long as the path and a longer gap, moved along to draw it. No
+     * non-scaling-stroke: with it, Chrome measures dashes on screen and
+     * ignores pathLength, and the line stopped halfway.
+     */
+    stroke-dasharray: 1 2;
+  }
+
+  .contact-text {
+    max-width: 38ch;
+    font-size: 1.25rem;
+    color: var(--color-muted);
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .contact-email {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: var(--font-mono);
+  }
+
+  .contact-copy {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    color: var(--color-muted);
+    cursor: pointer;
+  }
+
+  .contact-copy:hover {
+    background: color-mix(in oklab, var(--color-foreground) 10%, transparent);
+    color: var(--color-foreground);
+  }
+
+  .contact-copied-icon,
+  .contact-copy[data-copied] .contact-copy-icon {
+    display: none;
+  }
+
+  .contact-copy[data-copied] .contact-copied-icon {
+    display: block;
+    color: var(--color-accent);
+  }
+
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .contact-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    color: var(--color-muted);
+  }
+
+  .contact-links a:hover {
+    color: var(--color-foreground);
+  }
+
+  /* Held back until the section is in view (lib/reveal-on-view.ts); without JS or with reduced motion it's drawn. */
+  /* A bit past its length: at exactly 1, the round cap of the empty dash still showed as a dot. */
+  .contact[data-pending] .contact-underline path {
+    stroke-dashoffset: 1.05;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .contact:not([data-pending]) .contact-underline path {
+      transition: stroke-dashoffset 900ms var(--ease-out) 200ms;
+    }
+  }
+</style>
