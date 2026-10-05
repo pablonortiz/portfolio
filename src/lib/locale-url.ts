@@ -40,3 +40,10 @@ export function getSectionPath(
 export function getProjectPath(lang: Locale, slug: string) {
   return getRelativeLocaleUrl(lang, `${routeSegments.projects[lang]}/${slug}`);
 }
+
+/** A project's demo, with its texts in the page's language: the demos read it from `?lang=` (§26). */
+export function getDemoUrl(demo: string, lang: Locale) {
+  const url = new URL(demo);
+  url.searchParams.set("lang", lang);
+  return url.href;
+}

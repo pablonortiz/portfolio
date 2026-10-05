@@ -4,3 +4,4 @@ year: 2024
 stack: [react-native, expo, typescript, zustand, tanstack-query]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/perfumario/

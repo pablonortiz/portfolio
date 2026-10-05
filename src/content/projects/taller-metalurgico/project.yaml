@@ -4,4 +4,5 @@ year: 2025
 stack: [electron, react, typescript, tailwind-css, sqlite, supabase]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/taller-metalurgico/
 fictionalBrand: true

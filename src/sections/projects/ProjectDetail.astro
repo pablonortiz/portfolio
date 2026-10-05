@@ -5,7 +5,7 @@ import { render } from "astro:content";
 import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
 import type { Locale } from "@/lib/i18n";
-import { getSectionPath } from "@/lib/locale-url";
+import { getDemoUrl, getSectionPath } from "@/lib/locale-url";
 import { isPackage, type Project } from "@/lib/projects";
 
 import PackagePanel from "./ui/PackagePanel.astro";
@@ -25,7 +25,10 @@ const { Content } = await render(project.body);
 /** The header's action: an npm package's code, or an app's demo if it has one. */
 const action = isPackage(project)
   ? { href: project.repository, label: texts.viewCode }
-  : project.demo && { href: project.demo, label: texts.tryIt };
+  : project.demo && {
+      href: getDemoUrl(project.demo, lang),
+      label: texts.tryIt,
+    };
 ---
 
 {!isPackage(project) && <ProjectBackdrop project={project} />}
