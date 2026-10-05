@@ -72,4 +72,14 @@ const { title, description } = siteTexts[lang];
   .home {
     timeline-scope: --projects-entry;
   }
+
+  /*
+   * Tilted, the folder is wider than the screen (27px more at 1440px), and
+   * the page could be dragged sideways until it landed. Clipped, not hidden:
+   * clip makes no scroll container, so the About section's pinned phrase
+   * still sticks to the screen.
+   */
+  .home {
+    overflow-x: clip;
+  }
 </style>
