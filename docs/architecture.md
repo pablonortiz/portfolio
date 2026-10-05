@@ -640,8 +640,12 @@ No necesita React.
 
 Las URLs por idioma se arman en **`lib/locale-url.ts`**; ningún componente las arma a mano. `getLocalizedPath` (el selector) cambia el prefijo de idioma y traduce los segmentos (`proyectos` ↔ `projects`), porque el i18n de Astro no los traduce; `getSectionPath` y `getProjectPath` arman los links a secciones y proyectos. La misma lógica alimenta:
 
-- el selector ES | EN;
+- el selector ES | EN, que además conserva dónde está quien visita (ver abajo);
 - los `<link rel="alternate" hreflang>` del `<head>`, que le indican a los buscadores que ambas páginas son la misma en otro idioma.
+
+**El selector conserva la sección y la pestaña** (`components/navigation/lib/language-switch.ts`): al tocarlo, el link suma al destino la pestaña de la carpeta, con el parámetro traducido (`?plataforma=mobile` ↔ `?platform=mobile`), y la sección que se está leyendo, traducida (`#sobre-mi` ↔ `#about`). La sección que se está leyendo es la última cuyo comienzo pasó el tercio superior de la pantalla. Se calcula al usarlo (click, click del medio o menú contextual) y no mientras se scrollea: actualizar la URL con el scroll ensucia el historial y pelea con el router. La posición exacta dentro de una sección no se conserva, porque los textos miden distinto en cada idioma: se llega a su comienzo. Sin JS, el link lleva al principio de la misma página en el otro idioma.
+
+- **`config/navigation.ts` es la fuente de las secciones con ancla** (`sections`, en orden de página, con sus ids por idioma), de las que enlaza el menú (`navigationSections`) y de los nombres de los parámetros por idioma (`queryParams`). Cómo trabajo tiene ancla aunque no esté en el menú: el selector la necesita para volver a ella.
 
 ---
 

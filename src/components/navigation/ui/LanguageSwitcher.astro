@@ -29,6 +29,9 @@ const { languageLabel } = navigationTexts[lang];
         hreflang={locale}
         lang={locale}
         class="px-1 text-muted hover:text-foreground"
+        data-language-link
+        data-lang-from={lang}
+        data-lang-to={locale}
       >
         <span class="sr-only">{localeNames[locale]}</span>
         <span aria-hidden="true">{locale.toUpperCase()}</span>
@@ -36,3 +39,15 @@ const { languageLabel } = navigationTexts[lang];
     ),
   )}
 </div>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupLanguageSwitch } from "../lib/language-switch";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLAnchorElement>("[data-language-link]")
+      .forEach((link) => setupLanguageSwitch(link, signal)),
+  );
+</script>

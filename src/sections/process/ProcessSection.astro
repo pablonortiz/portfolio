@@ -3,6 +3,7 @@ import RepeatIcon from "@/assets/icons/repeat.svg";
 import SearchIcon from "@/assets/icons/search.svg";
 import ShieldCheckIcon from "@/assets/icons/shield-check.svg";
 import WorkflowIcon from "@/assets/icons/workflow.svg";
+import { sectionIds } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 
 import { processTexts, steps, type StepIcon } from "./process.texts";
@@ -25,6 +26,7 @@ const stepNumber = (index: number) => String(index + 1).padStart(2, "0");
 ---
 
 <section
+  id={sectionIds[lang].process}
   class="process"
   aria-labelledby="process-title"
   style={`--steps: ${steps.length}`}

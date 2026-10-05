@@ -1,4 +1,4 @@
-import type { Section } from "@/config/navigation";
+import type { NavigationSection } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 
 interface NavigationTexts {
@@ -9,7 +9,7 @@ interface NavigationTexts {
   openMenu: string;
   closeMenu: string;
   menuLabel: string;
-  links: Record<Section, string>;
+  links: Record<NavigationSection, string>;
   cv: string;
   cvLabel: string;
 }

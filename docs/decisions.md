@@ -119,3 +119,7 @@ Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones 
 - **Sección "Contacto" y footer** (§45), boceto de Pablo con las recomendaciones aceptadas: el mail visible y copiable además del `mailto:` (un formulario queda para cuando se decida el hosting), "Escribime" en lugar de "Contactarme", el subrayado trazado a mano que se escribe una vez y el footer solo en la home.
 - **El botón de copiar y la aparición al entrar en pantalla pasan a `src/lib/`** (`copy-button.ts`, `reveal-on-view.ts`): los usaba una sección cada uno, y con Contacto los usan dos (principio 8).
 - **Sin frenos por sección dentro del capítulo libre** (§20), recomendado y aceptado por Pablo, que los había pedido: en CSS, cualquier punto de encaje adentro hace de imán o deja paredes entre secciones, y con JS habría que cancelar el scroll. Una inercia fuerte desde Sobre mí puede llegar al final de la página.
+
+### 2026-10-05
+
+- **El selector de idioma conserva la sección y la pestaña** (§22), propuesta aceptada por Pablo: calcula el destino al tocarlo, con la sección que se está leyendo y el parámetro de la pestaña traducidos. Se descartó ir actualizando la URL con el scroll.

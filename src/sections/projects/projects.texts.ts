@@ -1,3 +1,4 @@
+import { queryParams } from "@/config/navigation";
 import type { ProjectCategory } from "@/config/projects";
 import type { Locale } from "@/lib/i18n";
 
@@ -29,7 +30,7 @@ export const projectsTexts = {
   es: {
     sectionTitle: "Proyectos",
     tablistLabel: "Plataformas",
-    urlParam: "plataforma",
+    urlParam: queryParams.platform.es,
     categories: {
       web: "Web",
       mobile: "Mobile",
@@ -57,7 +58,7 @@ export const projectsTexts = {
   en: {
     sectionTitle: "Projects",
     tablistLabel: "Platforms",
-    urlParam: "platform",
+    urlParam: queryParams.platform.en,
     categories: {
       web: "Web",
       mobile: "Mobile",

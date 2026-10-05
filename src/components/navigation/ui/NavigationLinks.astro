@@ -1,6 +1,6 @@
 ---
 import { cvPaths } from "@/config/contact";
-import { sections } from "@/config/navigation";
+import { navigationSections } from "@/config/navigation";
 import type { Locale } from "@/lib/i18n";
 import { getSectionPath } from "@/lib/locale-url";
 
@@ -16,7 +16,7 @@ const { links, cv, cvLabel } = navigationTexts[lang];
 ---
 
 <ul class={className}>
-  {sections.map((section) => (
+  {navigationSections.map((section) => (
     <li>
       <a href={getSectionPath(lang, section)}>{links[section]}</a>
     </li>
