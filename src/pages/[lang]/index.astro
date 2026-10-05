@@ -5,6 +5,7 @@ import { siteTexts } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
 import Hero from "@/sections/hero/Hero.astro";
+import AboutSection from "@/sections/about/AboutSection.astro";
 import ProjectsSection from "@/sections/projects/ProjectsSection.astro";
 
 export const getStaticPaths = (() =>
@@ -20,25 +21,48 @@ const { title, description } = siteTexts[lang];
   <div class="home">
     <Hero lang={lang} />
     <ProjectsSection lang={lang} />
+    <div class="home-rest">
+      <AboutSection lang={lang} />
+    </div>
   </div>
 </BaseLayout>
 
 <style>
   /*
-   * The home scrolls by chapters (docs/architecture.md §20): it always rests on
-   * the start of a section, never between two. Otherwise, scrolling from the
-   * Hero with the pointer in the middle, the folder's own scroll took over
-   * before the folder was in place. Each section of the home has to be a
-   * direct child here to get its snap point; a section taller than the screen
-   * can still be scrolled through. The margin keeps sections below the sticky
-   * header (4rem plus its 1px border), for anchors too.
+   * The home scrolls by chapters (docs/architecture.md §20): the Hero and the
+   * projects always rest at their start, never between the two. Otherwise,
+   * scrolling from the Hero with the pointer in the middle, the folder's own
+   * scroll took over before the folder was in place. Everything after the
+   * projects is one more chapter (.home-rest), taller than the screen, so it
+   * scrolls freely inside: with a chapter per section, from the end of one
+   * the next one's start was more than half a screen away, and a regular
+   * gesture bounced back as if against a wall. The margin keeps sections
+   * below the sticky header (4rem plus its 1px border), for anchors too.
    */
   :global(html:has(.home)) {
     scroll-snap-type: y mandatory;
   }
 
-  .home > :global(section) {
+  .home > :global(section),
+  .home-rest {
     scroll-snap-align: start;
+  }
+
+  /*
+   * No gesture skips a chapter's start. The free chapter accepts any point
+   * as a place to rest, so a strong trackpad or touch fling went from the
+   * Hero past the projects, or from the projects past the About section's
+   * opening, with its intro already lit. A fling up from inside the free
+   * chapter stops at its start too, before the projects.
+   */
+  .home > :global(section),
+  .home-rest {
+    scroll-snap-stop: always;
+  }
+
+  .home > :global(section),
+  .home-rest,
+  .home-rest > :global(section) {
     scroll-margin-top: calc(4rem + 1px);
   }
 

@@ -1,0 +1,48 @@
+---
+interface Props {
+  text: string;
+}
+
+const words = Astro.props.text.split(" ");
+---
+
+<span class="reveal-words" style={`--words: ${words.length}`}>
+  {words.map((word, index) => (
+    <span class="reveal-word" style={`--word: ${index}`}>
+      {word}{" "}
+    </span>
+  ))}
+</span>
+
+<style>
+  /*
+   * The words light up one after another as the page scrolls, from the muted
+   * text color (readable on its own, 4.5:1 or more) to the text color. The
+   * container sets the timeline and the stretch of it they take:
+   * --reveal-timeline, --reveal-range (a timeline range name), --reveal-start
+   * and --reveal-length. Without scroll-driven animations or with reduced
+   * motion, they're just lit.
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal-word {
+        --step: calc(var(--reveal-length) / var(--words));
+
+        animation-name: reveal-word;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: var(--reveal-timeline);
+        animation-range-start: var(--reveal-range)
+          calc(var(--reveal-start) + var(--word) * var(--step));
+        animation-range-end: var(--reveal-range)
+          calc(var(--reveal-start) + (var(--word) + 1) * var(--step));
+      }
+    }
+  }
+
+  @keyframes reveal-word {
+    from {
+      color: var(--color-muted);
+    }
+  }
+</style>

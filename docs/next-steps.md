@@ -6,8 +6,6 @@ Sin que sean obligatorias, los siguientes pasos naturales serían:
 
 1. Construir la sección de proyectos y la página de cada proyecto, en las fases de la §42.8.
 2. Definir y construir el resto de las secciones de la home:
-   - sobre mí;
-   - experiencia;
    - contacto;
    - CTA final.
 3. Iterar progresivamente sobre el resto.
@@ -28,5 +26,6 @@ Cosas postergadas a propósito, cada una con su disparador (cuándo retomarla). 
 - [ ] **Link al CV en la navegación.** Quedó afuera para no tener un link roto. _Disparador:_ tener el PDF del CV (uno por idioma).
 - [ ] **Dónde alojar los videos** (§42.7): fuera de git. _Disparador:_ definir el hosting.
 - [ ] **Kairos en Desktop:** la app nativa de macOS (SwiftUI) para tareas, propuesta como proyecto de Desktop. _Disparador:_ tener su clip y su recorrido.
+- [ ] **La UTN en la línea de tiempo** (§43.4): Ingeniería en Sistemas, con su estado real. _Disparador:_ el examen de ingreso del 4 de diciembre.
 - [ ] **Prueba con lector de pantalla** (VoiceOver en Mac, y en iPhone o Android para mobile): pestañas y paneles de proyectos, menú mobile, selectores de tema e idioma, y el orden de lectura del Hero. Hasta ahora todo se probó con teclado y Chrome headless. _Disparador:_ antes de publicar.
 - [ ] **El selector de idioma pierde la sección y la pestaña:** desde la carpeta en `/es/?plataforma=mobile#proyectos`, cambiar a inglés lleva al principio de `/en/`, porque el link se arma solo con la ruta. Debería conservar el ancla y traducir el parámetro (`?platform=mobile#projects`). _Disparador:_ antes de publicar, o al volver a tocar la navegación.

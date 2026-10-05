@@ -110,3 +110,8 @@ Cambios sobre lo definido en el resto de `docs/`, con su porqué. Las secciones 
 - **El recorrido se abre en un diálogo, con los controles nativos** (§42.5), elegido por Pablo; cambia lo que decía la §42.5 (el video dentro de la columna derecha), donde mediría el 27% de su tamaño. `<dialog>` modal abierto con Invoker Commands, sin JS. Cada recorrido lleva una descripción en texto (WCAG 1.2.1), también a pedido de Pablo.
 - **"Probalo" en el encabezado, como acción principal** (§42.5), propuesto y aceptado por Pablo: a la derecha del título, con el acento, y la píldora de "Ver recorrido" pasa a ser neutra. Se muestra solo en los proyectos con demo, hasta que existan.
 - **La pestaña Dev muestra tres paquetes de npm propios** (mcp-rn-devtools, mcp-mobile-interaction y tapfix), elegidos por Pablo entre sus repos (§42.1). La tarjeta muestra nombre, resumen y versión, sin las descargas ni el comando. La página muestra el comando para instalarlo, con un botón para copiarlo, y "Ver en GitHub" como acción principal (§42.5).
+
+### 2026-10-04
+
+- **"Sobre mí" es una línea de tiempo ligada al scroll** (§43), idea de Pablo: una frase que se enciende, otra que queda fija y los hitos que pasan alrededor, en orden cronológico. Las recomendaciones aceptadas: hitos en las bandas laterales sin cruzar la frase, del gris secundario al color del texto (contraste), y cerrar con "Hoy".
+- **Desde Proyectos en adelante, la home es un solo capítulo de scroll libre** (§20, §43.3), probado con un prototipo en Chrome y Safari. Con un capítulo por sección, el encaje hacía saltar el encendido y dejaba una pared al final de la sección.

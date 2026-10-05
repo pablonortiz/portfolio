@@ -1,0 +1,303 @@
+---
+import BriefcaseIcon from "@/assets/icons/briefcase.svg";
+import GraduationCapIcon from "@/assets/icons/graduation-cap.svg";
+import HandshakeIcon from "@/assets/icons/handshake.svg";
+import LanguagesIcon from "@/assets/icons/languages.svg";
+import MapPinIcon from "@/assets/icons/map-pin.svg";
+import PackageIcon from "@/assets/icons/package.svg";
+import RadioIcon from "@/assets/icons/radio.svg";
+import ReceiptIcon from "@/assets/icons/receipt.svg";
+import SmartphoneIcon from "@/assets/icons/smartphone.svg";
+import { sectionIds } from "@/config/navigation";
+import type { Locale } from "@/lib/i18n";
+
+import {
+  aboutTexts,
+  milestones,
+  type MilestoneIcon,
+  type MilestoneTexts,
+} from "./about.texts";
+import RevealWords from "./ui/RevealWords.astro";
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const texts = aboutTexts[lang];
+
+const milestoneIcons = {
+  "graduation-cap": GraduationCapIcon,
+  languages: LanguagesIcon,
+  radio: RadioIcon,
+  smartphone: SmartphoneIcon,
+  briefcase: BriefcaseIcon,
+  handshake: HandshakeIcon,
+  receipt: ReceiptIcon,
+  package: PackageIcon,
+  "map-pin": MapPinIcon,
+} satisfies Record<MilestoneIcon, unknown>;
+---
+
+<section
+  id={sectionIds[lang].about}
+  class="about"
+  aria-labelledby="about-title"
+>
+  <div class="about-opening">
+    <h2 id="about-title" class="about-label">
+      {texts.label}
+    </h2>
+    <p class="about-intro">
+      <RevealWords text={texts.intro} />
+    </p>
+  </div>
+
+  <div class="about-track" style={`--milestones: ${milestones.length}`}>
+    <div class="about-stage">
+      <p class="about-phrase">
+        <RevealWords text={texts.phrase} />
+      </p>
+    </div>
+    <ol class="about-milestones">
+      {milestones.map((milestone, index) => {
+        const Icon = milestoneIcons[milestone.icon];
+        const { title, detail }: MilestoneTexts =
+          texts.milestones[milestone.id];
+        return (
+          <li
+            class="about-milestone"
+            style={`--row: ${index}`}
+            data-side={index % 2 === 0 ? "start" : "end"}
+            data-today={milestone.year === undefined || undefined}
+          >
+            <p class="about-when">
+              <Icon class="size-4" aria-hidden="true" />
+              {milestone.year ? (
+                <time datetime={String(milestone.year)}>{milestone.year}</time>
+              ) : (
+                texts.today
+              )}
+            </p>
+            <p class="about-milestone-title">{title}</p>
+            {detail && <p class="about-milestone-detail">{detail}</p>}
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>
+
+<style>
+  /*
+   * The timeline (docs/about.md §43): the intro lights up word by word, then
+   * the phrase lights up as it reaches the middle and stays there while the
+   * milestones go past it, in order. Everything is tied to the scroll, which
+   * stays free here: from the projects on, the home is a single chapter.
+   */
+  .about {
+    --content-width: 72rem;
+  }
+
+  /*
+   * The chapter's first screen. The intro sits low on purpose: arriving from
+   * the projects, the snap lands here, and the intro has to light up after
+   * it, while the visitor scrolls, not during the jump.
+   */
+  .about-opening {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: calc(100dvh - 4rem - 1px);
+    max-width: var(--content-width);
+    margin-inline: auto;
+    padding: 2rem 1.5rem 18dvh;
+  }
+
+  .about-label {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .about-intro {
+    align-self: end;
+    justify-self: center;
+    max-width: 30ch;
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    view-timeline-name: --about-intro;
+    /* Lights up while it rises from about 65% to 30% of the screen. */
+    --reveal-timeline: --about-intro;
+    --reveal-range: cover;
+    --reveal-start: 33%;
+    --reveal-length: 32%;
+  }
+
+  /*
+   * The phrase is pinned for as long as this track scrolls by, and the
+   * milestones are laid out along it, starting one screen below its top.
+   */
+  .about-track {
+    --row-gap: 20dvh;
+    --phrase-width: min(36rem, 52%);
+
+    position: relative;
+    height: calc(100dvh + var(--milestones) * var(--row-gap) + 20dvh);
+    max-width: var(--content-width);
+    margin: 20dvh auto 0;
+    padding-inline: 1.5rem;
+    view-timeline-name: --about-track;
+  }
+
+  .about-stage {
+    position: sticky;
+    top: 0;
+    display: grid;
+    place-items: center;
+    height: 100dvh;
+  }
+
+  .about-phrase {
+    width: var(--phrase-width);
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 5.5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    text-align: center;
+    /* Lights up while the track's top goes from 40% of the screen to the top: the phrase rises to the middle. */
+    --reveal-timeline: --about-track;
+    --reveal-range: entry;
+    --reveal-start: 60%;
+    --reveal-length: 40%;
+  }
+
+  .about-milestones {
+    position: absolute;
+    inset: 100dvh 1.5rem 0;
+  }
+
+  /* In the bands on either side of the phrase, never across it: overlapped, neither text would read. */
+  .about-milestone {
+    --band-width: calc((100% - var(--phrase-width)) / 2 - 1.5rem);
+    --indent: calc(mod(var(--row) * 3, 4) * 0.75rem);
+
+    position: absolute;
+    top: calc(var(--row) * var(--row-gap));
+    display: grid;
+    gap: 0.25rem;
+    width: calc(var(--band-width) - var(--indent));
+  }
+
+  .about-milestone[data-side="start"] {
+    left: var(--indent);
+  }
+
+  .about-milestone[data-side="end"] {
+    right: var(--indent);
+  }
+
+  .about-when {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-accent);
+  }
+
+  .about-milestone-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .about-milestone-detail {
+    color: var(--color-muted);
+  }
+
+  .about-milestone[data-today] .about-milestone-title {
+    color: var(--color-accent);
+  }
+
+  /*
+   * Mobile has no room beside the phrase: it pins under the header, on the
+   * page's background, and the milestones rise in one column below it.
+   */
+  @media (width < 48rem) {
+    .about-track {
+      height: auto;
+      padding-bottom: 30dvh;
+    }
+
+    .about-stage {
+      top: calc(4rem + 1px);
+      z-index: 1;
+      height: auto;
+      padding-block: 1.5rem;
+      background: var(--color-background);
+    }
+
+    /* The milestones fade out under the pinned phrase instead of being cut by its edge. */
+    .about-stage::after {
+      content: "";
+      position: absolute;
+      inset: 100% 0 auto;
+      height: 2rem;
+      background: linear-gradient(var(--color-background), transparent);
+    }
+
+    .about-phrase {
+      width: auto;
+    }
+
+    .about-milestones {
+      position: static;
+      display: grid;
+      gap: 3.5rem;
+      padding-top: 25dvh;
+    }
+
+    .about-milestone {
+      position: static;
+      width: auto;
+      max-width: 80%;
+      margin-inline-start: calc(mod(var(--row) * 2, 3) * 1.5rem);
+    }
+  }
+
+  /*
+   * Each milestone fades in as it rises into view and out as it leaves,
+   * before the sticky header: the timeline's view starts below it (inset).
+   */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .about-milestone {
+        animation-name: milestone-pass;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+        animation-timeline: view(calc(4rem + 1px) 0);
+      }
+    }
+  }
+
+  @keyframes milestone-pass {
+    entry 0% {
+      opacity: 0;
+      translate: 0 2rem;
+    }
+
+    entry 100%,
+    exit 0% {
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    exit 100% {
+      opacity: 0;
+    }
+  }
+</style>
