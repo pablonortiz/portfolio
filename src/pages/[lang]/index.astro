@@ -5,6 +5,7 @@ import SiteFooter from "@/components/footer/SiteFooter.astro";
 import { siteTexts } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
+import { homeOgImage } from "@/lib/og-image/og-image";
 import Hero from "@/sections/hero/Hero.astro";
 import AboutSection from "@/sections/about/AboutSection.astro";
 import ContactSection from "@/sections/contact/ContactSection.astro";
@@ -20,7 +21,13 @@ const { lang } = Astro.params as Params;
 const { title, description } = siteTexts[lang];
 ---
 
-<BaseLayout lang={lang} title={title} description={description} isHome>
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  image={homeOgImage(lang)}
+  isHome
+>
   <div class="home">
     <Hero lang={lang} />
     <ProjectsSection lang={lang} />

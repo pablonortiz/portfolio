@@ -9,6 +9,7 @@ import { routeSegments } from "@/config/navigation";
 import { siteName } from "@/config/site";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { locales } from "@/lib/i18n";
+import { projectOgImage } from "@/lib/og-image/og-image";
 import { getProjects } from "@/lib/projects";
 import ProjectDetail from "@/sections/projects/ProjectDetail.astro";
 
@@ -39,6 +40,7 @@ const { project } = Astro.props as Props;
   lang={lang}
   title={`${project.title} — ${siteName}`}
   description={project.summary}
+  image={projectOgImage(project, lang)}
 >
   <ProjectDetail lang={lang} project={project} />
 </BaseLayout>
