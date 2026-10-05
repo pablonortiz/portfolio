@@ -597,7 +597,11 @@ Así no hay páginas duplicadas por construcción: un solo archivo por página, 
 - **En el `<head>` de cada página** (`BaseLayout`), con las URLs absolutas de `getLocalizedUrl` (`lib/locale-url.ts`), que toma el dominio de `site` en `astro.config.mjs`:
   - el **canonical**, la URL oficial de la página, sin parámetros: `?plataforma=mobile` es la misma home con otra pestaña;
   - los **`hreflang`** `es` y `en`, que le dicen a los buscadores que las dos versiones son la misma página. La home suma `x-default` hacia `/`, que elige el idioma de quien entra; los proyectos no tienen una versión neutral;
-  - **Open Graph** de texto: título, descripción (en los proyectos, su `summary`), URL, nombre del sitio y `og:locale` (`es_AR`, por el voseo, o `en_US`). La imagen para compartir está en los pendientes (§41).
+  - **Open Graph**: título, descripción (en los proyectos, su `summary`), URL, nombre del sitio, `og:locale` (`es_AR`, por el voseo, o `en_US`) y la imagen para compartir, con `twitter:card` grande.
+- **Imagen para compartir** (`lib/og-image/`): una tarjeta oscura de 1200×630 por página, generada al compilar por los endpoints de `src/pages/og/` (`/og/es.png`, `/og/es/<slug>.png`). Satori arma el SVG a partir de un árbol de cajas con flexbox, y sharp, que ya estaba por Astro, lo pasa a PNG.
+  - **La home:** los textos del Hero, sin la foto, con un resplandor del color de acento donde el Hero tiene la foto.
+  - **Cada proyecto, por idioma** (algunos nombres cambian): su categoría y su nombre, con el poster al lado. En los de Mobile el poster se recorta al teléfono y se suma el `summary`; en los paquetes de npm, el `summary` y `npx -y <paquete>`, el comando que ejecuta el servidor.
+  - **Duplicados a mantener:** los colores del tema oscuro van en hex en `elements.ts` (Satori no lee `oklch`), y el recorte del teléfono supone la composición de los posters de Mobile (§42.7). Las fuentes van en WOFF en el repo, con sus licencias OFL, porque Satori no lee WOFF2.
 - **Sitemap con `@astrojs/sitemap`:** genera `sitemap-index.xml` al compilar, con las rutas del build, y `public/robots.txt` lo declara. Sin la opción de i18n de la integración, que empareja URLs que solo difieren en el prefijo de idioma (acá los segmentos se traducen): los idiomas los declaran los `hreflang` del `<head>`.
 - **Google Search Console**, con una propiedad de dominio (cubre `www` y `media.`), verificada con un registro TXT en el DNS. Ahí se cargó el sitemap.
 
