@@ -1,0 +1,185 @@
+---
+import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
+import CheckIcon from "@/assets/icons/check.svg";
+import CopyIcon from "@/assets/icons/copy.svg";
+import type { Locale } from "@/lib/i18n";
+import type { PackageProject } from "@/lib/projects";
+
+import { getNpmPackageInfo, getNpmPackageUrl } from "../lib/npm-package";
+import { projectsTexts } from "../projects.texts";
+
+interface Props {
+  lang: Locale;
+  project: PackageProject;
+}
+
+const { lang, project } = Astro.props;
+const texts = projectsTexts[lang];
+const info = await getNpmPackageInfo(project.npmPackage);
+const release = [info && `v${info.version}`, info?.license]
+  .filter(Boolean)
+  .join(" · ");
+---
+
+<section
+  class="package-panel"
+  transition:name={`project-${project.slug}`}
+  aria-labelledby="package-install-title"
+  data-package-panel
+>
+  <h2 id="package-install-title" class="package-panel-label">
+    {texts.install}
+  </h2>
+  <div class="package-command">
+    <code>
+      <span class="package-prompt" aria-hidden="true">
+        $
+      </span>
+      {project.install}
+    </code>
+    <button
+      type="button"
+      class="package-copy"
+      aria-label={texts.copyCommand}
+      data-command={project.install}
+      data-copied-label={texts.commandCopied}
+      data-copy-command
+      hidden
+    >
+      <span class="package-copy-icon">
+        <CopyIcon class="size-4" />
+      </span>
+      <span class="package-copied-icon">
+        <CheckIcon class="size-4" />
+      </span>
+    </button>
+  </div>
+  <div class="package-release">
+    {release && <span>{release}</span>}
+    <a
+      href={getNpmPackageUrl(project.npmPackage)}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      npm
+      <ArrowUpRightIcon class="size-4" aria-hidden="true" />
+      <span class="sr-only">{texts.opensInNewTab}</span>
+    </a>
+  </div>
+  <p class="sr-only" role="status" data-copy-status></p>
+</section>
+
+<script>
+  import { onEveryPage } from "@/lib/page-lifecycle";
+
+  import { setupCopyCommand } from "../lib/copy-command";
+
+  onEveryPage((signal) =>
+    document
+      .querySelectorAll<HTMLButtonElement>("[data-copy-command]")
+      .forEach((button) => setupCopyCommand(button, signal)),
+  );
+</script>
+
+<style>
+  /*
+   * An npm package's page shows how to install it, in a terminal like its
+   * card's: the card zooms into this panel (docs/projects.md §42.5).
+   */
+  .package-panel {
+    --terminal-border: color-mix(
+      in oklab,
+      var(--color-terminal-foreground) 14%,
+      var(--color-terminal)
+    );
+
+    display: grid;
+    gap: 1rem;
+    width: 100%;
+    padding: 1.5rem;
+    border: 1px solid var(--terminal-border);
+    border-radius: 0.75rem;
+    background: var(--color-terminal);
+    color: var(--color-terminal-foreground);
+    font-family: var(--font-mono);
+    view-transition-class: project-zoom;
+  }
+
+  .package-panel-label {
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--color-terminal-muted);
+  }
+
+  .package-command {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--terminal-border);
+    border-radius: 0.5rem;
+  }
+
+  .package-command code {
+    flex: 1;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+
+  .package-prompt {
+    margin-inline-end: 0.5ch;
+    color: var(--color-terminal-accent);
+  }
+
+  .package-copy {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    color: var(--color-terminal-muted);
+    cursor: pointer;
+  }
+
+  .package-copy:hover {
+    background: color-mix(
+      in oklab,
+      var(--color-terminal-foreground) 10%,
+      transparent
+    );
+    color: var(--color-terminal-foreground);
+  }
+
+  .package-copied-icon,
+  .package-copy[data-copied] .package-copy-icon {
+    display: none;
+  }
+
+  .package-copy[data-copied] .package-copied-icon {
+    display: block;
+    color: var(--color-terminal-accent);
+  }
+
+  .package-release {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-terminal-muted);
+  }
+
+  .package-release a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-inline-start: auto;
+    color: var(--color-terminal-foreground);
+  }
+
+  .package-release a:hover {
+    text-decoration: underline;
+  }
+</style>

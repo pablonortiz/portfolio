@@ -169,13 +169,10 @@ const [defaultCategory] = categories;
 
   .project-folder[data-active-category="dev"],
   .project-panel[data-category="dev"] {
-    --folder-background: light-dark(
-      oklch(17% 0.025 285),
-      oklch(11.5% 0.02 285)
-    );
-    --folder-foreground: oklch(94% 0.015 290);
-    --folder-muted: oklch(70% 0.03 290);
-    --folder-accent: oklch(80% 0.13 300);
+    --folder-background: var(--color-terminal);
+    --folder-foreground: var(--color-terminal-foreground);
+    --folder-muted: var(--color-terminal-muted);
+    --folder-accent: var(--color-terminal-accent);
   }
 
   /*

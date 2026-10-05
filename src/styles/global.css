@@ -7,6 +7,11 @@
   --color-border: light-dark(oklch(91% 0.012 285), oklch(27% 0.035 285));
   --color-accent: light-dark(oklch(54% 0.25 290), oklch(70% 0.19 290));
   --color-accent-foreground: light-dark(oklch(99% 0 0), oklch(14% 0.03 285));
+  /* A dark terminal in both themes: the Dev category and npm packages. */
+  --color-terminal: light-dark(oklch(17% 0.025 285), oklch(11.5% 0.02 285));
+  --color-terminal-foreground: oklch(94% 0.015 290);
+  --color-terminal-muted: oklch(70% 0.03 290);
+  --color-terminal-accent: oklch(80% 0.13 300);
 
   --font-sans: var(--font-inter);
   --font-display: var(--font-bricolage);

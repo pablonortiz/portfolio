@@ -1,16 +1,16 @@
 ---
 import { Picture } from "astro:assets";
 
-import type { Project } from "@/lib/projects";
+import type { AppProject } from "@/lib/projects";
 
 import { getClipSources } from "../lib/video-sources";
 
 interface Props {
-  project: Project;
+  project: AppProject;
 }
 
 const { project } = Astro.props;
-const clip = project.npmPackage ? undefined : getClipSources(project.slug);
+const clip = getClipSources(project.slug);
 ---
 
 <div
@@ -25,22 +25,18 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
     widths={[640, 1280]}
     sizes="100vw"
   />
-  {
-    /* Where the router leaves the card's clip when the zoom brings it along; on a direct visit it stays hidden. */
-    clip && (
-      <video
-        transition:persist={`clip-${project.slug}`}
-        data-clip-placeholder
-        muted
-        preload="none"
-        hidden
-      >
-        {clip.sources.map((source) => (
-          <source src={source.src} type={source.type} />
-        ))}
-      </video>
-    )
-  }
+  {/* Where the router leaves the card's clip when the zoom brings it along; on a direct visit it stays hidden. */}
+  <video
+    transition:persist={`clip-${project.slug}`}
+    data-clip-placeholder
+    muted
+    preload="none"
+    hidden
+  >
+    {clip.sources.map((source) => (
+      <source src={source.src} type={source.type} />
+    ))}
+  </video>
 </div>
 
 <style>

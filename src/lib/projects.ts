@@ -46,3 +46,9 @@ function getTour(
 }
 
 export type Project = Awaited<ReturnType<typeof getProjects>>[number];
+export type AppProject = Exclude<Project, { npmPackage: string }>;
+export type PackageProject = Extract<Project, { npmPackage: string }>;
+
+/** An npm package rather than an app: no video, an install command instead. */
+export const isPackage = (project: Project): project is PackageProject =>
+  project.npmPackage !== undefined;

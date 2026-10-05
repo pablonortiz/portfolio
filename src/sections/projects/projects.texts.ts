@@ -19,6 +19,10 @@ interface ProjectsTexts {
   tour: string;
   watchTour: string;
   closeTour: string;
+  viewCode: string;
+  install: string;
+  copyCommand: string;
+  commandCopied: string;
 }
 
 export const projectsTexts = {
@@ -45,6 +49,10 @@ export const projectsTexts = {
     tour: "Recorrido",
     watchTour: "Ver recorrido",
     closeTour: "Cerrar recorrido",
+    viewCode: "Ver en GitHub",
+    install: "Instalación",
+    copyCommand: "Copiar comando",
+    commandCopied: "Comando copiado",
   },
   en: {
     sectionTitle: "Projects",
@@ -69,5 +77,9 @@ export const projectsTexts = {
     tour: "Tour",
     watchTour: "Watch the tour",
     closeTour: "Close the tour",
+    viewCode: "View on GitHub",
+    install: "Install",
+    copyCommand: "Copy the command",
+    commandCopied: "Command copied",
   },
 } satisfies Record<Locale, ProjectsTexts>;

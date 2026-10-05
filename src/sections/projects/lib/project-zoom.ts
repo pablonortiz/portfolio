@@ -8,10 +8,8 @@ const isPlainClick = (event: MouseEvent) =>
   !event.shiftKey &&
   !event.altKey;
 
-/** Its clip stops on the frame that was showing; the card's clip setup continues it on the way back. */
-const freezeClip = (card: HTMLElement) => {
-  const video = card.querySelector<HTMLVideoElement>("[data-card-video]");
-  if (!video) return;
+/** The clip stops on the frame that was showing; the card's clip setup continues it on the way back. */
+const freezeClip = (video: HTMLVideoElement) => {
   video.pause();
   video.dataset.resume = "";
 };
@@ -41,7 +39,10 @@ export function setupProjectZoom(folder: HTMLElement) {
       "[data-project-card]",
     );
     if (!card || !isPlainClick(event)) return;
-    freezeClip(card);
+    const clip = card.querySelector<HTMLVideoElement>("[data-card-video]");
+    // An npm package's card has no frame to arrive with: it zooms into its page's install panel, which has to be visible.
+    if (!clip) return;
+    freezeClip(clip);
     markArrival(card.href);
   });
 }

@@ -302,9 +302,19 @@ stack: [react-native, expo, typescript] # ids de config/technologies.ts (validad
 poster: ./poster.png
 demo: https://… # opcional: sin demo, no aparece "Probalo"
 repository: https://… # opcional
-npmPackage: "@scope/x" # opcional, para la pestaña Dev
 fictionalBrand: true # opcional: proyecto para un cliente con nombre y datos inventados (§42.3)
 tour: true # opcional: tiene recorrido (§42.5), que cada .md describe en tourDescription
+```
+
+```yaml
+# project.yaml de un paquete de npm (pestaña Dev): sin póster ni video
+category: dev
+order: 1
+year: 2026
+stack: [typescript, nodejs, mcp]
+npmPackage: mcp-rn-devtools # su versión y licencia se traen de npm al compilar
+install: claude mcp add rn-devtools -- npx -y mcp-rn-devtools # el comando que muestra su página
+repository: https://github.com/… # obligatorio: el botón "Ver en GitHub"
 ```
 
 ```md

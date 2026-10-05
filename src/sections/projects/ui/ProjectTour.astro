@@ -4,14 +4,14 @@ import { Picture } from "astro:assets";
 import PlayIcon from "@/assets/icons/play.svg";
 import XIcon from "@/assets/icons/x.svg";
 import type { Locale } from "@/lib/i18n";
-import type { Project } from "@/lib/projects";
+import type { AppProject } from "@/lib/projects";
 
 import { getTourSources } from "../lib/video-sources";
 import { projectsTexts } from "../projects.texts";
 
 interface Props {
   lang: Locale;
-  project: Project;
+  project: AppProject;
   description: string;
 }
 

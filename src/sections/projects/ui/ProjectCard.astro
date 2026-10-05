@@ -1,12 +1,10 @@
 ---
-import { Picture } from "astro:assets";
-
 import type { Locale } from "@/lib/i18n";
 import { getProjectPath } from "@/lib/locale-url";
-import type { Project } from "@/lib/projects";
+import { isPackage, type Project } from "@/lib/projects";
 
-import { getClipSources } from "../lib/video-sources";
-import { projectsTexts } from "../projects.texts";
+import AppCardBody from "./AppCardBody.astro";
+import PackageCardBody from "./PackageCardBody.astro";
 
 interface Props {
   lang: Locale;
@@ -14,7 +12,6 @@ interface Props {
 }
 
 const { lang, project } = Astro.props;
-const clip = project.npmPackage ? undefined : getClipSources(project.slug);
 ---
 
 <a
@@ -23,38 +20,13 @@ const clip = project.npmPackage ? undefined : getClipSources(project.slug);
   data-project-card
   data-slug={project.slug}
   transition:name={`project-${project.slug}`}
+  aria-labelledby={
+    isPackage(project) ? `package-${project.slug}-name` : undefined
+  }
 >
-  <Picture
-    src={project.poster}
-    alt=""
-    formats={["avif", "webp"]}
-    widths={[400, 640, 960]}
-    sizes="(min-width: 768px) 34rem, 90vw"
-    class="size-full object-cover"
-  />
-  {clip && (
-    <video
-      class="absolute inset-0 size-full object-cover"
-      data-card-video
-      transition:persist={`clip-${project.slug}`}
-      muted
-      playsinline
-      preload="none"
-      data-first-frame={clip.firstFrame}
-      aria-hidden="true"
-      hidden
-    >
-      {clip.sources.map((source) => (
-        <source src={source.src} type={source.type} />
-      ))}
-    </video>
-  )}
-  <span class="absolute bottom-3 left-3 rounded-md bg-background/85 px-2 py-1 text-sm">
-    {project.title}
-  </span>
-  {project.fictionalBrand && (
-    <span class="absolute top-3 right-3 rounded-md bg-background/85 px-2 py-0.5 font-mono text-xs">
-      {projectsTexts[lang].fictionalBrand}
-    </span>
+  {isPackage(project) ? (
+    <PackageCardBody project={project} />
+  ) : (
+    <AppCardBody lang={lang} project={project} />
   )}
 </a>

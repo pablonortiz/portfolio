@@ -6,8 +6,9 @@ import ArrowLeftIcon from "@/assets/icons/arrow-left.svg";
 import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg";
 import type { Locale } from "@/lib/i18n";
 import { getSectionPath } from "@/lib/locale-url";
-import type { Project } from "@/lib/projects";
+import { isPackage, type Project } from "@/lib/projects";
 
+import PackagePanel from "./ui/PackagePanel.astro";
 import ProjectBackdrop from "./ui/ProjectBackdrop.astro";
 import ProjectTour from "./ui/ProjectTour.astro";
 import TechnologyList from "./ui/TechnologyList.astro";
@@ -21,9 +22,13 @@ interface Props {
 const { lang, project } = Astro.props;
 const texts = projectsTexts[lang];
 const { Content } = await render(project.body);
+/** The header's action: an npm package's code, or an app's demo if it has one. */
+const action = isPackage(project)
+  ? { href: project.repository, label: texts.viewCode }
+  : project.demo && { href: project.demo, label: texts.tryIt };
 ---
 
-<ProjectBackdrop project={project} />
+{!isPackage(project) && <ProjectBackdrop project={project} />}
 
 <article class="project-detail">
   <header class="detail-header">
@@ -42,14 +47,14 @@ const { Content } = await render(project.body);
       <h1 class="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
         {project.title}
       </h1>
-      {project.demo && (
+      {action && (
         <a
-          href={project.demo}
+          href={action.href}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-accent-foreground"
         >
-          {texts.tryIt}
+          {action.label}
           <ArrowUpRightIcon class="size-4" aria-hidden="true" />
           <span class="sr-only">{texts.opensInNewTab}</span>
         </a>
@@ -83,7 +88,9 @@ const { Content } = await render(project.body);
   </div>
 
   <div class="detail-media">
-    {project.tour ? (
+    {isPackage(project) ? (
+      <PackagePanel lang={lang} project={project} />
+    ) : project.tour ? (
       <ProjectTour
         lang={lang}
         project={project}
