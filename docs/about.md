@@ -54,7 +54,7 @@ La home scrollea por capítulos (§20), pero **todo lo que viene después de Pro
 | 2020 | `languages`      | Inglés: Cambridge B2 First                                       | 180 (nivel C1)                        |
 | 2021 | `radio`          | Desarrollador en Radio Nacional                                  |                                       |
 | 2022 | `smartphone`     | Primera app publicada                                            | Android e iOS                         |
-| 2023 | `briefcase`      | Desarrollador mobile en Janis Commerce                           |                                       |
+| 2022 | `briefcase`      | Desarrollador mobile en Janis Commerce                           |                                       |
 | 2024 | `handshake`      | Empiezo como freelance                                           | Apps, sistemas y sitios para empresas |
 | 2026 | `receipt`        | Sistema de gestión en producción                                 | Con facturación electrónica           |
 | 2026 | `package`        | Herramientas open source para devs                               | Tres paquetes en npm                  |

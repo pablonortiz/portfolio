@@ -6,7 +6,7 @@ export const milestones = [
   { id: "english", year: 2020, icon: "languages" },
   { id: "radio", year: 2021, icon: "radio" },
   { id: "first-app", year: 2022, icon: "smartphone" },
-  { id: "janis", year: 2023, icon: "briefcase" },
+  { id: "janis", year: 2022, icon: "briefcase" },
   { id: "freelance", year: 2024, icon: "handshake" },
   { id: "management-system", year: 2026, icon: "receipt" },
   { id: "npm", year: 2026, icon: "package" },
