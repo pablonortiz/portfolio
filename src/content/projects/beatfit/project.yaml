@@ -4,3 +4,4 @@ year: 2026
 stack: [react-native, expo, typescript, sqlite, drizzle]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/beatfit/
