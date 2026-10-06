@@ -4,4 +4,5 @@ year: 2025
 stack: [react, typescript, tailwind-css, express, prisma, postgresql]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/sitio-inmobiliaria/
 fictionalBrand: true
