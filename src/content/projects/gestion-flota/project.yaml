@@ -4,3 +4,4 @@ year: 2026
 stack: [flutter, dart, riverpod, sqlite, supabase]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/gestion-flota/
