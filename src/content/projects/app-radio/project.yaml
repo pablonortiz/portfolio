@@ -4,4 +4,5 @@ year: 2022
 stack: [react-native, javascript, redux]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/app-radio/
 fictionalBrand: true
