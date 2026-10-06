@@ -4,3 +4,4 @@ year: 2026
 stack: [react-native, typescript, zustand, sqlite, kotlin]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/aureus/
