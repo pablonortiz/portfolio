@@ -4,4 +4,5 @@ year: 2026
 stack: [flutter, dart, riverpod, supabase, postgresql]
 poster: ./poster.png
 tour: true
+demo: https://demos.pablonortiz.com/gestion-distribuidora/
 fictionalBrand: true
