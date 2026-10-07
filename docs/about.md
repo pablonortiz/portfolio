@@ -63,4 +63,3 @@ La home scrollea por capítulos (§20), pero **todo lo que viene después de Pro
 - **El secundario y el inglés no están para mostrar algo técnico** (no lo son), sino el ritmo: termina el secundario en 2019, el First en 2020 y en 2021 ya trabaja en la radio. Planteo de Pablo.
 - **El 180 del B2 First es calificación A**, y con esa nota el certificado acredita nivel C1: por eso "180 (nivel C1)" y no el número solo, que no le dice nada a quien no conoce la escala.
 - **"Hoy" cierra con el acento** (`map-pin`, el "estás acá" de un mapa) y lleva a Contacto.
-- **La UTN entra cuando rinda el ingreso** (pendiente en §41).

@@ -265,12 +265,6 @@ Motivos:
 - rompe la coherencia;
 - puede sentirse autoasignado.
 
-Puede aparecer más adelante en educación o “Sobre mí” como:
-
-> Ingeniería en Sistemas — UTN.BA
-
-con el estado real de la carrera.
-
 ---
 
 ## 12. Hero — CTA
