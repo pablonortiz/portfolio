@@ -22,7 +22,12 @@ const { links, cv, cvLabel } = navigationTexts[lang];
     </li>
   ))}
   <li>
-    <a href={cvPaths[lang]} download aria-label={cvLabel}>
+    <a
+      href={cvPaths[lang]}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={cvLabel}
+    >
       {cv}
     </a>
   </li>

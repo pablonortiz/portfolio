@@ -25,7 +25,7 @@ export const navigationTexts = {
     menuLabel: "Menú",
     links: { projects: "Proyectos", about: "Sobre mí", contact: "Contacto" },
     cv: "CV",
-    cvLabel: "Descargar CV",
+    cvLabel: "Ver CV (se abre en otra pestaña)",
   },
   en: {
     homeLabel: "Pablo Ortiz, home",
@@ -37,6 +37,6 @@ export const navigationTexts = {
     menuLabel: "Menu",
     links: { projects: "Projects", about: "About", contact: "Contact" },
     cv: "CV",
-    cvLabel: "Download CV",
+    cvLabel: "View CV (opens in a new tab)",
   },
 } satisfies Record<Locale, NavigationTexts>;

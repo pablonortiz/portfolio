@@ -20,7 +20,7 @@ export const contactTexts = {
     copyEmail: "Copiar mail",
     emailCopied: "Mail copiado",
     linksLabel: "Perfiles y CV",
-    cv: "Descargar CV",
+    cv: "Ver CV",
     opensInNewTab: "(se abre en otra pestaña)",
   },
   en: {
@@ -30,7 +30,7 @@ export const contactTexts = {
     copyEmail: "Copy the email",
     emailCopied: "Email copied",
     linksLabel: "Profiles and CV",
-    cv: "Download CV",
+    cv: "View CV",
     opensInNewTab: "(opens in a new tab)",
   },
 } satisfies Record<Locale, ContactTexts>;
