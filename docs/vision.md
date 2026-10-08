@@ -168,7 +168,7 @@ Ideas que aparecieron durante el brainstorming y que deberán clasificarse luego
 - Portfolio bilingüe español / inglés.
 - Diseño mobile-friendly.
 - Foto personal.
-- CV descargable.
+- CV para ver y descargar.
 - Demos interactivas de proyectos.
 - Videos cuando una demo real no sea viable.
 - Diferenciar lectura customer-friendly y técnica.

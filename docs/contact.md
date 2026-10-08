@@ -12,7 +12,7 @@ Boceto de Pablo: el cierre de la página, con la pregunta "¿Construimos algo?" 
 
    ( Escribime )   pablonortiz05@hotmail.com ⧉
 
-      LinkedIn ↗   GitHub ↗   Descargar CV ⤓
+      LinkedIn ↗   GitHub ↗   Ver CV ↗
  ─────────────────────────────────────────────
   [firma]                       © 2026 Pablo Ortiz
 ```
@@ -26,7 +26,7 @@ Boceto de Pablo: el cierre de la página, con la pregunta "¿Construimos algo?" 
   - **Un hueco más largo que el trazo** (`stroke-dasharray: 1 2`) y oculto un poco más allá de su largo (`1.05`): con el extremo redondeado, un guion vacío seguía viéndose como un punto.
   - Sin JS o con "reducir movimiento", está dibujado.
 - **El botón de copiar es compartido** con el panel de instalación de los paquetes (`lib/copy-button.ts`): copia el texto de `data-copy`, muestra el check 2 segundos y lo avisa por la línea de estado que nombra (`data-copy-status`).
-- **Links:** LinkedIn y GitHub (se abren en otra pestaña) y el CV en el idioma de la página, que se descarga (`public/cv/`, rutas en `config/contact.ts`). Los CV son de Pablo y se revisaron antes de publicarlos: sin nombres de clientes con marca ficticia ni datos en los metadatos.
+- **Links:** LinkedIn y GitHub (se abren en otra pestaña) y el CV en el idioma de la página, que también se abre en otra pestaña, en el visor de PDF del navegador, desde donde se puede descargar (`public/cv/`, rutas en `config/contact.ts`). El link del menú hace lo mismo. Los CV son de Pablo y se revisaron antes de publicarlos: sin nombres de clientes con marca ficticia ni datos en los metadatos.
 - **El título baja hasta 1,75rem en pantallas chicas:** el subrayado necesita que "Construimos algo" entre en una línea, y en 320 px (el ancho de referencia de WCAG) con un tamaño mayor se salía.
 
 ### 45.2. El footer
